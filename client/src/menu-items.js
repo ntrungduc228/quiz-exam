@@ -1,3 +1,47 @@
+export const studentMenuItems = [];
+export const teacherMenuItems = {
+  items: [
+    // {
+    //   id: 'navigation',
+    //   title: 'Navigation',
+    //   type: 'group',
+    //   icon: 'icon-navigation',
+    //   children: [
+    //     {
+    //       id: 'dashboard',
+    //       title: 'Dashboard',
+    //       type: 'item',
+    //       url: '/app/dashboard/default',
+    //       icon: 'feather icon-home'
+    //     }
+    //   ]
+    // },
+    {
+      id: 'dashboard',
+      title: 'Dashboard',
+      type: 'item',
+      url: '/app/dashboard/default',
+      icon: 'feather icon-home'
+    },
+    {
+      id: 'charts',
+      title: 'Charts',
+      type: 'item',
+      url: '/charts/nvd3',
+      icon: 'feather icon-pie-chart'
+    },
+    {
+      id: 'question',
+      title: 'Câu hỏi',
+      type: 'item',
+      url: '/question',
+      classes: 'nav-item',
+      icon: 'feather icon-sidebar'
+    }
+  ]
+};
+export const adminMenuItems = [];
+
 const menuItems = {
   items: [
     {
@@ -11,7 +55,7 @@ const menuItems = {
           title: 'Dashboard',
           type: 'item',
           url: '/app/dashboard/default',
-          icon: 'feather icon-home',
+          icon: 'feather icon-home'
         }
       ]
     },
@@ -27,7 +71,6 @@ const menuItems = {
           type: 'collapse',
           icon: 'feather icon-box',
           children: [
-            
             {
               id: 'button',
               title: 'Button',
@@ -51,7 +94,7 @@ const menuItems = {
               title: 'Pagination',
               type: 'item',
               url: '/basic/pagination'
-          },
+            },
             {
               id: 'collapse',
               title: 'Collapse',
@@ -85,14 +128,14 @@ const menuItems = {
           title: 'Form Elements',
           type: 'item',
           url: '/forms/form-basic',
-          icon: 'feather icon-file-text',
+          icon: 'feather icon-file-text'
         },
         {
           id: 'tables',
           title: 'Table',
           type: 'item',
           url: '/tables/bootstrap',
-          icon: 'feather icon-server',
+          icon: 'feather icon-server'
         }
       ]
     },
@@ -132,7 +175,7 @@ const menuItems = {
           badge: {
             title: 'New',
             type: 'label-danger'
-        },
+          },
           children: [
             {
               id: 'signup-1',
@@ -142,7 +185,7 @@ const menuItems = {
               target: true,
               breadcrumbs: false
             },
-            
+
             {
               id: 'signin-1',
               title: 'Sign in',

@@ -3,7 +3,6 @@ import React, { useContext, useEffect, useRef } from 'react';
 import Navigation from './Navigation';
 import NavBar from './NavBar';
 import Breadcrumb from './Breadcrumb';
-import Configuration from './Configuration';
 
 import useWindowSize from '../../hooks/useWindowSize';
 import useOutsideClick from '../../hooks/useOutsideClick';
@@ -25,14 +24,10 @@ const AdminLayout = ({ children }) => {
   });
 
   useEffect(() => {
-    if (windowSize.width > 992 && windowSize.width <= 1024 && layout !== 'horizontal') {
+    if (windowSize.width > 992 && windowSize.width <= 1024) {
       dispatch({ type: actionType.COLLAPSE_MENU });
     }
-
-    if (layout === 'horizontal' && windowSize.width < 992) {
-      dispatch({ type: actionType.CHANGE_LAYOUT, layout: 'vertical' });
-    }
-  }, [dispatch, layout, windowSize]);
+  }, [dispatch, windowSize]);
 
   const mobileOutClickHandler = () => {
     if (windowSize.width < 992 && collapseMenu) {
@@ -41,9 +36,6 @@ const AdminLayout = ({ children }) => {
   };
 
   let mainClass = ['pcoded-wrapper'];
-  if (layout === 'horizontal' && subLayout === 'horizontal-2') {
-    mainClass = [...mainClass, 'container'];
-  }
 
   let common = (
     <React.Fragment>
@@ -72,9 +64,6 @@ const AdminLayout = ({ children }) => {
     if (collapseMenu) {
       outSideClass = [...outSideClass, 'mob-backdrop'];
     }
-    if (headerFixedLayout) {
-      outSideClass = [...outSideClass, 'mob-fixed'];
-    }
 
     common = (
       <div className={outSideClass.join(' ')} ref={ref}>
@@ -93,7 +82,6 @@ const AdminLayout = ({ children }) => {
     <React.Fragment>
       {common}
       {mainContainer}
-      {configBlock && <Configuration />}
     </React.Fragment>
   );
 };
