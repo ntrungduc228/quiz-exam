@@ -1,20 +1,20 @@
 import React, { useContext, useEffect, useRef } from 'react';
 
-import Navigation from './Navigation';
-import NavBar from './NavBar';
-import Breadcrumb from './Breadcrumb';
+import Navigation from '../AdminLayout/Navigation';
+import Breadcrumb from '../AdminLayout/Breadcrumb';
+import NavBar from '../AdminLayout/NavBar';
 
 import useWindowSize from '../../hooks/useWindowSize';
 import useOutsideClick from '../../hooks/useOutsideClick';
 import { ConfigContext } from '../../contexts/ConfigContext';
 import * as actionType from '../../store/actions';
 
-const AdminLayout = ({ children }) => {
+const TeacherLayout = ({ children }) => {
   const windowSize = useWindowSize();
   const ref = useRef();
   const configContext = useContext(ConfigContext);
 
-  const { collapseMenu, layout, subLayout, headerFixedLayout, configBlock } = configContext.state;
+  const { collapseMenu } = configContext.state;
   const { dispatch } = configContext;
 
   useOutsideClick(ref, () => {
@@ -77,7 +77,6 @@ const AdminLayout = ({ children }) => {
       </div>
     );
   }
-
   return (
     <React.Fragment>
       {common}
@@ -86,4 +85,4 @@ const AdminLayout = ({ children }) => {
   );
 };
 
-export default AdminLayout;
+export default TeacherLayout;
