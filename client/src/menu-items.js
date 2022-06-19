@@ -1,21 +1,16 @@
-export const studentMenuItems = [];
+export const studentMenuItems = {
+  items: [
+    {
+      id: 'dashboard',
+      title: 'Vào thi',
+      type: 'item',
+      url: '/do-exam',
+      icon: 'feather icon-home'
+    }
+  ]
+};
 export const teacherMenuItems = {
   items: [
-    // {
-    //   id: 'navigation',
-    //   title: 'Navigation',
-    //   type: 'group',
-    //   icon: 'icon-navigation',
-    //   children: [
-    //     {
-    //       id: 'dashboard',
-    //       title: 'Dashboard',
-    //       type: 'item',
-    //       url: '/app/dashboard/default',
-    //       icon: 'feather icon-home'
-    //     }
-    //   ]
-    // },
     {
       id: 'dashboard',
       title: 'Dashboard',
