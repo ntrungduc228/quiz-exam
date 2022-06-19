@@ -4,6 +4,7 @@ import { Switch, Redirect, Route } from 'react-router-dom';
 import Loader from './components/Loader/Loader';
 import AdminLayout from './layouts/AdminLayout';
 import TeacherLayout from './layouts/TeacherLayout';
+import StudentLayout from './layouts/StudentLayout';
 
 import { BASE_URL } from './config/constant';
 
@@ -38,6 +39,17 @@ export const renderRoutes = (routes = {}) => (
     </Switch>
   </Suspense>
 );
+
+export const studentRoutes = {
+  layout: StudentLayout,
+  items: [
+    {
+      path: '/do-exam',
+      exact: true,
+      component: lazy(() => import('./views/student/Exam'))
+    }
+  ]
+};
 
 export const teacherRoutes = {
   layout: TeacherLayout,
