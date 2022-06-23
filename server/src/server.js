@@ -3,7 +3,7 @@ require("dotenv").config();
 const app = express();
 
 const cors = require("cors");
-app.use(cors());
+app.use(cors({ origin: process.env.REACT_APP_URL }));
 const initRoutes = require("./routes/web");
 const connectDB = require("./configs/db.config");
 

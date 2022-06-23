@@ -35,7 +35,17 @@ export const teacherMenuItems = {
     }
   ]
 };
-export const adminMenuItems = [];
+export const adminMenuItems = {
+  items: [
+    {
+      id: 'dashboard',
+      title: 'Dashboard',
+      type: 'item',
+      url: '/app/dashboard/default',
+      icon: 'feather icon-home'
+    }
+  ]
+};
 
 const menuItems = {
   items: [

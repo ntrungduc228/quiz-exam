@@ -6,7 +6,10 @@ import AdminLayout from './layouts/AdminLayout';
 import TeacherLayout from './layouts/TeacherLayout';
 import StudentLayout from './layouts/StudentLayout';
 
-import { BASE_URL } from './config/constant';
+import GuestGuard from './components/Auth/GuestGuard';
+import AuthGuard from './components/Auth/AuthGuard';
+
+import { BASE_URL, ROLES, DASHBOARD_ROUTE } from './config/constant';
 
 // export const renderRoutes = (routes = []) => (
 //   <Suspense fallback={<Loader />}>
@@ -27,26 +30,93 @@ import { BASE_URL } from './config/constant';
 //   </Suspense>
 // );
 
-export const renderRoutes = (routes = {}) => (
-  <Suspense fallback={<Loader />}>
-    <Switch>
-      {routes.items &&
-        routes.items.map((route, i) => {
-          const Layout = routes.layout || Fragment;
-          const Component = route.component;
-          return <Route key={i} path={route.path} exact={route.exact} render={(props) => <Layout>{<Component {...props} />}</Layout>} />;
-        })}
-    </Switch>
-  </Suspense>
-);
+export const renderRoutes = (routes = {}) =>
+  routes.items &&
+  routes.items.map((route, i) => {
+    const Guard = route.guard || Fragment;
+    const Layout = routes.layout || Fragment;
+    const Component = route.component;
+    return (
+      <Route
+        key={i}
+        path={route.path}
+        exact={route.exact}
+        render={(props) => {
+          if (route.guard) {
+            return (
+              <Guard path={props?.match.path} allowedRoles={route.roles}>
+                <Layout>{<Component {...props} />}</Layout>
+              </Guard>
+            );
+          }
+          return (
+            <Guard>
+              <Layout>{<Component {...props} />}</Layout>
+            </Guard>
+          );
+        }}
+      />
+    );
+  });
+
+export const errorRoutes = {
+  items: [
+    {
+      path: '/400',
+      exact: true,
+      component: lazy(() => import('./views/errors/Page400'))
+    },
+    {
+      path: '/404',
+      exact: true,
+      component: lazy(() => import('./views/errors/Page404'))
+    },
+    {
+      path: '/403',
+      exact: true,
+      component: lazy(() => import('./views/errors/Page403'))
+    },
+    {
+      path: '*',
+      exact: true,
+      component: lazy(() => import('./components/DashboardRole'))
+    }
+  ]
+};
+
+export const authRoutes = {
+  items: [
+    {
+      guard: GuestGuard,
+      path: '/signin',
+      exact: true,
+      component: lazy(() => import('./views/auth/signin/SignIn2'))
+    },
+    {
+      exact: true,
+      layout: AdminLayout,
+      path: '/dashboard123',
+      component: lazy(() => import('./views/dashboard/DashDefault'))
+    }
+  ]
+};
 
 export const studentRoutes = {
   layout: StudentLayout,
   items: [
     {
+      guard: AuthGuard,
+      roles: [ROLES.student],
       path: '/do-exam',
       exact: true,
       component: lazy(() => import('./views/student/Exam'))
+    },
+    {
+      guard: AuthGuard,
+      roles: [ROLES.student],
+      path: ['/', BASE_URL],
+      exact: true,
+      component: lazy(() => import('./views/student/Dashboard'))
     }
   ]
 };
@@ -55,25 +125,29 @@ export const teacherRoutes = {
   layout: TeacherLayout,
   items: [
     {
-      path: '/question',
+      path: '/teacher/question',
       exact: true,
       component: lazy(() => import('./views/teacher/Question'))
+    },
+    {
+      guard: AuthGuard,
+      roles: [ROLES.teacher],
+      path: DASHBOARD_ROUTE.teacher?.path,
+      exact: true,
+      component: lazy(() => import('./views/teacher/Dashboard'))
     }
   ]
 };
 
-// export const teacherRoutes = [
-//   {
-//     path: '/question',
-//     layout: TeacherLayout,
-//     exact: true,
-//     component: lazy(() => import('./views/teacher/Question'))
-//   }
-// ];
-
 export const adminRoutes = {
   layout: AdminLayout,
   items: [
+    {
+      path: DASHBOARD_ROUTE.admin?.path,
+      roles: [ROLES.admin],
+      exact: true,
+      component: lazy(() => import('./views/dashboard/DashDefault'))
+    },
     {
       exact: true,
       layout: AdminLayout,

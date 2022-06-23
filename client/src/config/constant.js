@@ -1,7 +1,32 @@
 export const BASENAME = ''; // don't add '/' at end off BASENAME
-export const BASE_URL = '/app/dashboard/default';
+// export const BASE_URL = '/app/dashboard/default';
+export const BASE_URL = '/dashboard';
 export const BASE_TITLE = ' | Datta Able Premium React Hooks + Redux Admin Template';
-export const API_SERVER = 'http://localhost:5000/api/';
+export const API_SERVER = process.env.REACT_APP_API_SERVER || 'http://localhost:5000/api/';
+
+export const STATE = {
+  active: 1,
+  needConfirm: 2,
+  lock: 0
+};
+
+export const ROLES = {
+  admin: 0,
+  teacher: 1,
+  student: 2
+};
+
+export const DASHBOARD_ROUTE = {
+  admin: {
+    path: '/admin/dashboard'
+  },
+  teacher: {
+    path: '/teacher/dashboard'
+  },
+  student: {
+    path: BASE_URL
+  }
+};
 
 export const CONFIG = {
   layout: 'vertical', // disable on free version

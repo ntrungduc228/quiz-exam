@@ -8,13 +8,14 @@ import useWindowSize from '../../hooks/useWindowSize';
 import useOutsideClick from '../../hooks/useOutsideClick';
 import { ConfigContext } from '../../contexts/ConfigContext';
 import * as actionType from '../../store/actions';
+import { adminMenuItems } from '../../menu-items';
 
 const AdminLayout = ({ children }) => {
   const windowSize = useWindowSize();
   const ref = useRef();
   const configContext = useContext(ConfigContext);
 
-  const { collapseMenu, layout, subLayout, headerFixedLayout, configBlock } = configContext.state;
+  const { collapseMenu } = configContext.state;
   const { dispatch } = configContext;
 
   useOutsideClick(ref, () => {
@@ -39,7 +40,7 @@ const AdminLayout = ({ children }) => {
 
   let common = (
     <React.Fragment>
-      <Navigation />
+      <Navigation menuItems={adminMenuItems} />
     </React.Fragment>
   );
 
