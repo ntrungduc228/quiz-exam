@@ -21,7 +21,7 @@ export const logout = createAsyncThunk('auth/logout', async () => {
   await authService.logout();
 });
 
-let initialState = user ? { isLoggedIn: true, user } : { isLoggedIn: false, user: null };
+let initialState = user?.accessToken ? { isLoggedIn: true, user } : { isLoggedIn: false, user: null };
 
 initialState = { ...initialState, isLoading: false };
 
@@ -54,7 +54,7 @@ const authSlice = createSlice({
     },
     [logout.fulfilled]: (state, action) => {
       state.isLoggedIn = false;
-      state.user = null;
+      state.user = 2;
     }
   }
 });

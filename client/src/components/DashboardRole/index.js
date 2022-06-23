@@ -1,6 +1,6 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
-import { Redirect } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { Redirect, useHistory } from 'react-router-dom';
 
 import StudentLayout from '../../layouts/StudentLayout';
 import AdminLayout from '../../layouts/AdminLayout';
@@ -10,10 +10,18 @@ import TeacherDashboard from '../../views/teacher/Dashboard';
 import AdminDashboard from '../../views/admin/Dashboard';
 
 import { ROLES, DASHBOARD_ROUTE } from '../../config/constant';
+import { logout } from '../../store/slices/auth';
 
 const DashboardRole = () => {
+  const dispatch = useDispatch();
+  const history = useHistory();
   const account = useSelector((state) => state.auth);
   const { user } = account;
+
+  const handleLogOut = () => {
+    dispatch(logout());
+    history.push('/signin');
+  };
 
   // switch (user?.role) {
   //   case ROLES.admin: {
@@ -53,6 +61,7 @@ const DashboardRole = () => {
       return <Redirect to={DASHBOARD_ROUTE.student.path} />;
     }
     default:
+      handleLogOut();
       return <Redirect to={'/404'} />;
   }
   return <div>dashboard role</div>;
