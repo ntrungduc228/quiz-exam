@@ -8,3 +8,8 @@ export default function authHeader() {
     return false;
   }
 }
+
+// function check token is expired 
+export function isAuthenticated() {
+ 
+}
