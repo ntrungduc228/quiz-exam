@@ -8,6 +8,7 @@ import useWindowSize from '../../hooks/useWindowSize';
 import useOutsideClick from '../../hooks/useOutsideClick';
 import { ConfigContext } from '../../contexts/ConfigContext';
 import * as actionType from '../../store/actions';
+import { teacherMenuItems } from '../../menu-items';
 
 const TeacherLayout = ({ children }) => {
   const windowSize = useWindowSize();
@@ -39,7 +40,7 @@ const TeacherLayout = ({ children }) => {
 
   let common = (
     <React.Fragment>
-      <Navigation />
+      <Navigation menuItems={teacherMenuItems} />
     </React.Fragment>
   );
 

@@ -7,7 +7,7 @@ import NavLogo from './NavLogo';
 import NavContent from './NavContent';
 import navigation, { teacherMenuItems, studentMenuItems } from '../../../menu-items';
 
-const Navigation = () => {
+const Navigation = ({ menuItems }) => {
   const configContext = useContext(ConfigContext);
   const { collapseMenu } = configContext.state;
   const windowSize = useWindowSize();
@@ -29,7 +29,7 @@ const Navigation = () => {
   let navContent = (
     <div className={navBarClass.join(' ')}>
       <NavLogo />
-      <NavContent navigation={studentMenuItems.items} />
+      <NavContent navigation={menuItems.items} />
       {/* <NavContent navigation={navigation.items} /> */}
     </div>
   );
@@ -37,7 +37,7 @@ const Navigation = () => {
     navContent = (
       <div className="navbar-wrapper">
         <NavLogo />
-        <NavContent navigation={studentMenuItems.items} />
+        <NavContent navigation={menuItems.items} />
         {/* <NavContent navigation={navigation.items} /> */}
       </div>
     );

@@ -3,7 +3,7 @@ import { Row, Col, Card, Table, Modal, Button } from 'react-bootstrap';
 import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
-import NavIcon from '../../layouts/AdminLayout/Navigation/NavContent/NavIcon';
+import NavIcon from '../../../layouts/AdminLayout/Navigation/NavContent/NavIcon';
 
 const { SearchBar } = Search;
 
