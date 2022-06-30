@@ -3,13 +3,12 @@ export default function authHeader() {
 
   if (user && user.accessToken) {
     // for Node.js Express back-end
-    return { 'x-access-token': user.accessToken };
+    // return { 'x-access-token': user.accessToken };
+    return user.accessToken;
   } else {
     return false;
   }
 }
 
-// function check token is expired 
-export function isAuthenticated() {
- 
-}
+// function check token is expired
+export function isAuthenticated() {}

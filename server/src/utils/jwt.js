@@ -8,7 +8,6 @@ let generateToken = (data) => {
   return new Promise((resolve, reject) => {
     try {
       let token = jwt.sign(data, secret, { expiresIn: tokenLife });
-      console.log("token sign", token);
 
       resolve(token);
     } catch (err) {
@@ -22,6 +21,7 @@ let verifyToken = (token) => {
     try {
       jwt.verify(token, secret, function (err, decoded) {
         if (err) {
+          console.log("err verify token:", err.message);
           return resolve({
             success: false,
             message: err.message,

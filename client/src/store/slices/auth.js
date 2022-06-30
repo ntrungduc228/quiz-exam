@@ -6,11 +6,11 @@ const user = JSON.parse(localStorage.getItem('user'));
 
 export const login = createAsyncThunk('auth/login', async ({ username, password }, thunkAPI) => {
   try {
-    const data = await authService.login(username, password);
+    let data = await authService.login(username, password);
     console.log('data response', data);
     return { data: data && data.data ? data.data : null };
   } catch (error) {
-    console.log('error login123', error);
+    console.log('error', error);
     // const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
     thunkAPI.dispatch(setMessage(error.message));
     return thunkAPI.rejectWithValue();
@@ -29,14 +29,14 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    decrement: (state, action) => {
-      state.isLoggedIn = true;
-    },
     showOnLoading: (state) => {
       state.isLoading = true;
     },
     showOffLoading: (state) => {
       state.isLoading = false;
+    },
+    setLoading: (state, action) => {
+      state.isLoading = action.payload;
     }
   },
   extraReducers: {
@@ -54,7 +54,7 @@ const authSlice = createSlice({
     },
     [logout.fulfilled]: (state, action) => {
       state.isLoggedIn = false;
-      state.user = 2;
+      state.user = null;
     }
   }
 });
@@ -62,5 +62,5 @@ const authSlice = createSlice({
 export const selectAuth = (state) => state.auth;
 
 const { reducer, actions } = authSlice;
-export const { decrement, showOnLoading, showOffLoading } = actions;
+export const { showOnLoading, showOffLoading, setLoading } = actions;
 export default reducer;

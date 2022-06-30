@@ -62,7 +62,7 @@ const DashboardRole = () => {
     }
     default:
       handleLogOut();
-      return <Redirect to={'/404'} />;
+      return <Redirect to={'/signin'} />;
   }
   return <div>dashboard role</div>;
 };

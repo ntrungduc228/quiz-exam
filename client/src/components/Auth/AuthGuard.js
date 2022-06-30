@@ -8,7 +8,9 @@ const AuthGuard = ({ children, allowedRoles, path, ...rest }) => {
   const account = useSelector((state) => state.auth);
   const { isLoggedIn, user } = account;
 
-  console.log('state change', account, allowedRoles, user);
+  // console.log('state change', account, allowedRoles, user);
+
+  useEffect(() => {}, [isLoggedIn]);
 
   if (!isLoggedIn) {
     return <Redirect to={'/signin'} />;

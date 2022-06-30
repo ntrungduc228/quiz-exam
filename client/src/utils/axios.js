@@ -23,7 +23,9 @@ axiosServices.interceptors.request.use(
 
 axiosServices.interceptors.response.use(
   (response) => response,
-  (error) => Promise.reject((error.response && error.response.data) || 'Wrong Services')
+  (error) => {
+    return Promise.reject((error.response && error.response.data) || { message: 'Wrong Services', errToken: true });
+  }
 );
 
 export default axiosServices;

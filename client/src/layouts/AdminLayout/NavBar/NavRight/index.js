@@ -1,11 +1,13 @@
 import React, { useContext, useState } from 'react';
-import { ListGroup, Dropdown, Media } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { ListGroup, Dropdown, Media, Button } from 'react-bootstrap';
+import { Link, useHistory } from 'react-router-dom';
 import PerfectScrollbar from 'react-perfect-scrollbar';
+import { useDispatch } from 'react-redux';
 
 import ChatList from './ChatList';
 import { ConfigContext } from '../../../../contexts/ConfigContext';
 import useAuth from '../../../../hooks/useAuth';
+import { logout } from '../../../../store/slices/auth';
 
 import avatar1 from '../../../../assets/images/user/avatar-1.jpg';
 import avatar2 from '../../../../assets/images/user/avatar-2.jpg';
@@ -13,8 +15,10 @@ import avatar3 from '../../../../assets/images/user/avatar-3.jpg';
 import avatar4 from '../../../../assets/images/user/avatar-4.jpg';
 
 const NavRight = () => {
+  const dispatch = useDispatch();
+  const history = useHistory();
+
   const configContext = useContext(ConfigContext);
-  const { logout } = useAuth();
   const { rtlLayout } = configContext.state;
 
   const [listOpen, setListOpen] = useState(false);
@@ -22,7 +26,8 @@ const NavRight = () => {
   const handleLogout = async () => {
     try {
       //handleClose();
-      await logout();
+      await dispatch(logout());
+      history.push('/signin');
     } catch (err) {
       console.error(err);
     }
