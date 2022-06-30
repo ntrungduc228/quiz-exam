@@ -39,10 +39,59 @@ export const adminMenuItems = {
   items: [
     {
       id: 'dashboard',
-      title: 'Dashboard',
+      title: 'Tổng quan',
       type: 'item',
-      url: '/app/dashboard/default',
+      url: '/admin/dashboard',
       icon: 'feather icon-home'
+    },
+    {
+      id: 'class',
+      title: 'Lớp học',
+      type: 'item',
+      url: '/admin/class',
+      icon: 'feather icon-box'
+    },
+    {
+      id: 'teacher',
+      title: 'Giảng viên',
+      type: 'item',
+      url: '/admin/teacher',
+      icon: 'feather icon-box'
+    },
+    {
+      id: 'student',
+      title: 'Sinh viên',
+      type: 'item',
+      url: '/admin/student',
+      icon: 'feather icon-box'
+    },
+    {
+      id: 'subject',
+      title: 'Môn học',
+      type: 'item',
+      url: '/admin/student',
+      icon: 'feather icon-box'
+    },
+    {
+      id: 'question',
+      title: 'Câu hỏi',
+      type: 'item',
+      url: '/admin/student',
+      icon: 'feather icon-box'
+    },
+    {
+      id: 'exam',
+      title: 'Đề thi',
+      type: 'item',
+      url: '/admin/student',
+      icon: 'feather icon-box'
+    },
+    {
+      id: 'result',
+      title: 'Kết quả',
+      type: 'item',
+      url: '/admin/student',
+      icon: 'feather icon-box'
     }
   ]
 };

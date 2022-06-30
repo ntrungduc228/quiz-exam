@@ -10,8 +10,8 @@ const Page403 = () => {
   const auth = useSelector((state) => state.auth);
   const { user } = auth;
 
-  const handleLogOut = () => {
-    dispatch(logout());
+  const handleLogOut = async () => {
+    await dispatch(logout());
     history.push('/signin');
   };
 

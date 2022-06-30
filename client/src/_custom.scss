@@ -1,0 +1,26 @@
+.css-nvf14r-ToastContainer {
+  top: 50px !important;
+}
+
+.react-bootstrap-table td {
+  white-space: normal !important;
+}
+
+@media screen and (max-width: 450px) {
+  .search-label input {
+    max-width: 320px;
+    width: 100% !important;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .search-label {
+    width: 100%;
+  }
+  .table-custom {
+    display: block;
+  }
+  .react-bootstrap-table {
+    overflow-x: scroll;
+  }
+}

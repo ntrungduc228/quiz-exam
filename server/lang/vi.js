@@ -11,6 +11,21 @@ const transErrorsVi = {
   token_undefined: "Token không tồn tại!",
   signin_failed: "Sai tài khoản hoặc mật khẩu!",
   server_error: "Có lỗi phía server",
+  createNew: (newInstance) => {
+    return `Tạo mới ${newInstance} thất bại!`;
+  },
+  updateInstance: (instance) => {
+    return `Cập nhật ${instance} thất bại!`;
+  },
+  deleteInstance: (instance) => {
+    return `Xóa ${instance} thất bại!`;
+  },
+  instanceIsExits: (instance) => {
+    return `${instance} đã tồn tại.`;
+  },
+  instanceIsNotExits: (instance) => {
+    return `Không tìm thấy ${instance}.`;
+  },
 };
 
 const transSuccessVi = {
@@ -23,6 +38,15 @@ const transSuccessVi = {
   send_reset_password_success:
     "Gửi mail reset mật khẩu thành công, vui lòng kiểm tra mail",
   user_password_updated: "Cập nhật mật khẩu thành công.",
+  createNew: (newInstance) => {
+    return `Tạo mới ${newInstance} thành công!`;
+  },
+  updateInstance: (instance) => {
+    return `Cập nhật ${instance} thành công!`;
+  },
+  deleteInstance: (instance) => {
+    return `Xóa ${instance} thành công!`;
+  },
 };
 
 module.exports = { transErrorsVi, transSuccessVi };

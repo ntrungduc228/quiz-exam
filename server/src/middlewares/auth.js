@@ -8,12 +8,16 @@ let isAuthenticated = async (req, res, next) => {
     if (!token) {
       return res
         .status(401)
-        .json({ success: false, message: "Access token missing" });
+        .json({
+          success: false,
+          message: "Access token missing",
+          errToken: true,
+        });
     }
 
     let check = await jwtHepler.verifyToken(token);
     if (!check.success) {
-      return res.json(check);
+      return res.status(401).json(check);
     }
     req.username = check.decoded.username || "";
 

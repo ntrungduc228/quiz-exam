@@ -29,7 +29,7 @@ module.exports = (sequelize, DataTypes) => {
       phone: DataTypes.STRING,
       classId: DataTypes.STRING,
       gender: DataTypes.BOOLEAN,
-      birthday: DataTypes.DATE,
+      birthday: DataTypes.DATEONLY,
     },
     {
       sequelize,
