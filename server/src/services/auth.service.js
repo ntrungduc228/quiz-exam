@@ -1,9 +1,9 @@
 const db = require("../models");
 const { transErrorsVi, transSuccessVi } = require("../../lang/vi");
-
+const bcrypt = require("bcryptjs");
+const { Op } = require("sequelize");
 const { generateToken } = require("../utils/jwt");
 const { ROLES, STATE } = require("../utils/constants");
-const account = require("../models/account");
 
 let login = (username, password) => {
   return new Promise(async (resolve, reject) => {
@@ -22,7 +22,7 @@ let login = (username, password) => {
           });
         }
 
-        if (password !== account.password) {
+        if (!bcrypt.compareSync(password, account.password)) {
           return resolve({
             success: false,
             message: transErrorsVi.signin_failed,
@@ -96,4 +96,67 @@ let isRole = (username, roles) => {
   });
 };
 
-module.exports = { login, isRole };
+let updateAccount = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let account = await db.Account.findOne({
+        where: {
+          username: data.username,
+        },
+        attributes: { exclude: ["createdAt", "updatedAt"] },
+      });
+
+      if (!account) {
+        return resolve({
+          success: false,
+          message: transErrorsVi.instanceIsNotExits("Tài khoản"),
+        });
+      } else {
+        account = await db.Account.findOne({
+          where: {
+            [Op.and]: [
+              { email: data?.newData.email },
+              { [Op.not]: [{ username: data.username }] },
+            ],
+          },
+          attributes: { exclude: ["createdAt", "updatedAt"] },
+        });
+      }
+
+      if (
+        account?.email === data?.newData?.email &&
+        account?.username !== data.username
+      ) {
+        return resolve({
+          success: false,
+          message: transErrorsVi.instanceIsExits("Email"),
+        });
+      }
+
+      let result = await db.Account.update(
+        {
+          email: data?.newData.email,
+          state: data?.newData.state,
+        },
+        { where: { username: data.username } }
+      );
+
+      if (result[0] == 1) {
+        account = await db.Account.findOne({
+          where: { username: data.username },
+          attributes: { exclude: ["createdAt", "updatedAt", "password"] },
+        });
+      }
+
+      return resolve({
+        success: true,
+        message: transSuccessVi.updateInstance("Tài khoản"),
+        data: account,
+      });
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
+module.exports = { login, isRole, updateAccount };

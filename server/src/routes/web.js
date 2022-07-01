@@ -35,39 +35,48 @@ const initRoutes = (app) => {
   });
 
   router.post("/login", authController.login);
-
-  router.get("/test/student", verifyStudent, studentController.studentBoard);
-  router.get("/test/teacher", verifyTeacher, teacherController.teacherBoard);
-  router.get("/test/admin", verifyAdmin, teacherController.adminBoard);
+  router.post("/updateAccount", verifyAdmin, authController.updateAccount);
 
   router.get(
     "/class/get-all-classes",
     verifyTeacherOrAdmin,
     classController.getAllClasses
   );
-
   router.get(
     "/class/get-class-by-id",
     verifyTeacherOrAdmin,
     classController.getClassById
   );
-
   router.post(
     "/class/create-class",
     verifyAdmin,
     classController.createNewClass
   );
-
   router.post(
     "/class/update-class-by-id",
     verifyAdmin,
     classController.updateClassById
   );
-
   router.post(
     "/class/delete-class-by-id",
     verifyAdmin,
     classController.deleteClassById
+  );
+
+  router.get(
+    "/student/get-all-students",
+    verifyTeacherOrAdmin,
+    studentController.getAllStudents
+  );
+  router.post(
+    "/class/create-student",
+    verifyAdmin,
+    studentController.createNewStudent
+  );
+  router.post(
+    "/class/update-student-by-id",
+    verifyAdmin,
+    studentController.updateStudentById
   );
 
   return app.use("/api", router);
