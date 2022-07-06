@@ -7,35 +7,34 @@ import { ACTION_TYPE, STATE } from '../../../config/constant';
 import errorJwt from '../../../utils/errorJwt';
 import { logout } from '../../../store/slices/auth';
 import TableList from '../../../components/TableList';
-import { getAllStudents, setLoading, createNewStudent, updateStudentById, changeState } from '../../../store/slices/student';
-import StudentForm from './StudentForm';
+import { getAllTeachers, setLoading, createNewTeacher, updateTeacherById, changeState } from '../../../store/slices/teacher';
+import TeacherForm from './TeacherForm';
 import FormState from '../../../components/FormState';
 
-const Student = () => {
+const Teacher = () => {
   const initialValues = useRef({
-    classId: '',
-    studentId: '',
+    teacherId: '',
     lastName: '',
     firstName: '',
     gender: true,
     email: '',
-    birthday: '',
     phone: ''
   }).current;
+
   const [formValue, setFormValue] = useState(initialValues);
-  const [studentList, setStudentList] = useState([]);
+  const [teacherList, setTeacherList] = useState([]);
   const [isShowModalConfirm, setIsShowModalConfirm] = useState(false);
   const [isShowModal, setIsShowModal] = useState(false);
   const [typeAction, setTypeAction] = useState(ACTION_TYPE.CREATE);
   const [errorMessage, setErrorMessage] = useState('');
 
-  const { students, isLoading } = useSelector((state) => state.student);
+  const { teachers, isLoading } = useSelector((state) => state.teacher);
   const history = useHistory();
   const dispatch = useDispatch();
   const { addToast } = useToasts();
 
   useEffect(() => {
-    dispatch(getAllStudents())
+    dispatch(getAllTeachers())
       .unwrap()
       .then(() => {})
       .catch(async (err) => {
@@ -48,8 +47,8 @@ const Student = () => {
   }, []);
 
   useEffect(() => {
-    setStudentList(students);
-  }, [students]);
+    setTeacherList(teachers);
+  }, [teachers]);
 
   const handleShowDetailInfo = (data) => {
     setFormValue({ ...data });
@@ -65,7 +64,7 @@ const Student = () => {
     setErrorMessage('');
   };
 
-  const handleUpdateStudent = (data) => {
+  const handleUpdateTeacher = (data) => {
     setFormValue({ ...data });
     setIsShowModal(true);
     setTypeAction(ACTION_TYPE.UPDATE);
@@ -73,79 +72,14 @@ const Student = () => {
   };
 
   const handleChangeState = (data) => {
-    setFormValue({ ...data, username:data.studentId,state: data?.studentAccountData.state });
+    setFormValue({ ...data, username: data.teacherId, state: data?.teacherAccountData.state });
     setIsShowModalConfirm(true);
-  };
-
-  const handleSubmitCreateStudent = async (data) => {
-    await dispatch(setLoading(true));
-    dispatch(createNewStudent(data))
-      .unwrap()
-      .then((res) => {
-        if (res.success) {
-          addToast(res.message, { appearance: 'success' });
-          setFormValue({ ...initialValues });
-          setIsShowModal(false);
-        }
-      })
-      .catch(async (err) => {
-        console.log('wrap err', err);
-        if (errorJwt(err)) {
-          await dispatch(logout());
-          await history.push('/signin');
-        }
-        setErrorMessage(err?.message);
-      });
-  };
-  const handleSubmitUpdateStudent = async (data) => {
-    await dispatch(setLoading(true));
-    dispatch(updateStudentById({ studentId: formValue.studentId, newData: { ...data } }))
-      .unwrap()
-      .then((res) => {
-        if (res.success) {
-          addToast(res.message, { appearance: 'success' });
-          setFormValue({ ...initialValues });
-          setIsShowModal(false);
-        }
-      })
-      .catch(async (err) => {
-        console.log('wrap err', err);
-        if (errorJwt(err)) {
-          await dispatch(logout());
-          await history.push('/signin');
-        }
-        setErrorMessage(err?.message);
-      });
-  };
-
-  const handleSubmitChangeState = async (data) => {
-    await dispatch(setLoading(true));
-
-    dispatch(changeState({ username: data.username, newData: { state: data.state } }))
-      .unwrap()
-      .then((res) => {
-        if (res.success) {
-          addToast(res.message, { appearance: 'success' });
-          setFormValue({ ...initialValues });
-          setIsShowModalConfirm(false);
-        }
-      })
-      .catch(async (err) => {
-        setIsShowModalConfirm(false);
-
-        console.log('wrap err', err);
-        if (errorJwt(err)) {
-          await dispatch(logout());
-          await history.push('/signin');
-        }
-        addToast(err?.message, { appearance: 'error' });
-      });
   };
 
   const columns = [
     {
-      dataField: 'studentId',
-      text: 'Mã sinh viên',
+      dataField: 'teacherId',
+      text: 'Mã giảng viên',
       sort: true
     },
     {
@@ -165,7 +99,7 @@ const Student = () => {
       sort: true
     },
     {
-      dataField: 'studentAccountData.state',
+      dataField: 'teacherAccountData.state',
       text: 'Trạng thái',
       sort: true,
       formatter: (celContent) => {
@@ -211,10 +145,10 @@ const Student = () => {
             <Button variant="info" className="btn-icon" onClick={() => handleShowDetailInfo(row)}>
               <i className="feather icon-info" />
             </Button>
-            <Button variant="warning" className="btn-icon" onClick={() => handleUpdateStudent(row)}>
+            <Button variant="warning" className="btn-icon" onClick={() => handleUpdateTeacher(row)}>
               <i className="feather icon-edit" />
             </Button>
-            <Button variant="danger" className="btn-icon" key={(rowIndex + 1) * students.length} onClick={() => handleChangeState(row)}>
+            <Button variant="danger" className="btn-icon" onClick={() => handleChangeState(row)}>
               <i className="feather icon-check-circle" />
             </Button>
           </>
@@ -222,34 +156,15 @@ const Student = () => {
       }
     }
   ];
+
   return (
     <>
-      <FormState
-        isLoading={isLoading}
-        title={`Thay đổi trạng thái cho sinh viên ${formValue.studentId}`}
-        data={formValue}
-        isShowModalConfirm={isShowModalConfirm}
-        setIsShowModalConfirm={setIsShowModalConfirm}
-        handleSubmitForm={handleSubmitChangeState}
-      />
-
-      <StudentForm
-        title={typeAction.message}
-        isDetail={typeAction.type === ACTION_TYPE.DETAIL.type ? true : false}
-        isUpdate={typeAction.type === ACTION_TYPE.UPDATE.type ? true : false}
-        data={formValue}
-        setIsShowModal={setIsShowModal}
-        isShowModal={isShowModal}
-        handleSubmitForm={typeAction.type === ACTION_TYPE.CREATE.type ? handleSubmitCreateStudent : handleSubmitUpdateStudent}
-        errorMessage={errorMessage}
-      />
-
       <Row>
         <Col>
           <TableList
-            keyField="studentId"
-            title={`Danh sách sinh viên: ${studentList.length}`}
-            dataList={studentList}
+            keyField="teacherId"
+            title={`Danh sách giảng viên: ${teacherList.length}`}
+            dataList={teacherList}
             columns={columns}
             isShowModal={isShowModal}
             setIsShowModal={setIsShowModal}
@@ -261,4 +176,4 @@ const Student = () => {
   );
 };
 
-export default Student;
+export default Teacher;
