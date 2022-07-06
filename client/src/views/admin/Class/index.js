@@ -156,12 +156,19 @@ const Class = () => {
       // isDummyField: true,
       sort: false,
       formatter: (cellContent, row, rowIndex) => {
+        let disabled = row?.studentClassData?.length > 0 ? true : false;
         return (
           <>
-            <Button variant="warning" className="btn-icon" key={rowIndex} onClick={() => handleUpdateClass(row)}>
+            <Button disabled={disabled} variant="warning" className="btn-icon" key={rowIndex} onClick={() => handleUpdateClass(row)}>
               <i className="feather icon-edit" />
             </Button>
-            <Button variant="danger" className="btn-icon" key={(rowIndex + 1) * classes.length} onClick={() => handleDeleteClass(row)}>
+            <Button
+              disabled={disabled}
+              variant="danger"
+              className="btn-icon"
+              key={(rowIndex + 1) * classes.length}
+              onClick={() => handleDeleteClass(row)}
+            >
               <i className="feather icon-trash" />
             </Button>
           </>
@@ -179,18 +186,22 @@ const Class = () => {
         isShowModalConfirm={isShowModalConfirm}
         setIsShowModalConfirm={setIsShowModalConfirm}
         handleSubmitForm={handleSubmitDeleteClass}
+        isText={false}
       />
 
       <ClassForm
-        title={typeAction === ACTION_TYPE.CREATE ? 'Thêm mới' : 'Sửa'}
+        // title={typeAction === ACTION_TYPE.CREATE ? 'Thêm mới' : 'Sửa'}
+        title={typeAction.message}
+        isDetail={typeAction.type === ACTION_TYPE.DETAIL.type ? true : false}
         data={formValue}
         setIsShowModal={setIsShowModal}
         isShowModal={isShowModal}
-        handleSubmitForm={typeAction === ACTION_TYPE.CREATE ? handleSubmitCreateClass : handleSubmitUpdateClass}
+        handleSubmitForm={typeAction.type === ACTION_TYPE.CREATE.type ? handleSubmitCreateClass : handleSubmitUpdateClass}
         errorMessage={errorMessage}
       />
 
       <TableList
+        keyField="classId"
         title={`Danh sách lớp học: ${classList.length}`}
         dataList={classList}
         columns={columns}

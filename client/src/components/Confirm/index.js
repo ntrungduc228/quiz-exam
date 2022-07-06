@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Modal, Row, Col, Spinner } from 'react-bootstrap';
 
-const Confirm = ({ title, data, isShowModalConfirm, setIsShowModalConfirm, handleSubmitForm, isLoading }) => {
+const Confirm = ({ title, isText, data, isShowModalConfirm, setIsShowModalConfirm, handleSubmitForm, isLoading }) => {
   return (
     <>
       <Modal size="" show={isShowModalConfirm} onHide={() => setIsShowModalConfirm(false)} aria-labelledby="example-modal-sizes-title-lg">
@@ -9,9 +9,13 @@ const Confirm = ({ title, data, isShowModalConfirm, setIsShowModalConfirm, handl
           <Modal.Title id="example-modal-sizes-title-md">{title || 'Bạn có chắn chắn muốn thực hiện thao tác này?'}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <p className="font-weight-bold" style={{ color: '#333', fontSize: '16px' }}>
-            {data}
-          </p>
+          {isText ? (
+            data
+          ) : (
+            <p className="font-weight-bold" style={{ color: '#333', fontSize: '16px' }}>
+              {data}
+            </p>
+          )}
           <Row>
             <Col className="d-flex justify-content-end">
               <Button className="shadow-3" variant="warning" style={{ width: '120px' }} onClick={() => setIsShowModalConfirm(false)}>

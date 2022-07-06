@@ -34,8 +34,8 @@ const FormSignIn = ({ className, ...rest }) => {
           submit: null
         }}
         validationSchema={Yup.object().shape({
-          username: Yup.string().max(255).required('Username is required'),
-          password: Yup.string().max(255).required('Password is required')
+          username: Yup.string().max(255).required('Vui lòng nhập username'),
+          password: Yup.string().max(255).required('Vui lòng nhập mật khẩu')
         })}
         onSubmit={async (values, { isSubmitting, setFieldValue, setErrors, setStatus, setSubmitting }) => {
           dispatch(setLoading(true));

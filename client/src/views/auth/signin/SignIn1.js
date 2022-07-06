@@ -6,8 +6,6 @@ import Breadcrumb from '../../../layouts/AdminLayout/Breadcrumb';
 
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
-import FirebaseLogin from './FirebaseLogin';
-
 const Signin1 = () => {
   return (
     <React.Fragment>
@@ -25,7 +23,7 @@ const Signin1 = () => {
               <div className="mb-4">
                 <i className="feather icon-unlock auth-icon" />
               </div>
-              <FirebaseLogin />
+              {/* <FirebaseLogin /> */}
               <p className="mb-2 text-muted">
                 Forgot password?{' '}
                 <NavLink to="/auth/reset-password-1" className="f-w-400">

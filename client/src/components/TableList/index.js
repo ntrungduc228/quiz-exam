@@ -6,7 +6,7 @@ import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 
 const { SearchBar } = Search;
 
-const TableList = ({ title, dataList, columns, isShowModal, setIsShowModal, handleCreateNew }) => {
+const TableList = ({ title, dataList, columns, keyField, isShowModal, setIsShowModal, handleCreateNew }) => {
   return (
     <React.Fragment>
       <Row>
@@ -19,7 +19,7 @@ const TableList = ({ title, dataList, columns, isShowModal, setIsShowModal, hand
               </span> */}
             </Card.Header>
             <Card.Body>
-              <ToolkitProvider bootstrap4 keyField="classId" data={dataList} columns={columns} search>
+              <ToolkitProvider bootstrap4 keyField={keyField} data={dataList} columns={columns} search>
                 {(props) => (
                   <div>
                     {/* <h3>Input something at below input field:</h3> */}
