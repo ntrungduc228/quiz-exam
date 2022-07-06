@@ -70,14 +70,30 @@ const initRoutes = (app) => {
     studentController.getAllStudents
   );
   router.post(
-    "/class/create-student",
+    "/student/create-student",
     verifyAdmin,
     studentController.createNewStudent
   );
   router.post(
-    "/class/update-student-by-id",
+    "/student/update-student-by-id",
     verifyAdmin,
     studentController.updateStudentById
+  );
+
+  router.get(
+    "/teacher/get-all-teachers",
+    verifyTeacherOrAdmin,
+    teacherController.getAllTeachers
+  );
+  router.post(
+    "/teacher/create-teacher",
+    verifyAdmin,
+    teacherController.createNewTeacher
+  );
+  router.post(
+    "/teacher/update-teacher-by-id",
+    verifyAdmin,
+    teacherController.updateTeacherById
   );
 
   return app.use("/api", router);
