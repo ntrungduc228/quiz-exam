@@ -5,8 +5,9 @@ export const BASE_TITLE = ' | Datta Able Premium React Hooks + Redux Admin Templ
 export const API_SERVER = process.env.REACT_APP_API_SERVER || 'http://localhost:5000/api';
 
 export const ACTION_TYPE = {
-  CREATE: 'CREATE',
-  UPDATE: 'UPDATE'
+  CREATE: { type: 'CREATE', message: 'Thêm mới' },
+  UPDATE: { type: 'UPDATE', message: 'Cập nhật' },
+  DETAIL: { type: 'DETAIL', message: 'Thông tin' }
 };
 
 export const STATE = {

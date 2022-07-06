@@ -33,9 +33,9 @@ let createNewStudent = async (req, res) => {
     !firstName ||
     !phone ||
     !classId ||
-    !gender ||
     !birthday ||
-    !email
+    !email ||
+    (gender != true && gender != false)
   ) {
     return res.status(400).json({
       message: "Vui lòng cung cấp đầy đủ dữ liệu !!!",
@@ -65,8 +65,8 @@ let updateStudentById = async (req, res) => {
     !newData?.firstName ||
     !newData?.phone ||
     !newData?.classId ||
-    !newData?.gender ||
-    !newData?.birthday
+    !newData?.birthday ||
+    (newData?.gender != true && newData?.gender != false)
   ) {
     return res.status(400).json({
       message: "Vui lòng cung cấp đầy đủ dữ liệu !!!",

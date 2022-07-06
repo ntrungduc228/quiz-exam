@@ -9,7 +9,6 @@ let salt = bcrypt.genSaltSync(10);
 
 let getAllStudents = () => {
   return new Promise(async (resolve, reject) => {
-    console.log("fsd", db.Student.associations);
     try {
       let data = await db.Student.findAll({
         nest: true,
@@ -43,7 +42,7 @@ let createNewStudent = (data) => {
 
       let existsCol = "";
       if (studentExists) {
-        existsCol =
+        existsCol +=
           studentExists.studentId === data.studentId ? "Mã sinh viên" : "";
         if (studentExists.phone === data.phone) {
           existsCol += existsCol ? ", số điện thoại" : "Số điện thoại";
@@ -59,9 +58,9 @@ let createNewStudent = (data) => {
         if (accountExists?.email === data.email) {
           existsCol += existsCol ? ", email" : "Email";
         }
-        if (accountExists?.username === data.studentId) {
-          existsCol += existsCol ? ", username" : "Username";
-        }
+        // if (accountExists?.username === data.studentId) {
+        //   existsCol += existsCol ? ", mã sinh viên" : "Mã sinh viên";
+        // }
       }
 
       let classExists = await db.Class.findOne({

@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import classService from '../../services/class.service';
 import { setMessage } from './message';
-import errorJwt from '../../utils/errorJwt';
 
 export const createNewClass = createAsyncThunk('class/createNewClass', async (data, thunkAPI) => {
   try {
@@ -59,13 +58,8 @@ export const getClassById = createAsyncThunk('class/getClassById', async (data, 
 export const getAllClasses = createAsyncThunk('class/getAllClasses', async (data, thunkAPI) => {
   try {
     let response = await classService.getAllClasses();
-    // console.log('res', response);
     if (!response.data?.success) {
-      if (errorJwt(response.data)) {
-        // await authService.logout();
-      }
-      thunkAPI.dispatch(setMessage(response.message));
-      return thunkAPI.rejectWithValue();
+      return thunkAPI.rejectWithValue(response.data);
     }
 
     return response?.data ? response.data : null;
@@ -113,7 +107,11 @@ const classSlice = createSlice({
       state.isLoading = false;
       state.classes = state.classes.map((item) => {
         if (item.classId == action.payload.id) {
-          return { classId: action.payload.newData?.classId, name: action.payload.newData?.name };
+          return {
+            classId: action.payload.newData?.classId,
+            name: action.payload.newData?.name,
+            studentClassData: action.payload.newData?.studentClassData
+          };
         }
         return item;
       });

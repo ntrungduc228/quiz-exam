@@ -11,6 +11,7 @@ const transErrorsVi = {
   token_undefined: "Token không tồn tại!",
   signin_failed: "Sai tài khoản hoặc mật khẩu!",
   server_error: "Có lỗi phía server",
+  invalid_value: "Dữ liệu không hợp lệ",
   createNew: (newInstance) => {
     return `Tạo mới ${newInstance} thất bại!`;
   },

@@ -35,7 +35,8 @@ const initRoutes = (app) => {
   });
 
   router.post("/login", authController.login);
-  router.post("/updateAccount", verifyAdmin, authController.updateAccount);
+  router.post("/update-account", verifyAdmin, authController.updateAccount);
+  router.post("/update-state", verifyAdmin, authController.updateState);
 
   router.get(
     "/class/get-all-classes",

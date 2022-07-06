@@ -14,9 +14,14 @@ const logout = () => {
   localStorage.removeItem('user');
 };
 
+const changeStateAccount = (data) => {
+  return axios.post('/update-state', data);
+};
+
 const authService = {
   login,
-  logout
+  logout,
+  changeStateAccount
 };
 
 export default authService;

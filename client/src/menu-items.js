@@ -69,28 +69,28 @@ export const adminMenuItems = {
       id: 'subject',
       title: 'Môn học',
       type: 'item',
-      url: '/admin/student',
+      url: '/admin/subject',
       icon: 'feather icon-box'
     },
     {
       id: 'question',
       title: 'Câu hỏi',
       type: 'item',
-      url: '/admin/student',
+      url: '/admin/question',
       icon: 'feather icon-box'
     },
     {
       id: 'exam',
       title: 'Đề thi',
       type: 'item',
-      url: '/admin/student',
+      url: '/admin/exam',
       icon: 'feather icon-box'
     },
     {
       id: 'result',
       title: 'Kết quả',
       type: 'item',
-      url: '/admin/student',
+      url: '/admin/result',
       icon: 'feather icon-box'
     }
   ]

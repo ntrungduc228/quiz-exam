@@ -45,4 +45,25 @@ let updateAccount = async (req, res) => {
   }
 };
 
-module.exports = { login, updateAccount };
+let updateState = async (req, res) => {
+  let { username, newData } = req.body;
+  if (!username || (!newData?.state && newData?.state != 0)) {
+    return res.status(400).json({
+      message: "Vui lòng cung cấp đầy đủ dữ liệu !!!",
+      success: false,
+    });
+  }
+  try {
+    let data = await authService.updateState(req.body);
+    return res.status(200).json(data);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      message: transErrorsVi.server_error,
+      error: error,
+    });
+  }
+};
+
+module.exports = { login, updateAccount, updateState };

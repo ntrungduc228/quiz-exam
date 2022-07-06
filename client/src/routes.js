@@ -164,6 +164,13 @@ export const adminRoutes = {
       component: lazy(() => import('./views/admin/Student'))
     },
     {
+      guard: AuthGuard,
+      path: '/admin/subject',
+      roles: [ROLES.admin],
+      exact: true,
+      component: lazy(() => import('./views/admin/Subject'))
+    },
+    {
       exact: true,
       layout: AdminLayout,
       path: '/app/dashboard/default',

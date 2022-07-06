@@ -159,4 +159,53 @@ let updateAccount = (data) => {
   });
 };
 
-module.exports = { login, isRole, updateAccount };
+let updateState = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!Object.values(STATE).includes(data.newData.state)) {
+        return resolve({
+          success: false,
+          message: transErrorsVi.invalid_value,
+        });
+      }
+
+      let account = await db.Account.findOne({
+        where: {
+          username: data.username,
+        },
+        attributes: { exclude: ["createdAt", "updatedAt"] },
+      });
+
+      if (!account) {
+        return resolve({
+          success: false,
+          message: transErrorsVi.instanceIsNotExits("Tài khoản"),
+        });
+      }
+
+      let result = await db.Account.update(
+        {
+          state: data?.newData.state,
+        },
+        { where: { username: data.username } }
+      );
+
+      if (result[0] == 1) {
+        account = await db.Account.findOne({
+          where: { username: data.username },
+          attributes: { exclude: ["createdAt", "updatedAt", "password"] },
+        });
+      }
+
+      return resolve({
+        success: true,
+        message: transSuccessVi.updateInstance("Tài khoản"),
+        data: account,
+      });
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
+module.exports = { login, isRole, updateAccount, updateState };
