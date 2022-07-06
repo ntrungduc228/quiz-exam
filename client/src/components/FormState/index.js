@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Col, Row } from 'react-bootstrap';
-import Confirm from '../../../components/Confirm';
-import { STATE } from '../../../config/constant';
+import Confirm from '../Confirm';
+import { STATE } from '../../config/constant';
 
 const stateLabel = {
   active: 'Hoạt động',

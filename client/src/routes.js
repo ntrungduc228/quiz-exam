@@ -158,6 +158,13 @@ export const adminRoutes = {
     },
     {
       guard: AuthGuard,
+      path: '/admin/teacher',
+      roles: [ROLES.admin],
+      exact: true,
+      component: lazy(() => import('./views/admin/Teacher'))
+    },
+    {
+      guard: AuthGuard,
       path: '/admin/student',
       roles: [ROLES.admin],
       exact: true,

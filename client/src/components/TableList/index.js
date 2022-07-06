@@ -1,12 +1,23 @@
 import React from 'react';
-import { Row, Col, Card, Table, Modal, Button } from 'react-bootstrap';
+import { Row, Col, Card, Button } from 'react-bootstrap';
 import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 
 const { SearchBar } = Search;
+let classes = [];
 
 const TableList = ({ title, dataList, columns, keyField, isShowModal, setIsShowModal, handleCreateNew }) => {
+  const handleResponsiveTable = () => {
+    if (window.innerWidth < 1200) {
+      classes.push('table-responsive');
+    }
+  };
+
+  if (window.innerWidth < 1200) {
+    classes.push('table-responsive');
+  }
+
   return (
     <React.Fragment>
       <Row>
@@ -38,7 +49,7 @@ const TableList = ({ title, dataList, columns, keyField, isShowModal, setIsShowM
                     <BootstrapTable
                       // headerWrapperClasses="bg-primary"
                       striped
-                      classes=""
+                      classes={window.innerWidth < 1200 ? 'table-responsive' : ''}
                       pagination={paginationFactory()}
                       noDataIndication="Không tìm thấy dữ liệu..."
                       {...props.baseProps}
