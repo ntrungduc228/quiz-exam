@@ -9,6 +9,7 @@ import TableList from '../../../components/TableList';
 import { getAllTeachers, setLoading, createNewTeacher, updateTeacherById, changeState } from '../../../store/slices/teacher';
 import TeacherForm from './TeacherForm';
 import FormState from '../../../components/FormState';
+import toast from 'react-hot-toast';
 
 const Teacher = () => {
   const initialValues = useRef({
@@ -72,6 +73,72 @@ const Teacher = () => {
   const handleChangeState = (data) => {
     setFormValue({ ...data, username: data.teacherId, state: data?.teacherAccountData.state });
     setIsShowModalConfirm(true);
+  };
+
+  const handleSubmitCreateTeacher = async (data) => {
+    await dispatch(setLoading(true));
+    dispatch(createNewTeacher(data))
+      .unwrap()
+      .then((res) => {
+        if (res.success) {
+          toast.success(res.message);
+          setFormValue({ ...initialValues });
+          setIsShowModal(false);
+        }
+      })
+      .catch(async (err) => {
+        console.log('wrap err', err);
+        if (errorJwt(err)) {
+          await dispatch(logout());
+          await history.push('/signin');
+        }
+        setErrorMessage(err?.message);
+      });
+  };
+
+  const handleSubmitUpdateTeacher = async (data) => {
+    await dispatch(setLoading(true));
+    dispatch(updateTeacherById({ teacherId: formValue.teacherId, newData: { ...data } }))
+      .unwrap()
+      .then((res) => {
+        if (res.success) {
+          toast.success(res.message);
+          setFormValue({ ...initialValues });
+          setIsShowModal(false);
+        }
+      })
+      .catch(async (err) => {
+        console.log('wrap err', err);
+        if (errorJwt(err)) {
+          await dispatch(logout());
+          await history.push('/signin');
+        }
+        setErrorMessage(err?.message);
+      });
+  };
+
+  const handleSubmitChangeState = async (data) => {
+    await dispatch(setLoading(true));
+
+    dispatch(changeState({ username: data.username, newData: { state: data.state } }))
+      .unwrap()
+      .then((res) => {
+        if (res.success) {
+          toast.success(res.message);
+          setFormValue({ ...initialValues });
+          setIsShowModalConfirm(false);
+        }
+      })
+      .catch(async (err) => {
+        setIsShowModalConfirm(false);
+
+        console.log('wrap err', err);
+        if (errorJwt(err)) {
+          await dispatch(logout());
+          await history.push('/signin');
+        }
+        toast.error(err?.message);
+      });
   };
 
   const columns = [
@@ -157,6 +224,26 @@ const Teacher = () => {
 
   return (
     <>
+      <FormState
+        isLoading={isLoading}
+        title={`Thay đổi trạng thái cho giảng viên ${formValue.teacherId}`}
+        data={formValue}
+        isShowModalConfirm={isShowModalConfirm}
+        setIsShowModalConfirm={setIsShowModalConfirm}
+        handleSubmitForm={handleSubmitChangeState}
+      />
+
+      <TeacherForm
+        title={typeAction.message}
+        isDetail={typeAction.type === ACTION_TYPE.DETAIL.type ? true : false}
+        isUpdate={typeAction.type === ACTION_TYPE.UPDATE.type ? true : false}
+        data={formValue}
+        setIsShowModal={setIsShowModal}
+        isShowModal={isShowModal}
+        handleSubmitForm={typeAction.type === ACTION_TYPE.CREATE.type ? handleSubmitCreateTeacher : handleSubmitUpdateTeacher}
+        errorMessage={errorMessage}
+      />
+
       <Row>
         <Col>
           <TableList
