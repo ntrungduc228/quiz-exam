@@ -19,6 +19,16 @@ module.exports = (sequelize, DataTypes) => {
         targetKey: "username",
         as: "studentAccountData",
       });
+
+      Student.hasMany(models.Score, {
+        foreignKey: "studentId",
+        as: "scoreStudentData",
+      });
+
+      Student.hasMany(models.StudentExam, {
+        foreignKey: "studentId",
+        as: "examDetailStudentData",
+      });
     }
   }
   Student.init(
