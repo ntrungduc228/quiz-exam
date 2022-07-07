@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Row, Col, Button, Badge } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { useToasts } from 'react-toast-notifications';
 import { ACTION_TYPE, STATE } from '../../../config/constant';
 import errorJwt from '../../../utils/errorJwt';
 import { logout } from '../../../store/slices/auth';
@@ -31,7 +30,6 @@ const Teacher = () => {
   const { teachers, isLoading } = useSelector((state) => state.teacher);
   const history = useHistory();
   const dispatch = useDispatch();
-  const { addToast } = useToasts();
 
   useEffect(() => {
     dispatch(getAllTeachers())

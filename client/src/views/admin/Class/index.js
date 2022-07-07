@@ -7,13 +7,13 @@ import { useSelector, useDispatch } from 'react-redux';
 import { getAllClasses, createNewClass, setLoading, updateClassById, deleteClassById } from '../../../store/slices/class';
 import { clearMessage } from '../../../store/slices/message';
 import TableList from '../../../components/TableList';
-import { useToasts } from 'react-toast-notifications';
 import ClassForm from './ClassForm';
 import { ACTION_TYPE } from '../../../config/constant';
 import errorJwt from '../../../utils/errorJwt';
 import { useHistory } from 'react-router-dom';
 import { logout } from '../../../store/slices/auth';
 import Confirm from '../../../components/Confirm';
+import toast from 'react-hot-toast';
 
 const { SearchBar } = Search;
 
@@ -28,7 +28,6 @@ const Class = () => {
 
   const { message } = useSelector((state) => state.message);
   const { classes, isLoading } = useSelector((state) => state.class);
-  const { addToast } = useToasts();
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -79,7 +78,7 @@ const Class = () => {
       .unwrap()
       .then((res) => {
         if (res.success) {
-          addToast(res.message, { appearance: 'success' });
+          toast.success(res.message);
           setFormValue({ ...initialValues });
           setIsShowModal(false);
         }
@@ -101,7 +100,7 @@ const Class = () => {
       .unwrap()
       .then((res) => {
         if (res.success) {
-          addToast(res.message, { appearance: 'success' });
+          toast.success(res.message);
           setFormValue({ ...initialValues });
           setIsShowModal(false);
         }
@@ -123,7 +122,7 @@ const Class = () => {
       .unwrap()
       .then((res) => {
         if (res.success) {
-          addToast(res.message, { appearance: 'success' });
+          toast.success(res.message);
           setFormValue({ ...initialValues });
           setIsShowModalConfirm(false);
         }
@@ -135,7 +134,7 @@ const Class = () => {
           await dispatch(logout());
           await history.push('/signin');
         }
-        addToast(err?.message, { appearance: 'error' });
+        toast.error(err?.message);
       });
   };
 
