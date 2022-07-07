@@ -5,6 +5,20 @@ const { Op } = require("sequelize");
 let getAllSubjects = () => {
   return new Promise(async (resolve, reject) => {
     try {
+      let data = await db.Subject.findAll({
+        nest: true,
+        raw: false,
+        attributes: { exclude: ["createdAt", "updatedAt"] },
+        include: [
+          {
+            model: db.Question,
+            as: "questionSubjectData",
+          },
+        ],
+        order: [["updatedAt", "DESC"]],
+      });
+
+      return resolve({ data, success: true });
     } catch (error) {
       reject(error);
     }

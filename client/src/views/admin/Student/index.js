@@ -246,6 +246,7 @@ const Student = () => {
       <Row>
         <Col>
           <TableList
+            isShowButtonCreate={true}
             keyField="studentId"
             title={`Danh sách sinh viên: ${studentList.length}`}
             dataList={studentList}

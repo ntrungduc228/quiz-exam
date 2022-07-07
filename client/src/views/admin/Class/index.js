@@ -200,6 +200,7 @@ const Class = () => {
       />
 
       <TableList
+        isShowButtonCreate={true}
         keyField="classId"
         title={`Danh sách lớp học: ${classList.length}`}
         dataList={classList}

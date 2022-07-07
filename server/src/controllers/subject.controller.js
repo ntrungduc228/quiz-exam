@@ -3,7 +3,7 @@ const { transErrorsVi } = require("../../lang/vi");
 
 let getAllSubjects = async (req, res) => {
   try {
-    let data = await subject.getAllSubjects();
+    let data = await subjectService.getAllSubjects();
     return res.status(200).json(data);
   } catch (error) {
     console.log(error);

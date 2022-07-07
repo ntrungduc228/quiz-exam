@@ -98,23 +98,23 @@ const initRoutes = (app) => {
   );
 
   router.get(
-    "/subject/get-all-subject",
+    "/subject/get-all-subjects",
     verifyTeacherOrAdmin,
     subjectController.getAllSubjects
   );
   router.post(
     "/subject/create-subject",
-    verifyAdmin,
+    verifyTeacher,
     subjectController.createNewSubject
   );
   router.post(
     "/subject/update-subject-by-id",
-    verifyAdmin,
+    verifyTeacher,
     subjectController.updateSubjectById
   );
   router.post(
     "/subject/delete-subject-by-id",
-    verifyAdmin,
+    verifyTeacher,
     subjectController.deleteSubjectById
   );
 

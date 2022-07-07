@@ -5,6 +5,7 @@ import messageReducer from './slices/message';
 import classReducer from './slices/class';
 import studentReducer from './slices/student';
 import teacherReducer from './slices/teacher';
+import subjectReducer from './slices/subject';
 
 const reducers = combineReducers({
   form: formReducer,
@@ -12,7 +13,8 @@ const reducers = combineReducers({
   message: messageReducer,
   class: classReducer,
   student: studentReducer,
-  teacher: teacherReducer
+  teacher: teacherReducer,
+  subject: subjectReducer
 });
 
 export default reducers;

@@ -125,16 +125,18 @@ export const teacherRoutes = {
   layout: TeacherLayout,
   items: [
     {
-      path: '/teacher/question',
-      exact: true,
-      component: lazy(() => import('./views/teacher/Question'))
-    },
-    {
       guard: AuthGuard,
       roles: [ROLES.teacher],
       path: DASHBOARD_ROUTE.teacher?.path,
       exact: true,
       component: lazy(() => import('./views/teacher/Dashboard'))
+    },
+    {
+      guard: AuthGuard,
+      path: '/teacher/subject',
+      roles: [ROLES.teacher],
+      exact: true,
+      component: lazy(() => import('./views/teacher/Subject'))
     }
   ]
 };
