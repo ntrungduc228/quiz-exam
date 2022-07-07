@@ -3,6 +3,7 @@ const authController = require("../controllers/auth.controller");
 const studentController = require("../controllers/student.controller");
 const teacherController = require("../controllers/teacher.controller");
 const classController = require("../controllers/class.controller");
+const subjectController = require("../controllers/subject.controller");
 
 const authMiddleware = require("../middlewares/auth");
 
@@ -94,6 +95,27 @@ const initRoutes = (app) => {
     "/teacher/update-teacher-by-id",
     verifyAdmin,
     teacherController.updateTeacherById
+  );
+
+  router.get(
+    "/subject/get-all-subject",
+    verifyTeacherOrAdmin,
+    subjectController.getAllSubjects
+  );
+  router.post(
+    "/subject/create-subject",
+    verifyAdmin,
+    subjectController.createNewSubject
+  );
+  router.post(
+    "/subject/update-subject-by-id",
+    verifyAdmin,
+    subjectController.updateSubjectById
+  );
+  router.post(
+    "/subject/delete-subject-by-id",
+    verifyAdmin,
+    subjectController.deleteSubjectById
   );
 
   return app.use("/api", router);

@@ -22,6 +22,13 @@ let login = (username, password) => {
           });
         }
 
+        if (account.state === STATE.needConfirm) {
+          return resolve({
+            success: false,
+            message: transErrorsVi.account_need_confirm,
+          });
+        }
+
         if (!bcrypt.compareSync(password, account.password)) {
           return resolve({
             success: false,

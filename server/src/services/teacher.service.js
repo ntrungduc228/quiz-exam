@@ -4,6 +4,7 @@ const { Op } = require("sequelize");
 const bcrypt = require("bcryptjs");
 const { v4: uuidv4 } = require("uuid");
 const emailService = require("./email.service");
+const { ROLES, STATE } = require("../utils/constants");
 
 let salt = bcrypt.genSaltSync(10);
 
@@ -72,8 +73,8 @@ let createNewTeacher = (data) => {
         username: data.teacherId,
         password: bcrypt.hashSync(password, salt),
         email: data.email,
-        role: 2,
-        state: 2,
+        role: ROLES.teacher,
+        state: STATE.needConfirm,
       });
 
       const newInstance = await db.Teacher.create({

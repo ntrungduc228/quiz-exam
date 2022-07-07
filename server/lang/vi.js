@@ -12,6 +12,8 @@ const transErrorsVi = {
   signin_failed: "Sai tài khoản hoặc mật khẩu!",
   server_error: "Có lỗi phía server",
   invalid_value: "Dữ liệu không hợp lệ",
+  account_need_confirm:
+    "Email đã đăng ký nhưng chưa được Active tài khoản, vui lòng kiểm tra email hoặc liên hệ với bộ phần hỗ  trợ của chúng tôi.",
   createNew: (newInstance) => {
     return `Tạo mới ${newInstance} thất bại!`;
   },
