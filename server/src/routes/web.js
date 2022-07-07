@@ -4,6 +4,7 @@ const studentController = require("../controllers/student.controller");
 const teacherController = require("../controllers/teacher.controller");
 const classController = require("../controllers/class.controller");
 const subjectController = require("../controllers/subject.controller");
+const questionController = require("../controllers/question.controller");
 
 const authMiddleware = require("../middlewares/auth");
 
@@ -116,6 +117,27 @@ const initRoutes = (app) => {
     "/subject/delete-subject-by-id",
     verifyTeacher,
     subjectController.deleteSubjectById
+  );
+
+  router.get(
+    "/question/get-all-questions",
+    verifyTeacherOrAdmin,
+    questionController.getAllQuestions
+  );
+  router.post(
+    "/question/create-question",
+    verifyTeacher,
+    questionController.createNewQuestion
+  );
+  router.post(
+    "/question/update-question-by-id",
+    verifyTeacher,
+    questionController.updateQuestionById
+  );
+  router.post(
+    "/question/delete-question-by-id",
+    verifyTeacher,
+    questionController.deleteQuestionById
   );
 
   return app.use("/api", router);

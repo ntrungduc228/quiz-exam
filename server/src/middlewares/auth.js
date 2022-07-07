@@ -6,13 +6,11 @@ let isAuthenticated = async (req, res, next) => {
   try {
     let token = req.headers["x-access-token"];
     if (!token) {
-      return res
-        .status(401)
-        .json({
-          success: false,
-          message: "Access token missing",
-          errToken: true,
-        });
+      return res.status(401).json({
+        success: false,
+        message: "Access token missing",
+        errToken: true,
+      });
     }
 
     let check = await jwtHepler.verifyToken(token);
@@ -37,10 +35,14 @@ const verifyRoles = (...allowedRoles) => {
       if (result) {
         next();
       } else {
-        return res.status(401).json({ message: "You don't have permission" });
+        return res
+          .status(401)
+          .json({ message: "You don't have permission", success: false });
       }
     } catch (err) {
-      return res.status(500).json({ message: "Server error !!!" });
+      return res
+        .status(500)
+        .json({ message: "Server error !!!", success: false });
     }
   };
 };
