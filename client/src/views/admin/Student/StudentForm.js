@@ -52,10 +52,6 @@ const StudentForm = ({ title, data, isDetail, isUpdate, isShowModal, setIsShowMo
     setClassList(classes);
   }, [classes]);
 
-  const onSubmit = (data) => {
-    handleSubmitForm({ ...data, gender: chooseGender });
-  };
-
   useEffect(() => {
     setValue('classId', data.classId);
     setValue('studentId', data.studentId);
@@ -68,6 +64,10 @@ const StudentForm = ({ title, data, isDetail, isUpdate, isShowModal, setIsShowMo
 
     clearErrors();
   }, [data]);
+
+  const onSubmit = (data) => {
+    handleSubmitForm({ ...data, gender: chooseGender });
+  };
 
   return (
     <>

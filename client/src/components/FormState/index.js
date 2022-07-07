@@ -13,11 +13,11 @@ const FormState = ({ data, isLoading, title, isShowModalConfirm, setIsShowModalC
   const [chooseState, setChooseState] = useState(0);
 
   useEffect(() => {
-    setChooseState(data?.studentAccountData?.state);
+    setChooseState(data?.state);
   }, [data]);
 
   const handleSubmitChangeState = () => {
-    handleSubmitForm({ username: data?.studentId, state: chooseState });
+    handleSubmitForm({ username: data?.username, state: chooseState });
   };
 
   let content = (
