@@ -5,19 +5,8 @@ import paginationFactory from 'react-bootstrap-table2-paginator';
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 
 const { SearchBar } = Search;
-let classes = [];
 
-const TableList = ({ title, dataList, columns, keyField, isShowModal, setIsShowModal, handleCreateNew }) => {
-  const handleResponsiveTable = () => {
-    if (window.innerWidth < 1200) {
-      classes.push('table-responsive');
-    }
-  };
-
-  if (window.innerWidth < 1200) {
-    classes.push('table-responsive');
-  }
-
+const TableList = ({ title, dataList, columns, keyField, isShowButtonCreate, isShowModal, setIsShowModal, handleCreateNew }) => {
   return (
     <React.Fragment>
       <Row>
@@ -33,19 +22,21 @@ const TableList = ({ title, dataList, columns, keyField, isShowModal, setIsShowM
               <ToolkitProvider bootstrap4 keyField={keyField} data={dataList} columns={columns} search>
                 {(props) => (
                   <div>
-                    {/* <h3>Input something at below input field:</h3> */}
                     <div className="col-12 d-flex justify-content-between flex-wrap">
                       <div className="col-sm-12 col-md-6">
-                        <Button variant="info" onClick={() => handleCreateNew()}>
-                          <i className="feather icon-plus" />
-                          Thêm mới
-                        </Button>
+                        {isShowButtonCreate && (
+                          <Button variant="info" onClick={() => handleCreateNew()}>
+                            <i className="feather icon-plus" />
+                            Thêm mới
+                          </Button>
+                        )}
                       </div>
                       <div className="col-sm-12 col-md-6 d-flex justify-content-end">
                         <SearchBar {...props.searchProps} placeholder="Tìm kiếm..." style={{ width: '320px' }} />
                       </div>
                     </div>
                     <hr />
+
                     <BootstrapTable
                       // headerWrapperClasses="bg-primary"
                       striped

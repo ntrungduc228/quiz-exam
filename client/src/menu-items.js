@@ -13,25 +13,52 @@ export const teacherMenuItems = {
   items: [
     {
       id: 'dashboard',
-      title: 'Dashboard',
+      title: 'Tổng quan',
       type: 'item',
-      url: '/app/dashboard/default',
+      url: '/teacher/dashboard',
       icon: 'feather icon-home'
     },
     {
-      id: 'charts',
-      title: 'Charts',
+      id: 'class',
+      title: 'Lớp học',
       type: 'item',
-      url: '/charts/nvd3',
-      icon: 'feather icon-pie-chart'
+      url: '/teacher/class',
+      icon: 'feather icon-box'
+    },
+    {
+      id: 'student',
+      title: 'Sinh viên',
+      type: 'item',
+      url: '/teacher/student',
+      icon: 'feather icon-box'
+    },
+    {
+      id: 'subject',
+      title: 'Môn học',
+      type: 'item',
+      url: '/teacher/subject',
+      icon: 'feather icon-box'
     },
     {
       id: 'question',
       title: 'Câu hỏi',
       type: 'item',
-      url: '/question',
-      classes: 'nav-item',
-      icon: 'feather icon-sidebar'
+      url: '/teacher/question',
+      icon: 'feather icon-box'
+    },
+    {
+      id: 'exam',
+      title: 'Đề thi',
+      type: 'item',
+      url: '/teacher/exam',
+      icon: 'feather icon-box'
+    },
+    {
+      id: 'result',
+      title: 'Kết quả',
+      type: 'item',
+      url: '/teacher/result',
+      icon: 'feather icon-box'
     }
   ]
 };

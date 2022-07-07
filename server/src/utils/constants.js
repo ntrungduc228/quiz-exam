@@ -10,4 +10,10 @@ const ROLES = {
   student: 2,
 };
 
-module.exports = { STATE, ROLES };
+const LEVEL = {
+  easy: 0,
+  medium: 1,
+  hard: 2,
+};
+
+module.exports = { STATE, ROLES, LEVEL };
