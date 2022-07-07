@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Row, Col, Button, Badge } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { useToasts } from 'react-toast-notifications';
 import { ACTION_TYPE, STATE } from '../../../config/constant';
 import errorJwt from '../../../utils/errorJwt';
 import { logout } from '../../../store/slices/auth';
@@ -10,6 +9,7 @@ import TableList from '../../../components/TableList';
 import { getAllStudents, setLoading, createNewStudent, updateStudentById, changeState } from '../../../store/slices/student';
 import StudentForm from './StudentForm';
 import FormState from '../../../components/FormState';
+import toast from 'react-hot-toast';
 
 const Student = () => {
   const initialValues = useRef({
@@ -32,7 +32,6 @@ const Student = () => {
   const { students, isLoading } = useSelector((state) => state.student);
   const history = useHistory();
   const dispatch = useDispatch();
-  const { addToast } = useToasts();
 
   useEffect(() => {
     dispatch(getAllStudents())
@@ -73,7 +72,7 @@ const Student = () => {
   };
 
   const handleChangeState = (data) => {
-    setFormValue({ ...data, username:data.studentId,state: data?.studentAccountData.state });
+    setFormValue({ ...data, username: data.studentId, state: data?.studentAccountData.state });
     setIsShowModalConfirm(true);
   };
 
@@ -83,7 +82,7 @@ const Student = () => {
       .unwrap()
       .then((res) => {
         if (res.success) {
-          addToast(res.message, { appearance: 'success' });
+          toast.success(res.message);
           setFormValue({ ...initialValues });
           setIsShowModal(false);
         }
@@ -103,7 +102,7 @@ const Student = () => {
       .unwrap()
       .then((res) => {
         if (res.success) {
-          addToast(res.message, { appearance: 'success' });
+          toast.success(res.message);
           setFormValue({ ...initialValues });
           setIsShowModal(false);
         }
@@ -125,7 +124,7 @@ const Student = () => {
       .unwrap()
       .then((res) => {
         if (res.success) {
-          addToast(res.message, { appearance: 'success' });
+          toast.success(res.message);
           setFormValue({ ...initialValues });
           setIsShowModalConfirm(false);
         }
@@ -138,7 +137,7 @@ const Student = () => {
           await dispatch(logout());
           await history.push('/signin');
         }
-        addToast(err?.message, { appearance: 'error' });
+        toast.error(err?.message);
       });
   };
 

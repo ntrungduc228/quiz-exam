@@ -49,7 +49,7 @@ const TableList = ({ title, dataList, columns, keyField, isShowModal, setIsShowM
                     <BootstrapTable
                       // headerWrapperClasses="bg-primary"
                       striped
-                      classes={window.innerWidth < 1200 ? 'table-responsive' : ''}
+                      classes={window.innerWidth < 768 ? 'table-responsive' : ''}
                       pagination={paginationFactory()}
                       noDataIndication="Không tìm thấy dữ liệu..."
                       {...props.baseProps}
