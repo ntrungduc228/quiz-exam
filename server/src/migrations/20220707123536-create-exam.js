@@ -60,7 +60,7 @@ module.exports = {
         allowNull: false,
       },
       state: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.BOOLEAN,
         allowNull: false,
       },
       createdAt: {

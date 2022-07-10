@@ -16,4 +16,9 @@ const LEVEL = {
   hard: 2,
 };
 
-module.exports = { STATE, ROLES, LEVEL };
+const STATE_EXAM = {
+  open: true,
+  close: false,
+};
+
+module.exports = { STATE, ROLES, LEVEL, STATE_EXAM };
