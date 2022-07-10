@@ -22,6 +22,14 @@ export const ROLES = {
   student: 2
 };
 
+export const LEVEL = {
+  easy: { id: 0, message: 'Dễ' },
+  medium: { id: 1, message: 'Trung bình' },
+  hard: { id: 2, message: 'Khó' }
+};
+
+export const ANSWER = [{ value: 'A' }, { value: 'B' }, { value: 'C' }, { value: 'D' }];
+
 export const DASHBOARD_ROUTE = {
   admin: {
     path: '/admin/dashboard'
