@@ -9,6 +9,12 @@ let getAllQuestions = () => {
         nest: true,
         raw: false,
         attributes: { exclude: ["createdAt", "updatedAt"] },
+        include: [
+          {
+            model: db.Subject,
+            as: "questionSubjectData",
+          },
+        ],
         order: [["updatedAt", "DESC"]],
       });
 
@@ -53,7 +59,7 @@ let createNewQuestion = (data) => {
       return resolve({
         message: transSuccessVi.createNew("câu hỏi"),
         success: true,
-        data: newInstance,
+        data: { ...newInstance, questionSubjectData: data.questionSubjectData },
       });
     } catch (error) {
       reject(error);
@@ -111,7 +117,10 @@ let updateQuestionById = (data) => {
         return resolve({
           message: transSuccessVi.updateInstance("câu hỏi"),
           success: true,
-          data: questionInstance,
+          data: {
+            ...questionInstance,
+            questionSubjectData: data?.newData.questionSubjectData,
+          },
         });
       }
 

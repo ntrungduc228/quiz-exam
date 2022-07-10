@@ -1,5 +1,6 @@
 const questionService = require("../services/question.service");
 const { transErrorsVi } = require("../../lang/vi");
+const { LEVEL } = require("../utils/constants");
 
 let getAllQuestions = async (req, res) => {
   try {
@@ -35,7 +36,7 @@ let createNewQuestion = async (req, res) => {
     !answerC ||
     !answerD ||
     !correctAnswer ||
-    !level ||
+    !Object.values(LEVEL).includes(level) ||
     !teacherId
   ) {
     return res.status(400).json({
