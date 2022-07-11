@@ -38,7 +38,7 @@ module.exports = (sequelize, DataTypes) => {
       numOfEasy: DataTypes.INTEGER,
       numOfMedium: DataTypes.INTEGER,
       numOfHard: DataTypes.INTEGER,
-      state: DataTypes.INTEGER,
+      state: DataTypes.BOOLEAN,
     },
     {
       sequelize,

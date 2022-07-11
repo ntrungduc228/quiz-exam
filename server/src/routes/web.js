@@ -5,6 +5,7 @@ const teacherController = require("../controllers/teacher.controller");
 const classController = require("../controllers/class.controller");
 const subjectController = require("../controllers/subject.controller");
 const questionController = require("../controllers/question.controller");
+const examController = require("../controllers/exam.controller");
 
 const authMiddleware = require("../middlewares/auth");
 
@@ -139,6 +140,19 @@ const initRoutes = (app) => {
     verifyTeacher,
     questionController.deleteQuestionById
   );
+
+  router.get(
+    "/exam/get-all-exams",
+    authMiddleware.isAuthenticated,
+    examController.getAllExams
+  );
+  router.post("/exam/create-exam", verifyTeacher, examController.createNewExam);
+  router.post(
+    "/exam/change-state-exam",
+    verifyTeacher,
+    examController.changeStateExam
+  );
+  router.post("/exam/delete-exam", verifyTeacher, examController.deleteExam);
 
   return app.use("/api", router);
 };
