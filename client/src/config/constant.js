@@ -30,6 +30,11 @@ export const LEVEL = {
 
 export const ANSWER = [{ value: 'A' }, { value: 'B' }, { value: 'C' }, { value: 'D' }];
 
+export const STATE_EXAM = {
+  open: true,
+  close: false
+};
+
 export const DASHBOARD_ROUTE = {
   admin: {
     path: '/admin/dashboard'

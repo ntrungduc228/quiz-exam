@@ -144,6 +144,13 @@ export const teacherRoutes = {
       roles: [ROLES.teacher],
       exact: true,
       component: lazy(() => import('./views/teacher/Question'))
+    },
+    {
+      guard: AuthGuard,
+      path: '/teacher/exam',
+      roles: [ROLES.teacher],
+      exact: true,
+      component: lazy(() => import('./views/teacher/Exam'))
     }
   ]
 };

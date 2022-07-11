@@ -10,7 +10,12 @@ let getAllExams = () => {
         nest: true,
         raw: false,
         attributes: { exclude: ["createdAt", "updatedAt"] },
-
+        include: [
+          {
+            model: db.Subject,
+            as: "examSubjectData",
+          },
+        ],
         order: [["updatedAt", "DESC"]],
       });
 
