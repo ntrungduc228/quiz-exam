@@ -2,9 +2,9 @@ export const studentMenuItems = {
   items: [
     {
       id: 'dashboard',
-      title: 'Vào thi',
+      title: 'Tổng quan',
       type: 'item',
-      url: '/do-exam',
+      url: '/dashboard',
       icon: 'feather icon-home'
     }
   ]

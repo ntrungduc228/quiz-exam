@@ -21,4 +21,6 @@ const STATE_EXAM = {
   close: false,
 };
 
-module.exports = { STATE, ROLES, LEVEL, STATE_EXAM };
+const MINIMUM_QUESTION = 3;
+
+module.exports = { STATE, ROLES, LEVEL, STATE_EXAM, MINIMUM_QUESTION };

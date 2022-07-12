@@ -1,7 +1,7 @@
 const db = require("../models");
 const { transErrorsVi, transSuccessVi } = require("../../lang/vi");
 const { Op } = require("sequelize");
-const { STATE_EXAM } = require("../utils/constants");
+const { STATE_EXAM, MINIMUM_QUESTION, LEVEL } = require("../utils/constants");
 
 let getAllExams = () => {
   return new Promise(async (resolve, reject) => {
@@ -40,6 +40,49 @@ let createNewExam = (data) => {
         return resolve({
           success: false,
           message: transErrorsVi.instanceIsExits("bài thi"),
+        });
+      }
+
+      let questionList = await db.Question.findAll({
+        where: { subjectId: data.subjectId },
+      });
+
+      let numOfQues = { easy: 0, medium: 0, hard: 0 };
+      questionList.forEach((item) => {
+        if (item.level === LEVEL.easy) {
+          numOfQues.easy++;
+        }
+
+        if (item.level === LEVEL.medium) {
+          numOfQues.medium++;
+        }
+
+        if (item.level === LEVEL.hard) {
+          numOfQues.hard++;
+        }
+      });
+
+      if (!Object.values(numOfQues).every((item) => item >= MINIMUM_QUESTION)) {
+        return resolve({
+          success: false,
+          message: `Cần có sẵn tổi thiểu ${MINIMUM_QUESTION} cho mỗi loại câu hỏi dễ, trung bình, khó của môn học ${data.subjectId} để tạo đề thi`,
+        });
+      }
+
+      let mess = "";
+      if (numOfQues.easy < data.numOfEasy) {
+        mess += "dễ";
+      }
+      if (numOfQues.medium < data.numOfMedium) {
+        mess += mess ? ", trung bình" : "trung bình";
+      }
+      if (numOfQues.hard < data.numOfHard) {
+        mess += mess ? ", khó" : "khó";
+      }
+      if (mess) {
+        return resolve({
+          success: false,
+          message: `Số câu hỏi ${mess} có sẵn không đủ để tạo đề thi này`,
         });
       }
 

@@ -18,13 +18,13 @@ const Exam = () => {
             </Card.Header>
             <Card.Body>
               <PerfectScrollbar>
-                <Form style={{}}>
+                <Form style={{ marginLeft: '10px' }}>
                   <Form.Group>
                     <Form.Check
                       className="mb-3"
                       custom
                       type="radio"
-                      label="Toggle this custom radio"
+                      label="Toggle this custom radioToggle this custom radioToggle this custom radio"
                       name="supportedRadios"
                       id="supportedRadio3"
                     />
