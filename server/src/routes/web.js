@@ -153,6 +153,17 @@ const initRoutes = (app) => {
     examController.changeStateExam
   );
   router.post("/exam/delete-exam", verifyTeacher, examController.deleteExam);
+  router.post(
+    "/exam/get-exams-by-class",
+    authMiddleware.isAuthenticated,
+    examController.getAllExamsByClass
+  );
+  router.post("/exam/doing-exam", verifyStudent, examController.doingExam);
+  router.post(
+    "/exam/get-exam-by-student",
+    verifyStudent,
+    examController.getExamsByStudentId
+  );
 
   return app.use("/api", router);
 };

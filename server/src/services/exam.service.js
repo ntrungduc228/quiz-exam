@@ -1,7 +1,9 @@
 const db = require("../models");
 const { transErrorsVi, transSuccessVi } = require("../../lang/vi");
-const { Op } = require("sequelize");
-const { STATE_EXAM } = require("../utils/constants");
+const { Op, Sequelize } = require("sequelize");
+const { STATE_EXAM, MINIMUM_QUESTION, LEVEL } = require("../utils/constants");
+const { getShuffledArr } = require("../utils/helpers");
+const moment = require("moment");
 
 let getAllExams = () => {
   return new Promise(async (resolve, reject) => {
@@ -40,6 +42,49 @@ let createNewExam = (data) => {
         return resolve({
           success: false,
           message: transErrorsVi.instanceIsExits("bài thi"),
+        });
+      }
+
+      let questionList = await db.Question.findAll({
+        where: { subjectId: data.subjectId },
+      });
+
+      let numOfQues = { easy: 0, medium: 0, hard: 0 };
+      questionList.forEach((item) => {
+        if (item.level === LEVEL.easy) {
+          numOfQues.easy++;
+        }
+
+        if (item.level === LEVEL.medium) {
+          numOfQues.medium++;
+        }
+
+        if (item.level === LEVEL.hard) {
+          numOfQues.hard++;
+        }
+      });
+
+      if (!Object.values(numOfQues).every((item) => item >= MINIMUM_QUESTION)) {
+        return resolve({
+          success: false,
+          message: `Cần có sẵn tổi thiểu ${MINIMUM_QUESTION} cho mỗi loại câu hỏi dễ, trung bình, khó của môn học ${data.subjectId} để tạo đề thi`,
+        });
+      }
+
+      let mess = "";
+      if (numOfQues.easy < data.numOfEasy) {
+        mess += "dễ";
+      }
+      if (numOfQues.medium < data.numOfMedium) {
+        mess += mess ? ", trung bình" : "trung bình";
+      }
+      if (numOfQues.hard < data.numOfHard) {
+        mess += mess ? ", khó" : "khó";
+      }
+      if (mess) {
+        return resolve({
+          success: false,
+          message: `Số câu hỏi ${mess} có sẵn không đủ để tạo đề thi này`,
         });
       }
 
@@ -160,9 +205,219 @@ let deleteExam = (data) => {
   });
 };
 
+let getAllExamsByClass = (classId) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let data = await db.Exam.findAll({
+        nest: true,
+        raw: false,
+        attributes: { exclude: ["createdAt", "updatedAt"] },
+        where: {
+          classId: classId,
+          state: STATE_EXAM.open,
+        },
+        include: [
+          {
+            model: db.Subject,
+            as: "examSubjectData",
+            attributes: { exclude: ["createdAt", "updatedAt"] },
+          },
+        ],
+        order: [["updatedAt", "DESC"]],
+      });
+
+      return resolve({ data, success: true });
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
+let doingExam = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let examInstance = await db.Exam.findOne({
+        where: {
+          classId: data.classId,
+          subjectId: data.subjectId,
+          times: data.times,
+        },
+      });
+      if (!examInstance) {
+        return resolve({
+          success: false,
+          message: transErrorsVi.instanceIsNotExits("bài thi"),
+        });
+      }
+
+      // Create question list
+      let res = {};
+      let questionRes = [];
+      // easy questions
+      let questionList = await db.Question.findAll({
+        where: { subjectId: data.subjectId, level: LEVEL.easy },
+        order: Sequelize.literal("rand()"),
+        limit: examInstance.numOfEasy,
+        attributes: { exclude: ["createdAt", "updatedAt", "correctAnswer"] },
+      });
+      questionRes = [...questionRes, ...questionList];
+      // medium questions
+      questionList = await db.Question.findAll({
+        where: { subjectId: data.subjectId, level: LEVEL.medium },
+        order: Sequelize.literal("rand()"),
+        limit: examInstance.numOfMedium,
+        attributes: { exclude: ["createdAt", "updatedAt", "correctAnswer"] },
+      });
+      questionRes = [...questionRes, ...questionList];
+      // hard questions
+      questionList = await db.Question.findAll({
+        where: { subjectId: data.subjectId, level: LEVEL.hard },
+        order: Sequelize.literal("rand()"),
+        limit: examInstance.numOfHard,
+        attributes: { exclude: ["createdAt", "updatedAt", "correctAnswer"] },
+      });
+      questionRes = [...questionRes, ...questionList];
+
+      res.questionList = getShuffledArr(questionRes);
+      res.info = examInstance;
+
+      // Create score instance
+      let expiresAt = new Date();
+      expiresAt = moment().add(examInstance.timeExam, "minutes").format();
+      const scoreInstance = await db.Score.create({
+        studentId: data.studentId,
+        subjectId: data.subjectId,
+        times: data.times,
+        date: new Date(),
+        score: -1,
+        expiresAt: expiresAt,
+      });
+
+      // Create question answer by student
+      let questionAnswer = res.questionList.map((item, index) => {
+        return {
+          studentId: data.studentId,
+          questionId: item.questionId,
+          subjectId: item.subjectId,
+          answer: null,
+          number: index + 1,
+          times: data.times,
+        };
+      });
+      await db.StudentExam.bulkCreate(questionAnswer);
+
+      return resolve({ data: res, success: true });
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
+let getResultByExam = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let answerList = await db.StudentExam.findAll({
+        raw: false,
+        nest: true,
+        where: {
+          studentId: data.studentId,
+          subjectId: data.subjectId,
+          times: data.times,
+        },
+        include: [
+          {
+            model: db.Question,
+            as: "examDetailQuestionData",
+            attributes: { exclude: ["createdAt", "updatedAt"] },
+          },
+        ],
+      });
+
+      let numOfRightAnswer = 0;
+      numOfRightAnswer = answerList.reduce((total, item) => {
+        return item.answer === item.examDetailQuestionData.correctAnswer
+          ? total + 1
+          : total;
+      }, 0);
+
+      let score = +Number(
+        (10.0 / answerList.length) * numOfRightAnswer
+      ).toFixed(2);
+
+      await db.Score.update(
+        { score },
+        {
+          where: {
+            studentId: data.studentId,
+            subjectId: data.subjectId,
+            times: data.times,
+          },
+        }
+      );
+
+      // await db.StudentExam.bulkDelete(answerList, {
+      //   where: {
+      //     studentId: data.studentId,
+      //     subjectId: data.subjectId,
+      //     times: data.times,
+      //   },
+      // });
+
+      // let result = await db.Score.findOne({
+      //   where: {
+      //     studentId: data.studentId,
+      //     subjectId: data.subjectId,
+      //     times: data.times,
+      //   },
+      // });
+      let result = {};
+      result.numOfQuestion = answerList.length;
+      result.numOfRightAnswer = numOfRightAnswer;
+      result.score = score;
+
+      resolve(result);
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
+let getExamsByStudentId = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let examInstances = await db.Score.findAll({
+        where: {
+          studentId: data.studentId,
+          score: -1,
+        },
+      });
+
+      let results = [];
+      if (examInstances) {
+        results = await Promise.all(
+          examInstances.map(async (item) => {
+            if (item.expiresAt.getTime() < new Date().getTime()) {
+              let result = await getResultByExam(item);
+              return { ...item, ...result };
+            }
+            return item;
+          })
+        );
+      }
+      return resolve({ data: results, success: true });
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
 module.exports = {
   getAllExams,
   createNewExam,
   deleteExam,
   changeStateExam,
+  getAllExamsByClass,
+  doingExam,
+  getExamsByStudentId,
+  getResultByExam,
 };

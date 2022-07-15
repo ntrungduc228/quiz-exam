@@ -28,7 +28,7 @@ const Exam = () => {
   const [isShowModal, setIsShowModal] = useState(false);
   const [typeAction, setTypeAction] = useState(ACTION_TYPE.CREATE);
   const [errorMessage, setErrorMessage] = useState('');
-  const [examList, setexamList] = useState([]);
+  const [examList, setExamList] = useState([]);
 
   const { exams, isLoading } = useSelector((state) => state.exam);
   const { user } = useSelector((state) => state.auth);
@@ -49,7 +49,7 @@ const Exam = () => {
   }, []);
 
   useEffect(() => {
-    setexamList(exams);
+    setExamList(exams);
   }, [exams]);
 
   const handleCreateNew = () => {

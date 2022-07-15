@@ -114,7 +114,7 @@ export const studentRoutes = {
     {
       guard: AuthGuard,
       roles: [ROLES.student],
-      path: ['/', BASE_URL],
+      path: ['/', DASHBOARD_ROUTE.student?.path],
       exact: true,
       component: lazy(() => import('./views/student/Dashboard'))
     }

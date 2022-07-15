@@ -10,7 +10,7 @@ import { ConfigContext } from '../../contexts/ConfigContext';
 import * as actionType from '../../store/actions';
 import { studentMenuItems } from '../../menu-items';
 
-const TeacherLayout = ({ children }) => {
+const StudentLayout = ({ children }) => {
   const windowSize = useWindowSize();
   const ref = useRef();
   const configContext = useContext(ConfigContext);
@@ -86,4 +86,4 @@ const TeacherLayout = ({ children }) => {
   );
 };
 
-export default TeacherLayout;
+export default StudentLayout;
