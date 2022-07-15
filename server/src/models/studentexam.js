@@ -32,7 +32,9 @@ module.exports = (sequelize, DataTypes) => {
       studentId: { type: DataTypes.STRING, primaryKey: true },
       questionId: { type: DataTypes.INTEGER, primaryKey: true },
       subjectId: { type: DataTypes.STRING, primaryKey: true },
+      times: { type: DataTypes.INTEGER },
       answer: DataTypes.STRING,
+      number: DataTypes.INTEGER,
     },
     {
       sequelize,

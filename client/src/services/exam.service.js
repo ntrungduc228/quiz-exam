@@ -16,6 +16,14 @@ let deleteExam = (data) => {
   return axios.post('/exam/delete-exam', data);
 };
 
-const examService = { getAllExams, createNewExam, changeStateExam, deleteExam };
+let getAllExamsByClass = (data) => {
+  return axios.post('/exam/get-exams-by-class', data);
+};
+
+let doingExam = (data) => {
+  return axios.post('/exam/doing-exam', data);
+};
+
+const examService = { getAllExams, createNewExam, changeStateExam, deleteExam, getAllExamsByClass, doingExam };
 
 export default examService;

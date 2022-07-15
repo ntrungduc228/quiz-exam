@@ -35,9 +35,17 @@ module.exports = {
         onUpdate: "cascade",
         onDelete: "cascade",
       },
-      answer: {
+      times: {
         allowNull: false,
+        type: Sequelize.INTEGER,
+      },
+      answer: {
+        allowNull: true,
         type: Sequelize.STRING,
+      },
+      number: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
       },
       createdAt: {
         allowNull: false,

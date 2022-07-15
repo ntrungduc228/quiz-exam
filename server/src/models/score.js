@@ -28,6 +28,7 @@ module.exports = (sequelize, DataTypes) => {
       times: { type: DataTypes.INTEGER, primaryKey: true },
       date: DataTypes.DATEONLY,
       score: DataTypes.FLOAT,
+      expiresAt: DataTypes.DATE,
     },
     {
       sequelize,
