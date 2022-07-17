@@ -35,7 +35,6 @@ const ExamForm = ({ title, data, isDetail, isUpdate, isShowModal, setIsShowModal
     formState: { errors },
     setValue,
     clearErrors,
-    getValues
   } = useForm({ mode: 'onChange', resolver: yupResolver(schema) });
 
   const { subjects } = useSelector((state) => state.subject);

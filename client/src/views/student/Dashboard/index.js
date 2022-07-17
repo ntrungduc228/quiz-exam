@@ -4,12 +4,15 @@ import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import errorJwt from '../../../utils/errorJwt';
 import { logout } from '../../../store/slices/auth';
-import { getAllExamsByClass, setExamInfo } from '../../../store/slices/exam';
+import { getAllExamsByClass, setExamInfo, getExamsByStudent } from '../../../store/slices/exam';
+import FormResult from '../../student/Result/FormResult';
 
 const Dashboard = () => {
   const [examList, setExamList] = useState([]);
+  const [isShowModal, setIsShowModal] = useState(false);
+  const [formValue, setFormValue] = useState(null);
 
-  const { exams, isLoading, examInfo } = useSelector((state) => state.exam);
+  const { exams, examInfo, examByStudent } = useSelector((state) => state.exam);
   const { user } = useSelector((state) => state.auth);
 
   const history = useHistory();
@@ -26,7 +29,20 @@ const Dashboard = () => {
           history.push('/signin');
         }
       });
+
+    dispatch(getExamsByStudent({ classId: user.classId, studentId: user.userId }))
+      .unwrap()
+      .then(() => {})
+      .catch(async (err) => {
+        console.log(err);
+        if (errorJwt(err)) {
+          await dispatch(logout());
+          history.push('/signin');
+        }
+      });
   }, []);
+  console.log('examByStudent', examByStudent);
+  console.log('examList', examList);
 
   useEffect(() => {
     if (examInfo?.classId && examInfo?.subjectId && examInfo?.times) {
@@ -38,8 +54,14 @@ const Dashboard = () => {
     setExamList(exams);
   }, [exams]);
 
+  const handleShowResult = (data) => {
+    setIsShowModal(true);
+    setFormValue({ ...data, result: examByStudent[data.keyField] });
+  };
+
   return (
     <React.Fragment>
+      <FormResult data={formValue} setIsShowModal={setIsShowModal} isShowModal={isShowModal} />
       <Row>
         {examList.map((item) => {
           return (
@@ -57,8 +79,16 @@ const Dashboard = () => {
                     <p>Số câu hỏi: {item?.numOfEasy + item?.numOfMedium + item?.numOfHard}</p>
                     <p>Thời gian: {item?.timeExam} phút</p>
                   </div>
-                  <Button className="mt-2" onClick={() => dispatch(setExamInfo(item))}>
-                    Vao thi
+                  <Button
+                    variant={examByStudent[item.keyField] ? 'warning' : 'primary'}
+                    className="mt-2"
+                    onClick={() => (examByStudent[item.keyField] ? handleShowResult(item) : dispatch(setExamInfo(item)))}
+                  >
+                    {examByStudent[item.keyField] && examByStudent[item.keyField].score != -1
+                      ? examByStudent[item.keyField] && examByStudent[item.keyField].score > -1
+                        ? 'Xem điểm'
+                        : 'Thi tiếp'
+                      : 'Vào thi'}
                   </Button>
                 </Card.Body>
               </Card>

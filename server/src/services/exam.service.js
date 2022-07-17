@@ -236,12 +236,45 @@ let getAllExamsByClass = (classId) => {
 let doingExam = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
+      let examExists = await db.Score.findOne({
+        where: {
+          studentId: data.studentId,
+          subjectId: data.subjectId,
+          times: data.times,
+        },
+      });
+
+      if (examExists) {
+        let answerList = await db.StudentExam.findAll({
+          where: {
+            subjectId: data.subjectId,
+            times: data.times,
+            studentId: data.studentId,
+          },
+          order: [["number", "ASC"]],
+        });
+
+        let res = {};
+        res.info = examExists;
+        res.questionList = answerList;
+        return resolve({ data: res, success: true });
+      }
+
       let examInstance = await db.Exam.findOne({
+        raw: false,
+        nest: true,
         where: {
           classId: data.classId,
           subjectId: data.subjectId,
           times: data.times,
         },
+        include: [
+          {
+            model: db.Subject,
+            as: "examSubjectData",
+            attributes: { exclude: ["createdAt", "updatedAt"] },
+          },
+        ],
       });
       if (!examInstance) {
         return resolve({
@@ -333,6 +366,13 @@ let getResultByExam = (data) => {
         ],
       });
 
+      if (!answerList.length) {
+        return resolve({
+          success: false,
+          message: "Dữ liệu không tìm thấy",
+        });
+      }
+
       let numOfRightAnswer = 0;
       numOfRightAnswer = answerList.reduce((total, item) => {
         return item.answer === item.examDetailQuestionData.correctAnswer
@@ -355,56 +395,128 @@ let getResultByExam = (data) => {
         }
       );
 
-      // await db.StudentExam.bulkDelete(answerList, {
-      //   where: {
-      //     studentId: data.studentId,
-      //     subjectId: data.subjectId,
-      //     times: data.times,
-      //   },
-      // });
+      await db.StudentExam.destroy({
+        where: {
+          studentId: data.studentId,
+          subjectId: data.subjectId,
+          times: data.times,
+        },
+      });
 
-      // let result = await db.Score.findOne({
-      //   where: {
-      //     studentId: data.studentId,
-      //     subjectId: data.subjectId,
-      //     times: data.times,
-      //   },
-      // });
-      let result = {};
+      let result = await db.Score.findOne({
+        raw: false,
+        nest: true,
+        where: {
+          studentId: data.studentId,
+          subjectId: data.subjectId,
+          times: data.times,
+        },
+        include: [
+          {
+            model: db.Subject,
+            as: "scoreSubjectData",
+            attributes: { exclude: ["createdAt", "updatedAt"] },
+          },
+        ],
+      });
+      // let result = {};
       result.numOfQuestion = answerList.length;
       result.numOfRightAnswer = numOfRightAnswer;
       result.score = score;
 
-      resolve(result);
+      return resolve({ data: result, success: true });
     } catch (error) {
       reject(error);
     }
   });
 };
 
-let getExamsByStudentId = (data) => {
+let getExamsByStudent = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
       let examInstances = await db.Score.findAll({
         where: {
           studentId: data.studentId,
-          score: -1,
+          // score: -1,
         },
       });
 
       let results = [];
+      let dataReturn = {};
+
       if (examInstances) {
         results = await Promise.all(
           examInstances.map(async (item) => {
-            if (item.expiresAt.getTime() < new Date().getTime()) {
+            if (
+              item.score === -1
+              //  && item.expiresAt.getTime() < new Date().getTime()
+            ) {
               let result = await getResultByExam(item);
-              return { ...item, ...result };
+              let resultItem = {
+                ...item,
+                ...result.data,
+                keyField: item.subjectId.concat(data.classId + item.times),
+                // timeRemain: moment(new Date()).subtract(item.expiresAt),
+              };
+
+              // dataReturn[resultItem.keyField] = resultItem;
+              return resultItem;
             }
+
+            item.keyField = item.subjectId.concat(data.classId + item.times);
+
+            // item.timeRemain = moment(item.expiresAt).subtract(new Date());
+            // dataReturn[item.keyField] = item;
             return item;
           })
         );
+
+        results.forEach((item) => {
+          dataReturn[item.keyField] = item;
+        });
       }
-      return resolve({ data: results, success: true });
+
+      return resolve({ data: dataReturn, success: true });
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
+let updateStudentAnswer = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let result = await db.StudentExam.update(
+        {
+          answer: data.answer || null,
+        },
+        {
+          where: {
+            studentId: data.studentId,
+            questionId: data.questionId,
+            times: data.times,
+            subjectId: data.subjectId,
+          },
+        }
+      );
+
+      let dataReturn = {
+        studentId: data.studentId,
+        questionId: data.questionId,
+        times: data.times,
+        subjectId: data.subjectId,
+        studentChoice: data.answer,
+      };
+      if (result[0] === 1) {
+        return resolve({
+          success: true,
+          data: dataReturn,
+        });
+      }
+      return resolve({
+        success: false,
+        data: dataReturn,
+      });
     } catch (error) {
       reject(error);
     }
@@ -418,6 +530,7 @@ module.exports = {
   changeStateExam,
   getAllExamsByClass,
   doingExam,
-  getExamsByStudentId,
+  getExamsByStudent,
   getResultByExam,
+  updateStudentAnswer,
 };

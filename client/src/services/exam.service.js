@@ -24,6 +24,28 @@ let doingExam = (data) => {
   return axios.post('/exam/doing-exam', data);
 };
 
-const examService = { getAllExams, createNewExam, changeStateExam, deleteExam, getAllExamsByClass, doingExam };
+let getExamsByStudent = (data) => {
+  return axios.post('/exam/get-exams-by-student', data);
+};
+
+let updateStudentAnswer = (data) => {
+  return axios.post('/exam/update-student-answer', data);
+};
+
+let getResultByExam = (data) => {
+  return axios.post('/exam/get-result-by-exam', data);
+};
+
+const examService = {
+  getAllExams,
+  createNewExam,
+  changeStateExam,
+  deleteExam,
+  getAllExamsByClass,
+  doingExam,
+  getExamsByStudent,
+  updateStudentAnswer,
+  getResultByExam
+};
 
 export default examService;

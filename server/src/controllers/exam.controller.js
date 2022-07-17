@@ -147,16 +147,58 @@ let doingExam = async (req, res) => {
   }
 };
 
-let getExamsByStudentId = async (req, res) => {
-  const { studentId } = req.body;
-  if (!studentId) {
+let getExamsByStudent = async (req, res) => {
+  const { studentId, classId } = req.body;
+  if (!studentId || !classId) {
     return res.status(400).json({
       message: "Vui lòng cung cấp đầy đủ dữ liệu !!!",
       success: false,
     });
   }
   try {
-    let data = await examService.getExamsByStudentId(req.body);
+    let data = await examService.getExamsByStudent(req.body);
+    return res.status(200).json(data);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      message: transErrorsVi.server_error,
+      error: error,
+    });
+  }
+};
+
+let getResultByExam = async (req, res) => {
+  const { studentId, subjectId, times } = req.body;
+  if (!studentId || !subjectId || !times) {
+    return res.status(400).json({
+      message: "Vui lòng cung cấp đầy đủ dữ liệu !!!",
+      success: false,
+    });
+  }
+  try {
+    let data = await examService.getResultByExam(req.body);
+    return res.status(200).json(data);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      message: transErrorsVi.server_error,
+      error: error,
+    });
+  }
+};
+
+let updateStudentAnswer = async (req, res) => {
+  const { studentId, subjectId, questionId, times } = req.body;
+  if (!studentId || !subjectId || !questionId || !times) {
+    return res.status(400).json({
+      message: "Vui lòng cung cấp đầy đủ dữ liệu !!!",
+      success: false,
+    });
+  }
+  try {
+    let data = await examService.updateStudentAnswer(req.body);
     return res.status(200).json(data);
   } catch (error) {
     console.log(error);
@@ -175,5 +217,7 @@ module.exports = {
   changeStateExam,
   getAllExamsByClass,
   doingExam,
-  getExamsByStudentId,
+  getExamsByStudent,
+  updateStudentAnswer,
+  getResultByExam,
 };

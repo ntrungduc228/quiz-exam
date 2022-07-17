@@ -5,17 +5,19 @@ import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import errorJwt from '../../../utils/errorJwt';
 import { logout } from '../../../store/slices/auth';
-import { doingExam, setLoading } from '../../../store/slices/answer';
+import { doingExam, setLoading, getResultByExam, updateStudentAnswer } from '../../../store/slices/answer';
 import { setExamInfo } from '../../../store/slices/exam';
 import toast from 'react-hot-toast';
+import Confirm from '../../../components/Confirm';
 
 const Exam = () => {
   const [isShowCollapse, setIsShowCollapse] = useState(true);
   const [questionList, setQuestionList] = useState([]);
   const [questionShow, setQuestionShow] = useState(null);
+  const [isShowModalConfirm, setIsShowModalConfirm] = useState(false);
 
   const { examInfo } = useSelector((state) => state.exam);
-  const { examDetail, isLoading, answers } = useSelector((state) => state.answer);
+  const { examDetail, isLoading } = useSelector((state) => state.answer);
   const { user } = useSelector((state) => state.auth);
   const history = useHistory();
   const dispatch = useDispatch();
@@ -26,7 +28,7 @@ const Exam = () => {
   };
 
   const handleTabClosing = () => {
-    alert('closeing');
+    dispatch(getResultByExam({ ...examInfo, studentId: user.userId }));
   };
 
   useEffect(() => {
@@ -69,34 +71,12 @@ const Exam = () => {
   }, [examInfo]);
 
   useEffect(() => {
+    console.log('examDetail change', examDetail);
     if (examDetail && examDetail?.questionList) {
       setQuestionList(examDetail?.questionList);
-      setQuestionShow({
-        questionId: examDetail?.questionList[0].questionId,
-        content: examDetail?.questionList[0].content,
-        answer: [
-          {
-            id: 'A',
-            value: examDetail?.questionList[0].answerA,
-            name: examDetail?.questionList[0].questionId
-          },
-          {
-            id: 'B',
-            value: examDetail?.questionList[0].answerB,
-            name: examDetail?.questionList[0].questionId
-          },
-          {
-            id: 'C',
-            value: examDetail?.questionList[0].answerC,
-            name: examDetail?.questionList[0].questionId
-          },
-          {
-            id: 'D',
-            value: examDetail?.questionList[0].answerD,
-            name: examDetail?.questionList[0].questionId
-          }
-        ]
-      });
+      if (!questionShow) {
+        changeQuestion(examDetail?.questionList[0]);
+      }
     }
   }, [examDetail]);
 
@@ -104,6 +84,7 @@ const Exam = () => {
     setQuestionShow({
       questionId: data.questionId,
       content: data.content,
+      studentChoice: data.studentChoice,
       answer: [
         {
           id: 'A',
@@ -129,14 +110,49 @@ const Exam = () => {
     });
   };
 
-  console.log('questionShow', questionShow);
+  // console.log('questionShow', questionShow);
+  console.log('questionList', questionList);
 
-  let arr = [];
-  for (let i = 0; i < 60; i++) {
-    arr.push(i);
-  }
+  const handleChangeStudentAnswer = (data) => {
+    setQuestionShow({ ...questionShow, studentChoice: data.value });
+    dispatch(
+      updateStudentAnswer({
+        subjectId: examInfo.subjectId,
+        times: examInfo.times,
+        questionId: data.questionId,
+        studentId: user.userId,
+        answer: data.value
+      })
+    );
+  };
+
+  const handleSubmitExamByStudent = () => {
+    history.push('/result');
+  };
+
+  const handleShowQuestionNext = () => {
+    let index = questionList.findIndex((item) => item.questionId === questionShow.questionId);
+    if (index < questionList.length - 1) {
+      changeQuestion(questionList[index + 1]);
+    }
+  };
+  const handleShowQuestionPrev = () => {
+    let index = questionList.findIndex((item) => item.questionId === questionShow.questionId);
+    if (index > 0) {
+      changeQuestion(questionList[index - 1]);
+    }
+  };
+
   return (
     <React.Fragment>
+      <Confirm
+        isLoading={isLoading}
+        title={`Bạn có chắc chắn muốn nộp bài?`}
+        isShowModalConfirm={isShowModalConfirm}
+        setIsShowModalConfirm={setIsShowModalConfirm}
+        handleSubmitForm={handleSubmitExamByStudent}
+        isText={false}
+      />
       {isLoading ? (
         <div className="d-flex align-items-center justify-content-center" style={{ flex: 1, height: '100vh' }}>
           <Spinner animation="border" role="status" variant="info" style={{ width: '3rem', height: '3rem' }} />
@@ -164,6 +180,8 @@ const Exam = () => {
                                 label={item.value}
                                 name={item.name}
                                 id={item.id}
+                                checked={item.id === questionShow.studentChoice ? true : false}
+                                onChange={() => handleChangeStudentAnswer({ questionId: questionShow.questionId, value: item.id })}
                               />
                             ))}
                         </Form.Group>
@@ -172,16 +190,24 @@ const Exam = () => {
                   </Card.Body>
                   <Card.Footer>
                     <Col className="mb-4">
-                      <h6 onClick={() => alert('click h6')} className="font-weight-bold text-danger" style={{ cursor: 'pointer' }}>
+                      <h6
+                        onClick={() => handleChangeStudentAnswer({ questionId: questionShow.questionId, value: null })}
+                        className="font-weight-bold text-danger"
+                        style={{ cursor: 'pointer' }}
+                      >
                         Xóa câu trả lời
                       </h6>
                     </Col>
                     <div className="d-flex justify-content-between">
-                      <Button variant="info" className="text-capitalize">
-                        info
-                      </Button>{' '}
-                      <Button variant="info" className="text-capitalize">
-                        info
+                      <Button variant="info" className="text-capitalize" onClick={() => handleShowQuestionPrev()}>
+                        <span>
+                          <i className="feather icon-arrow-left"></i>
+                        </span>
+                      </Button>
+                      <Button variant="info" className="text-capitalize" onClick={() => handleShowQuestionNext()}>
+                        <span>
+                          <i className="feather icon-arrow-right"></i>
+                        </span>
                       </Button>
                     </div>
                   </Card.Footer>
@@ -193,7 +219,7 @@ const Exam = () => {
                     Featured
                     <div className="border-top" style={{ marginLeft: '-25px', marginRight: '-25px' }}>
                       <Button className="ml-3 mt-3" onClick={() => setIsShowCollapse(!isShowCollapse)}>
-                        Hiện chi tiết Ẩn
+                        {isShowCollapse ? 'Ẩn chi tiết' : 'Hiện chi tiết'}
                       </Button>
                     </div>
                   </Card.Header>
@@ -226,7 +252,7 @@ const Exam = () => {
                   </Collapse>
 
                   <Card.Footer>
-                    <Button variant="danger" className="text-capitalize">
+                    <Button variant="danger" className="text-capitalize" onClick={() => setIsShowModalConfirm(true)}>
                       <span>Nộp bài</span>
                     </Button>
                   </Card.Footer>

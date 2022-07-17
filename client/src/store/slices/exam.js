@@ -25,10 +25,23 @@ export const getAllExamsByClass = createAsyncThunk('exam/getAllExamsByClass', as
   }
 });
 
+export const getExamsByStudent = createAsyncThunk('exam/getExamsByStudent', async (data, thunkAPI) => {
+  try {
+    let response = await examService.getExamsByStudent(data);
+    if (!response.data?.success) {
+      return thunkAPI.rejectWithValue(response.data);
+    }
+    return response?.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+});
+
 const initialState = {
   exams: [],
   isLoading: false,
-  examInfo: {}
+  examInfo: {},
+  examByStudent: {}
 };
 
 const examSlice = createSlice({
@@ -58,6 +71,12 @@ const examSlice = createSlice({
     },
     [getAllExamsByClass.rejected]: (state, action) => {
       state.exams = [];
+    },
+    [getExamsByStudent.fulfilled]: (state, action) => {
+      state.examByStudent = action.payload.data;
+    },
+    [getExamsByStudent.rejected]: (state, action) => {
+      state.examByStudent = [];
     }
   }
 });
