@@ -13,10 +13,35 @@ export const doingExam = createAsyncThunk('exam/doingExam', async (data, thunkAP
   }
 });
 
+export const updateStudentAnswer = createAsyncThunk('exam/updateStudentAnswer', async (data, thunkAPI) => {
+  try {
+    let response = await examService.updateStudentAnswer(data);
+    if (!response.data?.success) {
+      return thunkAPI.rejectWithValue(response.data);
+    }
+    return response?.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+});
+
+export const getResultByExam = createAsyncThunk('exam/getResultByExam', async (data, thunkAPI) => {
+  try {
+    let response = await examService.getResultByExam(data);
+    if (!response.data?.success) {
+      return thunkAPI.rejectWithValue(response.data);
+    }
+    return response?.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+});
+
 const initialState = {
   answers: [],
   isLoading: false,
-  examDetail: null
+  examDetail: null,
+  examResult: null
 };
 
 const answerSlice = createSlice({
@@ -29,10 +54,33 @@ const answerSlice = createSlice({
   },
   extraReducers: {
     [doingExam.fulfilled]: (state, action) => {
+      console.log('action', action.payload);
       state.examDetail = action.payload.data;
       state.isLoading = false;
     },
     [doingExam.rejected]: (state, action) => {
+      state.isLoading = false;
+    },
+    [updateStudentAnswer.fulfilled]: (state, action) => {
+      let questionList = state.examDetail?.questionList;
+      questionList = questionList.map((item) => {
+        if (item.questionId === action.payload.data.questionId) {
+          return { ...item, studentChoice: action.payload.data.studentChoice };
+        }
+        return item;
+      });
+      state.examDetail = { ...state.examDetail, questionList: questionList };
+      state.isLoading = false;
+    },
+    [updateStudentAnswer.rejected]: (state, action) => {
+      state.isLoading = false;
+    },
+    [getResultByExam.fulfilled]: (state, action) => {
+      state.examResult = { result: action.payload.data, ...state.examDetail?.info };
+      state.isLoading = false;
+    },
+    [getResultByExam.rejected]: (state, action) => {
+      state.examResult = null;
       state.isLoading = false;
     }
   }

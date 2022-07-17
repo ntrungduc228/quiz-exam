@@ -47,38 +47,7 @@ const verifyRoles = (...allowedRoles) => {
   };
 };
 
-let isStudent = async (req, res, next) => {
-  let response = await authService.isRole(req.username, ROLE.student);
-  if (!response) {
-    return res
-      .status(401)
-      .json({ success: false, message: "Required student role" });
-  }
-  next();
-};
-let isAdmin = async (req, res, next) => {
-  let response = await authService.isRole(req.username, ROLE.admin);
-  if (!response) {
-    return res
-      .status(401)
-      .json({ success: false, message: "Required admin role" });
-  }
-  next();
-};
-let isTeacher = async (req, res, next) => {
-  let response = await authService.isRole(req.username, ROLE.teacher);
-  if (!response) {
-    return res
-      .status(401)
-      .json({ success: false, message: "Required teacher role" });
-  }
-  next();
-};
-
 module.exports = {
   isAuthenticated,
   verifyRoles,
-  isStudent,
-  isAdmin,
-  isTeacher,
 };

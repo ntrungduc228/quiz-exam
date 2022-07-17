@@ -160,9 +160,19 @@ const initRoutes = (app) => {
   );
   router.post("/exam/doing-exam", verifyStudent, examController.doingExam);
   router.post(
-    "/exam/get-exam-by-student",
+    "/exam/get-exams-by-student",
     verifyStudent,
-    examController.getExamsByStudentId
+    examController.getExamsByStudent
+  );
+  router.post(
+    "/exam/update-student-answer",
+    verifyStudent,
+    examController.updateStudentAnswer
+  );
+  router.post(
+    "/exam/get-result-by-exam",
+    verifyStudent,
+    examController.getResultByExam
   );
 
   return app.use("/api", router);
