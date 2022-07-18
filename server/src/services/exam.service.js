@@ -489,7 +489,6 @@ let getExamsByStudent = (data) => {
       if (examInstances) {
         results = await Promise.all(
           examInstances.map(async (item) => {
-            console.log(item.expiresAt.getTime(), item.times, item.expiresAt);
             if (
               item.score === -1 &&
               item.expiresAt.getTime() < new Date().getTime()

@@ -128,7 +128,7 @@ export const studentRoutes = {
     {
       guard: AuthGuard,
       roles: [ROLES.student],
-      path: '/exam',
+      path: '/score',
       exact: true,
       component: lazy(() => import('./views/student/ListResult'))
     }

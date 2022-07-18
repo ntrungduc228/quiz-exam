@@ -6,6 +6,7 @@ const classController = require("../controllers/class.controller");
 const subjectController = require("../controllers/subject.controller");
 const questionController = require("../controllers/question.controller");
 const examController = require("../controllers/exam.controller");
+const resultController = require("../controllers/result.controller");
 
 const authMiddleware = require("../middlewares/auth");
 
@@ -173,6 +174,12 @@ const initRoutes = (app) => {
     "/exam/get-result-by-exam",
     verifyStudent,
     examController.getResultByExam
+  );
+
+  router.get(
+    "/result/get-all-result-by-student",
+    verifyStudent,
+    resultController.getListResultByStudentId
   );
 
   return app.use("/api", router);

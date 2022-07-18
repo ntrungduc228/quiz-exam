@@ -9,6 +9,7 @@ import subjectReducer from './slices/subject';
 import questionReducer from './slices/question';
 import examReducer from './slices/exam';
 import answerReducer from './slices/answer';
+import scoreReducer from './slices/score';
 
 const reducers = combineReducers({
   form: formReducer,
@@ -20,7 +21,8 @@ const reducers = combineReducers({
   subject: subjectReducer,
   question: questionReducer,
   exam: examReducer,
-  answer: answerReducer
+  answer: answerReducer,
+  score: scoreReducer
 });
 
 export default reducers;

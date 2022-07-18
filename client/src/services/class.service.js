@@ -9,7 +9,7 @@ let createNewClass = (data) => {
 };
 
 let getClassById = (data) => {
-  return axios.get('/class/get-class-by-id', data);
+  return axios.get(`/class/get-class-by-id?classId=${data.classId}`);
 };
 
 let updateClassById = (data) => {
