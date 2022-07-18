@@ -18,10 +18,21 @@ const changeStateAccount = (data) => {
   return axios.put('/update-state', data);
 };
 
+const verifyResetAccount = (data) => {
+  return axios.put('/account/verify-reset-account', data).then((response) => {
+    if (response.data.data) {
+      const user = JSON.parse(localStorage.getItem('user'));
+      localStorage.setItem('user', JSON.stringify({ ...user, ...response.data.data }));
+    }
+    return response;
+  });
+};
+
 const authService = {
   login,
   logout,
-  changeStateAccount
+  changeStateAccount,
+  verifyResetAccount
 };
 
 export default authService;

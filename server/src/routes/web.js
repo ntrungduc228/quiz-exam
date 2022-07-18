@@ -40,7 +40,12 @@ const initRoutes = (app) => {
 
   router.post("/login", authController.login);
   router.post("/update-account", verifyAdmin, authController.updateAccount);
-  router.post("/update-state", verifyAdmin, authController.updateState);
+  router.put("/update-state", verifyAdmin, authController.updateState);
+  router.put(
+    "/account/verify-reset-account",
+    authMiddleware.isAuthenticated,
+    authController.verifyResetAccount
+  );
 
   router.get(
     "/class/get-all-classes",
