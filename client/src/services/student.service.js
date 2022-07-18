@@ -9,7 +9,7 @@ let createNewStudent = (data) => {
 };
 
 let updateStudentById = (data) => {
-  return axios.post('/student/update-student-by-id', data);
+  return axios.put('/student/update-student-by-id', data);
 };
 
 const studentService = { getAllStudents, createNewStudent, updateStudentById };

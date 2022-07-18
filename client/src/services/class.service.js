@@ -9,15 +9,15 @@ let createNewClass = (data) => {
 };
 
 let getClassById = (data) => {
-  return axios.get('/class/get-class-by-id', data);
+  return axios.get(`/class/get-class-by-id?classId=${data.classId}`);
 };
 
 let updateClassById = (data) => {
-  return axios.post('/class/update-class-by-id', data);
+  return axios.put('/class/update-class-by-id', data);
 };
 
 let deleteClassById = (data) => {
-  return axios.post('/class/delete-class-by-id', data);
+  return axios.delete('/class/delete-class-by-id', data);
 };
 
 const classService = { getAllClasses, createNewClass, getClassById, updateClassById, deleteClassById };

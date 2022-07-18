@@ -8,7 +8,7 @@ const Completionist = () => (
 );
 
 // Renderer callback with condition
-const renderer = ({ days, hours, minutes, seconds, completed, ...props }) => {
+const renderer = ({ days, hours, minutes, seconds, completed }) => {
   // console.log('fsd', props);
   if (completed) {
     // Render a complete state
@@ -17,8 +17,8 @@ const renderer = ({ days, hours, minutes, seconds, completed, ...props }) => {
     // Render a countdown
     return (
       <span className="text-danger" style={{ fontSize: '20px' }}>
-        {days != '00' ? zeroPad(days) + ':' : ''}
-        {hours != '00' ? zeroPad(hours) + ':' : ''}
+        {days !== '00' ? '' : zeroPad(days) + ':'}
+        {hours !== '00' ? '' : zeroPad(hours) + ':'}
         {zeroPad(minutes)}:{zeroPad(seconds)}
       </span>
     );

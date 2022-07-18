@@ -15,7 +15,7 @@ const logout = () => {
 };
 
 const changeStateAccount = (data) => {
-  return axios.post('/update-state', data);
+  return axios.put('/update-state', data);
 };
 
 const authService = {

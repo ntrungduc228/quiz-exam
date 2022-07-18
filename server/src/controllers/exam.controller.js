@@ -106,7 +106,7 @@ let deleteExam = async (req, res) => {
 };
 
 let getAllExamsByClass = async (req, res) => {
-  const { classId } = req.body;
+  const { classId } = req.query;
   if (!classId) {
     return res.status(400).json({
       message: "Vui lòng cung cấp đầy đủ dữ liệu !!!",
@@ -148,7 +148,7 @@ let doingExam = async (req, res) => {
 };
 
 let getExamsByStudent = async (req, res) => {
-  const { studentId, classId } = req.body;
+  const { studentId, classId } = req.query;
   if (!studentId || !classId) {
     return res.status(400).json({
       message: "Vui lòng cung cấp đầy đủ dữ liệu !!!",
@@ -156,7 +156,7 @@ let getExamsByStudent = async (req, res) => {
     });
   }
   try {
-    let data = await examService.getExamsByStudent(req.body);
+    let data = await examService.getExamsByStudent(req.query);
     return res.status(200).json(data);
   } catch (error) {
     console.log(error);
@@ -169,7 +169,7 @@ let getExamsByStudent = async (req, res) => {
 };
 
 let getResultByExam = async (req, res) => {
-  const { studentId, subjectId, times } = req.body;
+  const { studentId, subjectId, times } = req.query;
   if (!studentId || !subjectId || !times) {
     return res.status(400).json({
       message: "Vui lòng cung cấp đầy đủ dữ liệu !!!",
@@ -177,7 +177,7 @@ let getResultByExam = async (req, res) => {
     });
   }
   try {
-    let data = await examService.getResultByExam(req.body);
+    let data = await examService.getResultByExam(req.query);
     return res.status(200).json(data);
   } catch (error) {
     console.log(error);

@@ -9,15 +9,15 @@ let createNewExam = (data) => {
 };
 
 let changeStateExam = (data) => {
-  return axios.post('/exam/change-state-exam', data);
+  return axios.put('/exam/change-state-exam', data);
 };
 
 let deleteExam = (data) => {
-  return axios.post('/exam/delete-exam', data);
+  return axios.delete('/exam/delete-exam', data);
 };
 
 let getAllExamsByClass = (data) => {
-  return axios.post('/exam/get-exams-by-class', data);
+  return axios.get(`/exam/get-exams-by-class?classId=${data.classId}`);
 };
 
 let doingExam = (data) => {
@@ -25,15 +25,15 @@ let doingExam = (data) => {
 };
 
 let getExamsByStudent = (data) => {
-  return axios.post('/exam/get-exams-by-student', data);
+  return axios.get(`/exam/get-exams-by-student?studentId=${data.studentId}&classId=${data.classId}`);
 };
 
 let updateStudentAnswer = (data) => {
-  return axios.post('/exam/update-student-answer', data);
+  return axios.put('/exam/update-student-answer', data);
 };
 
 let getResultByExam = (data) => {
-  return axios.post('/exam/get-result-by-exam', data);
+  return axios.get(`/exam/get-result-by-exam?studentId=${data.studentId}&subjectId=${data.subjectId}&times=${data.times}`);
 };
 
 const examService = {

@@ -30,7 +30,7 @@ const DashboardRole = () => {
       handleLogOut();
       return <Redirect to={'/signin'} />;
   }
-  return <div>dashboard role</div>;
+  // return <div>dashboard role</div>;
 };
 
 export default DashboardRole;
