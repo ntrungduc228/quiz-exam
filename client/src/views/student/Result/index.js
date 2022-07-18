@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Row, Col, Button, Card, Spinner } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -6,6 +6,8 @@ import { getResultByExam, setLoading } from '../../../store/slices/answer';
 import { setExamInfo } from '../../../store/slices/exam';
 
 const Result = () => {
+  const [result, setResult] = useState(null);
+
   const { user } = useSelector((state) => state.auth);
   const { isLoading, examResult } = useSelector((state) => state.answer);
   const { examInfo } = useSelector((state) => state.exam);
@@ -23,6 +25,10 @@ const Result = () => {
       dispatch(getResultByExam({ studentId: user.userId, subjectId: examInfo.subjectId, times: examInfo.times }));
     }
   }, [examInfo]);
+
+  useEffect(() => {
+    setResult({ ...examResult });
+  }, [examResult]);
 
   const handleGoHomePage = () => {
     dispatch(setExamInfo(null));
@@ -42,27 +48,27 @@ const Result = () => {
           <Col>
             <Card>
               <Card.Header>
-                <Card.Title id="example-modal-sizes-title-lg">Kết quả bài thi môn {examResult?.examSubjectData?.name}</Card.Title>
+                <Card.Title id="example-modal-sizes-title-lg">Kết quả bài thi môn {result?.result?.scoreSubjectData?.name}</Card.Title>
               </Card.Header>
               <Card.Body>
                 <Row>
                   <Col md={6} className="mx-auto">
                     <div className="d-flex justify-content-between">
-                      <p>Mã môn học: {examResult?.examSubjectData?.subjectId}</p>
-                      <p>Lần thi: {examResult?.times}</p>
+                      <p>Mã môn học: {result?.result?.scoreSubjectData?.subjectId}</p>
+                      <p>Lần thi: {result?.times}</p>
                     </div>
                     <div className="d-flex justify-content-between">
-                      <p>Số câu hỏi: {examResult?.numOfEasy + examResult?.numOfMedium + examResult?.numOfHard}</p>
-                      <p>Thời gian: {examResult?.timeExam}</p>
+                      <p>Số câu hỏi: {result?.numOfEasy + result?.numOfMedium + result?.numOfHard}</p>
+                      <p>Thời gian: {result?.timeExam}</p>
                     </div>
                     <div>
                       <p>Tên thí sinh: {user.lastName + ' ' + user.firstName}</p>
                       <p>Mã thí sinh: {user.userId}</p>
-                      <p>Mã lớp: {examResult?.classId}</p>
+                      <p>Mã lớp: {user?.classId}</p>
                     </div>
                     <div>
                       <p className="text-center" style={{ color: '#333', fontWeight: 600 }}>
-                        Điểm thi: {examResult?.result?.score}/10
+                        Điểm thi: {result?.result?.score}/10
                       </p>
                     </div>
                   </Col>

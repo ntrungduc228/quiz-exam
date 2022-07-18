@@ -14,6 +14,7 @@ const Dashboard = () => {
 
   const { exams, examInfo, examByStudent } = useSelector((state) => state.exam);
   const { user } = useSelector((state) => state.auth);
+  const { examResult } = useSelector((state) => state.answer);
 
   const history = useHistory();
   const dispatch = useDispatch();
@@ -45,7 +46,7 @@ const Dashboard = () => {
   console.log('examList', examList);
 
   useEffect(() => {
-    if (examInfo?.classId && examInfo?.subjectId && examInfo?.times) {
+    if (examInfo?.classId && examInfo?.subjectId && examInfo?.times && !examResult) {
       history.push('/do-exam');
     }
   }, [examInfo]);
@@ -82,9 +83,9 @@ const Dashboard = () => {
                   <Button
                     variant={examByStudent[item.keyField] ? 'warning' : 'primary'}
                     className="mt-2"
-                    onClick={() => (examByStudent[item.keyField] ? handleShowResult(item) : dispatch(setExamInfo(item)))}
+                    onClick={() => (examByStudent[item.keyField]?.score > -1 ? handleShowResult(item) : dispatch(setExamInfo(item)))}
                   >
-                    {examByStudent[item.keyField] && examByStudent[item.keyField].score != -1
+                    {examByStudent[item.keyField]
                       ? examByStudent[item.keyField] && examByStudent[item.keyField].score > -1
                         ? 'Xem điểm'
                         : 'Thi tiếp'

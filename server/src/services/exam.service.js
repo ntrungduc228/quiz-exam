@@ -246,17 +246,36 @@ let doingExam = (data) => {
 
       if (examExists) {
         let answerList = await db.StudentExam.findAll({
+          raw: false,
+          nest: true,
           where: {
             subjectId: data.subjectId,
             times: data.times,
             studentId: data.studentId,
           },
+          include: [
+            {
+              model: db.Question,
+              as: "examDetailQuestionData",
+              attributes: {
+                exclude: ["createdAt", "updatedAt", "correctAnswer"],
+              },
+            },
+          ],
           order: [["number", "ASC"]],
         });
 
+        let questionList = answerList.map((item) => {
+          return {
+            ...item.examDetailQuestionData.dataValues,
+            studentChoice: item.answer,
+          };
+        });
+
+        examExists.timeRemain = +examExists.expiresAt.getTime();
         let res = {};
         res.info = examExists;
-        res.questionList = answerList;
+        res.questionList = questionList;
         return resolve({ data: res, success: true });
       }
 
@@ -349,6 +368,29 @@ let doingExam = (data) => {
 let getResultByExam = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
+      let scoreInstance = await db.Score.findOne({
+        raw: false,
+        nest: true,
+        where: {
+          studentId: data.studentId,
+          subjectId: data.subjectId,
+          times: data.times,
+        },
+        include: [
+          {
+            model: db.Subject,
+            as: "scoreSubjectData",
+            attributes: { exclude: ["createdAt", "updatedAt"] },
+          },
+        ],
+      });
+
+      if (scoreInstance) {
+        if (scoreInstance.score > -1) {
+          return resolve({ data: scoreInstance, success: true });
+        }
+      }
+
       let answerList = await db.StudentExam.findAll({
         raw: false,
         nest: true,
@@ -447,25 +489,25 @@ let getExamsByStudent = (data) => {
       if (examInstances) {
         results = await Promise.all(
           examInstances.map(async (item) => {
+            console.log(item.expiresAt.getTime(), item.times, item.expiresAt);
             if (
-              item.score === -1
-              //  && item.expiresAt.getTime() < new Date().getTime()
+              item.score === -1 &&
+              item.expiresAt.getTime() < new Date().getTime()
             ) {
               let result = await getResultByExam(item);
               let resultItem = {
                 ...item,
                 ...result.data,
                 keyField: item.subjectId.concat(data.classId + item.times),
-                // timeRemain: moment(new Date()).subtract(item.expiresAt),
               };
 
               // dataReturn[resultItem.keyField] = resultItem;
+
               return resultItem;
             }
 
             item.keyField = item.subjectId.concat(data.classId + item.times);
-
-            // item.timeRemain = moment(item.expiresAt).subtract(new Date());
+            item.timeRemain = +item.expiresAt.getTime();
             // dataReturn[item.keyField] = item;
             return item;
           })
