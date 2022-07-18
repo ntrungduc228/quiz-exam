@@ -9,6 +9,7 @@ import { doingExam, setLoading, getResultByExam, updateStudentAnswer } from '../
 import { setExamInfo } from '../../../store/slices/exam';
 import toast from 'react-hot-toast';
 import Confirm from '../../../components/Confirm';
+import Timer from '../../../components/Timer';
 
 const Exam = () => {
   const [isShowCollapse, setIsShowCollapse] = useState(true);
@@ -216,7 +217,16 @@ const Exam = () => {
               <Col md={5}>
                 <Card>
                   <Card.Header>
-                    Featured
+                    <div className="d-flex justify-content-between">
+                      <div></div>
+                      <div>
+                        <Timer
+                          minutes={examDetail?.info?.timeExam}
+                          timeRemain={examDetail?.info?.timeRemain}
+                          onComplete={() => handleSubmitExamByStudent()}
+                        />
+                      </div>
+                    </div>
                     <div className="border-top" style={{ marginLeft: '-25px', marginRight: '-25px' }}>
                       <Button className="ml-3 mt-3" onClick={() => setIsShowCollapse(!isShowCollapse)}>
                         {isShowCollapse ? 'Ẩn chi tiết' : 'Hiện chi tiết'}

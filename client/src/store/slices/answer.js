@@ -56,6 +56,13 @@ const answerSlice = createSlice({
     [doingExam.fulfilled]: (state, action) => {
       console.log('action', action.payload);
       state.examDetail = action.payload.data;
+      if (!state.examDetail?.info?.timeRemain) {
+        let timeRemain = new Date();
+        timeRemain.setMinutes(timeRemain.getMinutes() + state.examDetail.info.timeExam);
+        console.log('time remain', timeRemain.getTime());
+        state.examDetail.info.timeRemain = timeRemain.getTime();
+      }
+
       state.isLoading = false;
     },
     [doingExam.rejected]: (state, action) => {
