@@ -9,7 +9,7 @@ let createNewTeacher = (data) => {
 };
 
 let updateTeacherById = (data) => {
-  return axios.post('/teacher/update-teacher-by-id', data);
+  return axios.put('/teacher/update-teacher-by-id', data);
 };
 
 const teacherService = { getAllTeachers, createNewTeacher, updateTeacherById };

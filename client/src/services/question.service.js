@@ -9,11 +9,11 @@ let createNewQuestion = (data) => {
 };
 
 let updateQuestionById = (data) => {
-  return axios.post('/question/update-question-by-id', data);
+  return axios.put('/question/update-question-by-id', data);
 };
 
 let deleteQuestionById = (data) => {
-  return axios.post('/question/delete-question-by-id', data);
+  return axios.delete('/question/delete-question-by-id', data);
 };
 
 const questionService = { getAllQuestions, createNewQuestion, updateQuestionById, deleteQuestionById };

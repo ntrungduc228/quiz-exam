@@ -57,12 +57,12 @@ const initRoutes = (app) => {
     verifyAdmin,
     classController.createNewClass
   );
-  router.post(
+  router.put(
     "/class/update-class-by-id",
     verifyAdmin,
     classController.updateClassById
   );
-  router.post(
+  router.delete(
     "/class/delete-class-by-id",
     verifyAdmin,
     classController.deleteClassById
@@ -78,7 +78,7 @@ const initRoutes = (app) => {
     verifyAdmin,
     studentController.createNewStudent
   );
-  router.post(
+  router.put(
     "/student/update-student-by-id",
     verifyAdmin,
     studentController.updateStudentById
@@ -94,7 +94,7 @@ const initRoutes = (app) => {
     verifyAdmin,
     teacherController.createNewTeacher
   );
-  router.post(
+  router.put(
     "/teacher/update-teacher-by-id",
     verifyAdmin,
     teacherController.updateTeacherById
@@ -110,12 +110,12 @@ const initRoutes = (app) => {
     verifyTeacher,
     subjectController.createNewSubject
   );
-  router.post(
+  router.put(
     "/subject/update-subject-by-id",
     verifyTeacher,
     subjectController.updateSubjectById
   );
-  router.post(
+  router.delete(
     "/subject/delete-subject-by-id",
     verifyTeacher,
     subjectController.deleteSubjectById
@@ -131,12 +131,12 @@ const initRoutes = (app) => {
     verifyTeacher,
     questionController.createNewQuestion
   );
-  router.post(
+  router.put(
     "/question/update-question-by-id",
     verifyTeacher,
     questionController.updateQuestionById
   );
-  router.post(
+  router.delete(
     "/question/delete-question-by-id",
     verifyTeacher,
     questionController.deleteQuestionById
@@ -148,29 +148,29 @@ const initRoutes = (app) => {
     examController.getAllExams
   );
   router.post("/exam/create-exam", verifyTeacher, examController.createNewExam);
-  router.post(
+  router.put(
     "/exam/change-state-exam",
     verifyTeacher,
     examController.changeStateExam
   );
-  router.post("/exam/delete-exam", verifyTeacher, examController.deleteExam);
-  router.post(
+  router.delete("/exam/delete-exam", verifyTeacher, examController.deleteExam);
+  router.get(
     "/exam/get-exams-by-class",
     authMiddleware.isAuthenticated,
     examController.getAllExamsByClass
   );
   router.post("/exam/doing-exam", verifyStudent, examController.doingExam);
-  router.post(
+  router.get(
     "/exam/get-exams-by-student",
     verifyStudent,
     examController.getExamsByStudent
   );
-  router.post(
+  router.put(
     "/exam/update-student-answer",
     verifyStudent,
     examController.updateStudentAnswer
   );
-  router.post(
+  router.get(
     "/exam/get-result-by-exam",
     verifyStudent,
     examController.getResultByExam

@@ -9,11 +9,11 @@ let createNewSubject = (data) => {
 };
 
 let updateSubjectById = (data) => {
-  return axios.post('/subject/update-subject-by-id', data);
+  return axios.put('/subject/update-subject-by-id', data);
 };
 
 let deleteSubjectById = (data) => {
-  return axios.post('/subject/delete-subject-by-id', data);
+  return axios.delete('/subject/delete-subject-by-id', data);
 };
 
 const subjectService = { getAllSubjects, createNewSubject, updateSubjectById, deleteSubjectById };
