@@ -5,7 +5,7 @@ import { Redirect, useHistory } from 'react-router-dom';
 import { ROLES, DASHBOARD_ROUTE } from '../../config/constant';
 import { logout } from '../../store/slices/auth';
 
-const DashboardRole = () => {
+const DashboardRole = ({ children }) => {
   const dispatch = useDispatch();
   const history = useHistory();
   const account = useSelector((state) => state.auth);
@@ -30,7 +30,7 @@ const DashboardRole = () => {
       handleLogOut();
       return <Redirect to={'/signin'} />;
   }
-  // return <div>dashboard role</div>;
+  return children;
 };
 
 export default DashboardRole;

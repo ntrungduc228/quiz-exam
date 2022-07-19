@@ -66,4 +66,52 @@ let updateState = async (req, res) => {
   }
 };
 
-module.exports = { login, updateAccount, updateState };
+let verifyResetAccount = async (req, res) => {
+  let { username, password } = req.body;
+  if (!username || !password) {
+    return res.status(400).json({
+      message: "Vui lòng cung cấp đầy đủ dữ liệu !!!",
+      success: false,
+    });
+  }
+  try {
+    let data = await authService.verifyResetAccount(req.body);
+    return res.status(200).json(data);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      message: transErrorsVi.server_error,
+      error: error,
+    });
+  }
+};
+
+let forgetPassword = async (req, res) => {
+  let { email } = req.body;
+  if (!email) {
+    return res.status(400).json({
+      message: "Vui lòng cung cấp đầy đủ dữ liệu !!!",
+      success: false,
+    });
+  }
+  try {
+    let data = await authService.forgetPassword(req.body);
+    return res.status(200).json(data);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      message: transErrorsVi.server_error,
+      error: error,
+    });
+  }
+};
+
+module.exports = {
+  login,
+  updateAccount,
+  updateState,
+  verifyResetAccount,
+  forgetPassword,
+};

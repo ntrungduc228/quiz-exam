@@ -1,8 +1,8 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { ListGroup, Dropdown, Media, Button } from 'react-bootstrap';
 import { Link, useHistory } from 'react-router-dom';
 import PerfectScrollbar from 'react-perfect-scrollbar';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import ChatList from './ChatList';
 import { ConfigContext } from '../../../../contexts/ConfigContext';
@@ -20,18 +20,19 @@ const NavRight = () => {
 
   const configContext = useContext(ConfigContext);
   const { rtlLayout } = configContext.state;
+  const { user } = useSelector((state) => state.auth);
 
   const [listOpen, setListOpen] = useState(false);
 
-  const handleLogout = async () => {
-    try {
-      //handleClose();
-      await dispatch(logout());
-      history.push('/signin');
-    } catch (err) {
-      console.error(err);
-    }
+  const handleLogout = () => {
+    dispatch(logout());
   };
+
+  useEffect(() => {
+    if (!user) {
+      history.push('/signin');
+    }
+  }, [user]);
 
   return (
     <React.Fragment>
@@ -143,7 +144,7 @@ const NavRight = () => {
               <div className="pro-head">
                 <img src={avatar1} className="img-radius" alt="User Profile" />
                 <span>John Doe</span>
-                <Link to="#" className="dud-logout" title="Logout">
+                <Link to="#" className="dud-logout" title="Logout" onClick={handleLogout}>
                   <i className="feather icon-log-out" />
                 </Link>
               </div>

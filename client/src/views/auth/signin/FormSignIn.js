@@ -82,17 +82,16 @@ const FormSignIn = ({ className, ...rest }) => {
 
               {message && (
                 <Col sm={12}>
-                  {/* <Alert variant="danger">{message}</Alert> */}
                   <p className="text-danger">{message}</p>
                 </Col>
               )}
 
-              <div className="custom-control custom-checkbox  text-left mb-4 mt-2">
+              {/* <div className="custom-control custom-checkbox  text-left mb-4 mt-2">
                 <input type="checkbox" className="custom-control-input" id="customCheck1" />
                 <label className="custom-control-label" htmlFor="customCheck1">
                   Save credentials.
                 </label>
-              </div>
+              </div> */}
               <Row>
                 <Col mt={2}>
                   <Button className="btn-block" color="primary" disabled={isLoading} size="large" type="submit" variant="primary">

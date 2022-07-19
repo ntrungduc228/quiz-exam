@@ -7,11 +7,9 @@ const user = JSON.parse(localStorage.getItem('user'));
 export const login = createAsyncThunk('auth/login', async ({ username, password }, thunkAPI) => {
   try {
     let data = await authService.login(username, password);
-    console.log('data response', data);
     return { data: data && data.data ? data.data : null };
   } catch (error) {
     console.log('error', error);
-    // const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
     thunkAPI.dispatch(setMessage(error.message));
     return thunkAPI.rejectWithValue();
   }
@@ -19,6 +17,31 @@ export const login = createAsyncThunk('auth/login', async ({ username, password 
 
 export const logout = createAsyncThunk('auth/logout', async () => {
   await authService.logout();
+});
+
+export const verifyResetAccount = createAsyncThunk('auth/verifyResetAccount', async (data, thunkAPI) => {
+  try {
+    let response = await authService.verifyResetAccount(data);
+    console.log('ré', response);
+    if (!response.data?.success) {
+      return thunkAPI.rejectWithValue(response.data);
+    }
+    return response?.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+});
+
+export const forgetPassword = createAsyncThunk('auth/forgetPassword', async (data, thunkAPI) => {
+  try {
+    let response = await authService.forgetPassword(data);
+    if (!response.data?.success) {
+      return thunkAPI.rejectWithValue(response.data);
+    }
+    return response?.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
 });
 
 let initialState = user?.accessToken ? { isLoggedIn: true, user } : { isLoggedIn: false, user: null };
@@ -42,7 +65,6 @@ const authSlice = createSlice({
   extraReducers: {
     [login.fulfilled]: (state, action) => {
       state.isLoggedIn = true;
-      console.log('action', action);
       state.user = action.payload.data;
       state.isLoading = false;
     },
@@ -55,6 +77,19 @@ const authSlice = createSlice({
     [logout.fulfilled]: (state, action) => {
       state.isLoggedIn = false;
       state.user = null;
+    },
+    [verifyResetAccount.fulfilled]: (state, action) => {
+      state.isLoading = false;
+      state.user = { ...state.user, ...action.payload.data };
+    },
+    [verifyResetAccount.rejected]: (state, action) => {
+      state.isLoading = false;
+    },
+    [forgetPassword.fulfilled]: (state, action) => {
+      state.isLoading = false;
+    },
+    [forgetPassword.rejected]: (state, action) => {
+      state.isLoading = false;
     }
   }
 });

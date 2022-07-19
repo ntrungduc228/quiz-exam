@@ -13,10 +13,10 @@ const App = () => {
       <Router>
         <Suspense fallback={<Loader />}>
           <Switch>
-            {renderRoutes(authRoutes)}
             {renderRoutes(studentRoutes)}
             {renderRoutes(adminRoutes)}
             {renderRoutes(teacherRoutes)}
+            {renderRoutes(authRoutes)}
             {renderRoutes(errorRoutes)}
           </Switch>
         </Suspense>

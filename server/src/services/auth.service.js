@@ -1,9 +1,13 @@
 const db = require("../models");
-const { transErrorsVi, transSuccessVi } = require("../../lang/vi");
+const { transErrorsVi, transSuccessVi, transMailVi } = require("../../lang/vi");
 const bcrypt = require("bcryptjs");
 const { Op } = require("sequelize");
 const { generateToken } = require("../utils/jwt");
 const { ROLES, STATE } = require("../utils/constants");
+const { v4: uuidv4 } = require("uuid");
+const emailService = require("./email.service");
+
+let salt = bcrypt.genSaltSync(10);
 
 let login = (username, password) => {
   return new Promise(async (resolve, reject) => {
@@ -30,10 +34,10 @@ let login = (username, password) => {
         }
       }
 
-      if (
-        !account.state === STATE.active &&
-        !account.state === STATE.needConfirm
-      ) {
+      if (account.state === STATE.needConfirm) {
+      }
+
+      if (!account.state === STATE.active) {
         return resolve({
           success: false,
           message: transErrorsVi.signin_failed,
@@ -59,6 +63,9 @@ let login = (username, password) => {
       let token = await generateToken({ username: account.username });
       user.role = account.role;
       user.accessToken = token;
+      if (account.state === STATE.needConfirm) {
+        user.state = account.state;
+      }
 
       return resolve({
         success: true,
@@ -208,4 +215,111 @@ let updateState = (data) => {
   });
 };
 
-module.exports = { login, isRole, updateAccount, updateState };
+let verifyResetAccount = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let account = await db.Account.findOne({
+        where: {
+          username: data.username,
+        },
+        attributes: { exclude: ["createdAt", "updatedAt"] },
+      });
+
+      if (!account) {
+        return resolve({
+          success: false,
+          message: transErrorsVi.instanceIsNotExits("Tài khoản"),
+        });
+      }
+
+      let result = await db.Account.update(
+        {
+          state: STATE.active,
+          password: bcrypt.hashSync(data.password, salt),
+        },
+        { where: { username: data.username } }
+      );
+
+      if (result[0] == 1) {
+        account = await db.Account.findOne({
+          where: { username: data.username },
+          attributes: { exclude: ["createdAt", "updatedAt", "password"] },
+        });
+      }
+
+      return resolve({
+        success: true,
+        message: transSuccessVi.updateInstance("Tài khoản"),
+        data: account,
+      });
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
+let forgetPassword = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let account = await db.Account.findOne({
+        where: {
+          email: data.email,
+        },
+        attributes: { exclude: ["createdAt", "updatedAt"] },
+      });
+
+      if (!account) {
+        return resolve({
+          success: false,
+          message: transErrorsVi.instanceIsNotExits("Tài khoản"),
+        });
+      }
+
+      let newPassword = uuidv4().slice(0, 6);
+      let result = await db.Account.update(
+        {
+          state: STATE.needConfirm,
+          password: bcrypt.hashSync(newPassword, salt),
+        },
+        { where: { email: data.email } }
+      );
+
+      // if (result[0] == 1) {
+      //   account = await db.Account.findOne({
+      //     where: { email: data.email },
+      //     attributes: { exclude: ["createdAt", "updatedAt", "password"] },
+      //   });
+      // }
+
+      let REACT_APP_URL = process.env.REACT_APP_URL;
+      let link = `${REACT_APP_URL}/signin`;
+      emailService
+        .sendMail(
+          data.email,
+          transMailVi.subject_send_reset_password,
+          transMailVi.template_reset_password(
+            account.username,
+            newPassword,
+            link
+          )
+        )
+        .then((success) => {
+          return resolve({
+            message: transSuccessVi.send_reset_password_success,
+            success: true,
+          });
+        });
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
+module.exports = {
+  login,
+  isRole,
+  updateAccount,
+  updateState,
+  verifyResetAccount,
+  forgetPassword,
+};

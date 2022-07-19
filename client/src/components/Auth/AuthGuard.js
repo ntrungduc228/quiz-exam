@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { ROLES } from '../../config/constant';
+import { ROLES, STATE } from '../../config/constant';
 import DashboardRole from '../DashboardRole';
 
 const AuthGuard = ({ children, allowedRoles, path, ...rest }) => {
@@ -15,6 +15,10 @@ const AuthGuard = ({ children, allowedRoles, path, ...rest }) => {
       return <Redirect to={'/signin'} />;
     }
   }, [isLoggedIn]);
+
+  if (user?.state === STATE.needConfirm) {
+    return <Redirect to={'/verify-account'} />;
+  }
 
   if (!isLoggedIn) {
     return <Redirect to={'/signin'} />;

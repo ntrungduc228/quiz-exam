@@ -94,9 +94,16 @@ export const authRoutes = {
     },
     {
       exact: true,
-      layout: AdminLayout,
-      path: '/dashboard123',
-      component: lazy(() => import('./views/dashboard/DashDefault'))
+      path: '/verify-account',
+      exact: true,
+      component: lazy(() => import('./views/auth/verifyReset/VerifyAccount'))
+    },
+    {
+      guard: GuestGuard,
+      exact: true,
+      path: '/forget-password',
+      exact: true,
+      component: lazy(() => import('./views/auth/forgetPassword'))
     }
   ]
 };
