@@ -22,6 +22,19 @@ export const logout = createAsyncThunk('auth/logout', async () => {
 export const verifyResetAccount = createAsyncThunk('auth/verifyResetAccount', async (data, thunkAPI) => {
   try {
     let response = await authService.verifyResetAccount(data);
+    console.log('ré', response);
+    if (!response.data?.success) {
+      return thunkAPI.rejectWithValue(response.data);
+    }
+    return response?.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+});
+
+export const forgetPassword = createAsyncThunk('auth/forgetPassword', async (data, thunkAPI) => {
+  try {
+    let response = await authService.forgetPassword(data);
     if (!response.data?.success) {
       return thunkAPI.rejectWithValue(response.data);
     }
@@ -52,7 +65,6 @@ const authSlice = createSlice({
   extraReducers: {
     [login.fulfilled]: (state, action) => {
       state.isLoggedIn = true;
-      console.log('action', action);
       state.user = action.payload.data;
       state.isLoading = false;
     },
@@ -71,6 +83,12 @@ const authSlice = createSlice({
       state.user = { ...state.user, ...action.payload.data };
     },
     [verifyResetAccount.rejected]: (state, action) => {
+      state.isLoading = false;
+    },
+    [forgetPassword.fulfilled]: (state, action) => {
+      state.isLoading = false;
+    },
+    [forgetPassword.rejected]: (state, action) => {
       state.isLoading = false;
     }
   }

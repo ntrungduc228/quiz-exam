@@ -39,6 +39,7 @@ const initRoutes = (app) => {
   });
 
   router.post("/login", authController.login);
+  router.post("/account/forget-password", authController.forgetPassword);
   router.post("/update-account", verifyAdmin, authController.updateAccount);
   router.put("/update-state", verifyAdmin, authController.updateState);
   router.put(

@@ -28,11 +28,16 @@ const verifyResetAccount = (data) => {
   });
 };
 
+let forgetPassword = (data) => {
+  return axios.post('/account/forget-password', data);
+};
+
 const authService = {
   login,
   logout,
   changeStateAccount,
-  verifyResetAccount
+  verifyResetAccount,
+  forgetPassword
 };
 
 export default authService;

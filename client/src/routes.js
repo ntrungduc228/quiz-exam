@@ -97,6 +97,13 @@ export const authRoutes = {
       path: '/verify-account',
       exact: true,
       component: lazy(() => import('./views/auth/verifyReset/VerifyAccount'))
+    },
+    {
+      guard: GuestGuard,
+      exact: true,
+      path: '/forget-password',
+      exact: true,
+      component: lazy(() => import('./views/auth/forgetPassword'))
     }
   ]
 };

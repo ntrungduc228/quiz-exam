@@ -65,6 +65,16 @@ const transMailVi = {
   },
   send_failed:
     "Có lỗi trong quá trình gửi email, vui lòng liên hệ với bộ phận hỗ  trợ của chúng tôi.",
+  subject_send_reset_password: "Quiz exam: Quên mật khẩu",
+  template_reset_password: (username, password, link) => {
+    return `
+       <h2>Tài khoản liên kết email này đã quên mật khẩu trên Quiz exam</h2>
+       <h3>Username của bạn là: <strong>${username}</strong></h3>
+       <h3>Mật khẩu mới của bạn là: <strong>${password}</strong></h3>
+       <h3>Đăng nhập tại <a href="${link}" target="blank">đây</a></h3>
+       <h4>Nếu tin rằng đây là nhầm lẫn, hãy bỏ qua nó. Cảm ơn.</h4>
+   `;
+  },
 };
 
 module.exports = { transErrorsVi, transSuccessVi, transMailVi };

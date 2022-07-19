@@ -7,6 +7,7 @@ import * as yup from 'yup';
 import { verifyResetAccount, setLoading, logout } from '../../../store/slices/auth';
 import errorJwt from '../../../utils/errorJwt';
 import { useHistory } from 'react-router-dom';
+import { STATE } from '../../../config/constant';
 
 const schema = yup
   .object({
@@ -36,7 +37,11 @@ const FormVerify = () => {
     clearErrors();
   }, []);
 
-  useEffect(() => {}, [user]);
+  useEffect(() => {
+    if (user?.state !== STATE.needConfirm) {
+      history.push('/');
+    }
+  }, [user]);
 
   const onSubmit = (data) => {
     dispatch(setLoading(true));
@@ -47,11 +52,10 @@ const FormVerify = () => {
           history.push('/');
         }
       })
-      .catch(async (err) => {
+      .catch((err) => {
         console.log('wrap err', err);
         if (errorJwt(err)) {
-          await dispatch(logout());
-          await history.push('/signin');
+          dispatch(logout());
         }
         setErrorMessage(err?.message);
       });
@@ -78,9 +82,9 @@ const FormVerify = () => {
         </Col>
       </Row>
       <Row>
-        <Col sm={{ span: 10, offset: 4 }}>
+        <Col className="mt-3">
           {errorMessage && <p className="text-danger form-text">{errorMessage}</p>}
-          <Button onClick={handleSubmit(onSubmit)} disabled={isLoading} color="info">
+          <Button onClick={handleSubmit(onSubmit)} disabled={isLoading} color="info" size="large" className="btn-block">
             {isLoading && <Spinner animation="border" role="status" size="sm" variant="light" />}
             <span>&nbsp; Lưu</span>
           </Button>
