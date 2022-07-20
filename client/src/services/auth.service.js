@@ -28,6 +28,20 @@ const verifyResetAccount = (data) => {
   });
 };
 
+const changePassword = (data) => {
+  return axios.put('/account/change-password', data);
+};
+
+const updateProfileInfo = (data) => {
+  return axios.put('/account/update-profile-info', data).then((response) => {
+    if (response.data.data) {
+      const user = JSON.parse(localStorage.getItem('user'));
+      localStorage.setItem('user', JSON.stringify({ ...user, ...response.data.data }));
+    }
+    return response;
+  });
+};
+
 let forgetPassword = (data) => {
   return axios.post('/account/forget-password', data);
 };
@@ -37,7 +51,9 @@ const authService = {
   logout,
   changeStateAccount,
   verifyResetAccount,
-  forgetPassword
+  forgetPassword,
+  changePassword,
+  updateProfileInfo
 };
 
 export default authService;

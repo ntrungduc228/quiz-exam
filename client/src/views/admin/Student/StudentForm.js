@@ -45,10 +45,6 @@ const StudentForm = ({ title, data, isDetail, isUpdate, isShowModal, setIsShowMo
   }, []);
 
   useEffect(() => {
-    setChooseGender(data?.gender);
-  }, [data]);
-
-  useEffect(() => {
     setClassList(classes);
   }, [classes]);
 
@@ -61,6 +57,8 @@ const StudentForm = ({ title, data, isDetail, isUpdate, isShowModal, setIsShowMo
     setValue('phone', data.phone);
     setValue('email', data?.studentAccountData?.email || data?.email);
     setValue('birthday', data.birthday);
+
+    setChooseGender(data?.gender);
 
     clearErrors();
   }, [data]);
@@ -110,7 +108,6 @@ const StudentForm = ({ title, data, isDetail, isUpdate, isShowModal, setIsShowMo
               <Col md={6}>
                 <Form.Group>
                   <Form.Label>Họ</Form.Label>
-
                   <Form.Control name="lastName" type="text" placeholder="Họ" {...register('lastName')} disabled={isDetail} />
                   {errors?.lastName && <p className="text-danger form-text">{errors?.lastName.message}</p>}
                 </Form.Group>

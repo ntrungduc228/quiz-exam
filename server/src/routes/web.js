@@ -40,6 +40,16 @@ const initRoutes = (app) => {
 
   router.post("/login", authController.login);
   router.post("/account/forget-password", authController.forgetPassword);
+  router.put(
+    "/account/change-password",
+    authMiddleware.isAuthenticated,
+    authController.changePassword
+  );
+  router.put(
+    "/account/update-profile-info",
+    authMiddleware.isAuthenticated,
+    authController.updateProfileInfo
+  );
   router.post("/update-account", verifyAdmin, authController.updateAccount);
   router.put("/update-state", verifyAdmin, authController.updateState);
   router.put(
