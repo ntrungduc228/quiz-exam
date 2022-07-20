@@ -31,16 +31,14 @@ const TeacherForm = ({ title, data, isDetail, isUpdate, isShowModal, setIsShowMo
   } = useForm({ mode: 'onChange', resolver: yupResolver(schema) });
 
   useEffect(() => {
-    setChooseGender(data?.gender);
-  }, [data]);
-
-  useEffect(() => {
     setValue('teacherId', data.teacherId);
     setValue('lastName', data.lastName);
     setValue('firstName', data.firstName);
     setValue('gender', data.gender);
     setValue('phone', data.phone);
     setValue('email', data?.teacherAccountData?.email || data?.email);
+
+    setChooseGender(data?.gender);
 
     clearErrors();
   }, [data]);

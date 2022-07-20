@@ -62,6 +62,8 @@ let login = (username, password) => {
 
       let token = await generateToken({ username: account.username });
       user.role = account.role;
+      user.email = account.email;
+      user.username = account.username;
       user.accessToken = token;
       if (account.state === STATE.needConfirm) {
         user.state = account.state;
@@ -315,6 +317,131 @@ let forgetPassword = (data) => {
   });
 };
 
+let updateProfileInfo = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let account = await db.Account.findOne({
+        where: {
+          username: data.username,
+        },
+        attributes: { exclude: ["createdAt", "updatedAt"] },
+      });
+
+      if (!account) {
+        return resolve({
+          success: false,
+          message: transErrorsVi.instanceIsNotExits("Tài khoản"),
+        });
+      }
+
+      let user = {};
+      if (account.role === ROLES.admin || account.role === ROLES.teacher) {
+        await db.Teacher.update(
+          {
+            lastName: data?.newData?.lastName,
+            firstName: data?.newData?.firstName,
+            phone: data?.newData?.phone,
+            gender: data?.newData?.gender,
+          },
+          {
+            where: {
+              teacherId: account.username,
+            },
+          }
+        );
+        user = await db.Teacher.findOne({
+          where: { teacherId: account.username },
+          attributes: { exclude: ["createdAt", "updatedAt"] },
+        });
+
+        user.userId = user.teacherId;
+
+        return resolve({
+          success: true,
+          data: user,
+          message: transSuccessVi.updateInstance("tài khoản"),
+        });
+      } else if (account.role === ROLES.student) {
+        await db.Student.update(
+          {
+            lastName: data?.newData?.lastName,
+            firstName: data?.newData?.firstName,
+            phone: data?.newData?.phone,
+            gender: data?.newData?.gender,
+            birthday: data?.newData?.birthday,
+          },
+          {
+            where: {
+              studentId: account.username,
+            },
+          }
+        );
+        user = await db.Student.findOne({
+          where: { studentId: account.username },
+          attributes: { exclude: ["createdAt", "updatedAt"] },
+        });
+        user.userId = user.studentId;
+
+        return resolve({
+          success: true,
+          data: user,
+          message: transSuccessVi.updateInstance("tài khoản"),
+        });
+      }
+
+      return resolve({
+        success: false,
+        message: transErrorsVi.updateInstance("tài khoản"),
+      });
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
+let changePassword = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let account = await db.Account.findOne({
+        where: {
+          username: data.username,
+        },
+        attributes: { exclude: ["createdAt", "updatedAt"] },
+      });
+
+      if (!account) {
+        return resolve({
+          success: false,
+          message: transErrorsVi.instanceIsNotExits("Tài khoản"),
+        });
+      }
+
+      if (!bcrypt.compareSync(data.password, account.password)) {
+        return resolve({
+          success: false,
+          message: transErrorsVi.password_incorrect,
+        });
+      }
+
+      let result = await db.Account.update(
+        {
+          password: bcrypt.hashSync(data?.newData.password, salt),
+        },
+        { where: { username: data.username } }
+      );
+
+      if (result[0] == 1) {
+        return resolve({
+          success: true,
+          message: transSuccessVi.updateInstance("tài khoản"),
+        });
+      }
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
 module.exports = {
   login,
   isRole,
@@ -322,4 +449,6 @@ module.exports = {
   updateState,
   verifyResetAccount,
   forgetPassword,
+  updateProfileInfo,
+  changePassword,
 };
