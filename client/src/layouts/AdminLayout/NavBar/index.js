@@ -3,15 +3,21 @@ import { Link } from 'react-router-dom';
 
 import NavLeft from './NavLeft';
 import NavRight from './NavRight';
+import NavbarTeacher from '../../TeacherLayout/NavbarTeacher';
+import NavbarStudent from '../../StudentLayout/NavbarStudent';
 
 import { ConfigContext } from '../../../contexts/ConfigContext';
 import * as actionType from '../../../store/actions';
+import { useSelector } from 'react-redux';
+import { ROLES } from '../../../config/constant';
 
 const NavBar = () => {
   //const [moreToggle, setMoreToggle] = useState(false);
   const configContext = useContext(ConfigContext);
   const { collapseMenu, headerBackColor, headerFixedLayout, layout, subLayout } = configContext.state;
   const { dispatch } = configContext;
+
+  const { user } = useSelector((state) => state.auth);
 
   let headerClass = ['navbar', 'pcoded-header', 'navbar-expand-lg', headerBackColor];
   if (headerFixedLayout && layout === 'vertical') {
@@ -54,8 +60,8 @@ const NavBar = () => {
                 </Link> */}
       </div>
       <div className={collapseClass.join(' ')}>
-        <NavLeft />
-        <NavRight />
+        {/* <NavLeft /> */}
+        {user?.role === ROLES.admin ? <NavRight /> : user?.role === ROLES.teacher ? <NavbarTeacher /> : <NavbarStudent />}
       </div>
     </React.Fragment>
   );

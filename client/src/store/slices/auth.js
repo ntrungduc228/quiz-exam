@@ -44,6 +44,30 @@ export const forgetPassword = createAsyncThunk('auth/forgetPassword', async (dat
   }
 });
 
+export const changePassword = createAsyncThunk('auth/changePassword', async (data, thunkAPI) => {
+  try {
+    let response = await authService.changePassword(data);
+    if (!response.data?.success) {
+      return thunkAPI.rejectWithValue(response.data);
+    }
+    return response?.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+});
+
+export const updateProfileInfo = createAsyncThunk('auth/updateProfileInfo', async (data, thunkAPI) => {
+  try {
+    let response = await authService.updateProfileInfo(data);
+    if (!response.data?.success) {
+      return thunkAPI.rejectWithValue(response.data);
+    }
+    return response?.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+});
+
 let initialState = user?.accessToken ? { isLoggedIn: true, user } : { isLoggedIn: false, user: null };
 
 initialState = { ...initialState, isLoading: false };
@@ -89,6 +113,19 @@ const authSlice = createSlice({
       state.isLoading = false;
     },
     [forgetPassword.rejected]: (state, action) => {
+      state.isLoading = false;
+    },
+    [changePassword.fulfilled]: (state, action) => {
+      state.isLoading = false;
+    },
+    [changePassword.rejected]: (state, action) => {
+      state.isLoading = false;
+    },
+    [updateProfileInfo.fulfilled]: (state, action) => {
+      state.isLoading = false;
+      state.user = { ...state.user, ...action.payload.data };
+    },
+    [updateProfileInfo.rejected]: (state, action) => {
       state.isLoading = false;
     }
   }

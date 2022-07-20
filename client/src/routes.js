@@ -138,6 +138,13 @@ export const studentRoutes = {
       path: '/score',
       exact: true,
       component: lazy(() => import('./views/student/ListResult'))
+    },
+    {
+      guard: AuthGuard,
+      roles: [ROLES.student],
+      path: '/profile',
+      exact: true,
+      component: lazy(() => import('./views/profile/Account'))
     }
   ]
 };
@@ -145,6 +152,13 @@ export const studentRoutes = {
 export const teacherRoutes = {
   layout: TeacherLayout,
   items: [
+    {
+      guard: AuthGuard,
+      path: '/teacher/profile',
+      roles: [ROLES.teacher],
+      exact: true,
+      component: lazy(() => import('./views/profile/Account'))
+    },
     {
       guard: AuthGuard,
       roles: [ROLES.teacher],
@@ -179,6 +193,13 @@ export const teacherRoutes = {
 export const adminRoutes = {
   layout: AdminLayout,
   items: [
+    {
+      guard: AuthGuard,
+      path: '/admin/profile',
+      roles: [ROLES.admin],
+      exact: true,
+      component: lazy(() => import('./views/profile/Account'))
+    },
     {
       guard: AuthGuard,
       path: DASHBOARD_ROUTE.admin?.path,

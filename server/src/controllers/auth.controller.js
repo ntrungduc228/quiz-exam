@@ -108,10 +108,54 @@ let forgetPassword = async (req, res) => {
   }
 };
 
+let updateProfileInfo = async (req, res) => {
+  let { username, newData } = req.body;
+  if (!username || !newData) {
+    return res.status(400).json({
+      message: "Vui lòng cung cấp đầy đủ dữ liệu !!!",
+      success: false,
+    });
+  }
+  try {
+    let data = await authService.updateProfileInfo(req.body);
+    return res.status(200).json(data);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      message: transErrorsVi.server_error,
+      error: error,
+    });
+  }
+};
+
+let changePassword = async (req, res) => {
+  let { username, password, newData } = req.body;
+  if (!username || !password || !newData?.password) {
+    return res.status(400).json({
+      message: "Vui lòng cung cấp đầy đủ dữ liệu !!!",
+      success: false,
+    });
+  }
+  try {
+    let data = await authService.changePassword(req.body);
+    return res.status(200).json(data);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      message: transErrorsVi.server_error,
+      error: error,
+    });
+  }
+};
+
 module.exports = {
   login,
   updateAccount,
   updateState,
   verifyResetAccount,
   forgetPassword,
+  updateProfileInfo,
+  changePassword,
 };
