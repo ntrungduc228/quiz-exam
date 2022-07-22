@@ -27,7 +27,7 @@ const FormForgetPassword = () => {
 
   useEffect(() => {
     clearErrors();
-  }, []);
+  }, [clearErrors]);
 
   const onSubmit = (data) => {
     dispatch(setLoading(true));

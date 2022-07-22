@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../../../store/slices/auth';
 import { useHistory } from 'react-router-dom';
 import FormVerify from './FormVerify';
-import { STATE } from '../../../config/constant';
+// import { STATE } from '../../../config/constant';
 
 const VerifyAccount = () => {
   const history = useHistory();
@@ -19,7 +19,7 @@ const VerifyAccount = () => {
     // if (user?.state !== STATE.needConfirm) {
     //   history.push('/dashboard');
     // }
-  }, [user]);
+  }, [user, history]);
 
   const handleLogout = () => {
     dispatch(logout());

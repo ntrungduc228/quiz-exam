@@ -93,7 +93,7 @@ const Account = () => {
     }
 
     clearErrors();
-  }, [user]);
+  }, [user, setValue, clearErrors]);
 
   useEffect(() => {
     if (tab === 'profile') {
@@ -116,7 +116,7 @@ const Account = () => {
     } else if (tab === 'password') {
       setValue('isChangePassword', true);
     }
-  }, [tab]);
+  }, [tab, setValue, user]);
 
   const onSubmitUpdateProfile = (data) => {
     let newData = {

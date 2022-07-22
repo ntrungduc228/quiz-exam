@@ -65,7 +65,7 @@ const ExamForm = ({ title, data, isDetail, isUpdate, isShowModal, setIsShowModal
           history.push('/signin');
         }
       });
-  }, []);
+  }, [dispatch, history]);
 
   useEffect(() => {
     setSubjectList(subjects);
@@ -87,7 +87,7 @@ const ExamForm = ({ title, data, isDetail, isUpdate, isShowModal, setIsShowModal
     setValue('state', data.state || (!isDetail && !isUpdate && true));
 
     clearErrors();
-  }, [data]);
+  }, [data, setValue, clearErrors, isDetail, isUpdate]);
 
   const onSubmit = (data) => {
     handleSubmitForm(data);

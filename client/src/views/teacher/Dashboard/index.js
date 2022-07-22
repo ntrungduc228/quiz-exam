@@ -34,7 +34,7 @@ const Dashboard = () => {
           history.push('/signin');
         }
       });
-  }, []);
+  }, [dispatch, history]);
 
   useEffect(() => {
     setDashboardList(dashboard);

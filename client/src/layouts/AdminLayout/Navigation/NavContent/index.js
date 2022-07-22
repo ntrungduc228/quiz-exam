@@ -3,7 +3,7 @@ import { ListGroup } from 'react-bootstrap';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 
 import NavGroup from './NavGroup';
-import NavCollapse from './NavCollapse';
+// import NavCollapse from './NavCollapse';
 import NavItem from './NavItem';
 
 const NavContent = ({ navigation }) => {

@@ -43,7 +43,7 @@ const Teacher = () => {
           history.push('/signin');
         }
       });
-  }, []);
+  }, [dispatch, history]);
 
   useEffect(() => {
     setTeacherList(teachers);

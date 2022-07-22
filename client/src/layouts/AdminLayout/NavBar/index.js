@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 
-import NavLeft from './NavLeft';
+// import NavLeft from './NavLeft';
 import NavRight from './NavRight';
 import NavbarTeacher from '../../TeacherLayout/NavbarTeacher';
 import NavbarStudent from '../../StudentLayout/NavbarStudent';

@@ -80,7 +80,7 @@ const Exam = () => {
           history.push('/signin');
         }
       });
-  }, []);
+  }, [dispatch, history]);
 
   useEffect(() => {
     setExamList(exams);

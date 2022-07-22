@@ -1,7 +1,7 @@
-import React, { Suspense, Fragment, lazy } from 'react';
-import { Switch, Redirect, Route } from 'react-router-dom';
+import React, { Fragment, lazy } from 'react';
+import { Redirect, Route } from 'react-router-dom';
 
-import Loader from './components/Loader/Loader';
+// import Loader from './components/Loader/Loader';
 import AdminLayout from './layouts/AdminLayout';
 import TeacherLayout from './layouts/TeacherLayout';
 import StudentLayout from './layouts/StudentLayout';
@@ -95,14 +95,12 @@ export const authRoutes = {
     {
       exact: true,
       path: '/verify-account',
-      exact: true,
       component: lazy(() => import('./views/auth/verifyReset/VerifyAccount'))
     },
     {
       guard: GuestGuard,
       exact: true,
       path: '/forget-password',
-      exact: true,
       component: lazy(() => import('./views/auth/forgetPassword'))
     }
   ]

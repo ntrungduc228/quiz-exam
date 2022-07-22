@@ -42,7 +42,7 @@ const ListResult = () => {
           history.push('/signin');
         }
       });
-  }, []);
+  }, [dispatch, history, user]);
 
   useEffect(() => {
     setScoreList(scores);

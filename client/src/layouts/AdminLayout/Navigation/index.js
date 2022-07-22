@@ -5,7 +5,7 @@ import useWindowSize from '../../../hooks/useWindowSize';
 
 import NavLogo from './NavLogo';
 import NavContent from './NavContent';
-import navigation, { teacherMenuItems, studentMenuItems } from '../../../menu-items';
+// import navigation, { teacherMenuItems, studentMenuItems } from '../../../menu-items';
 
 const Navigation = ({ menuItems }) => {
   const configContext = useContext(ConfigContext);

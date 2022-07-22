@@ -132,17 +132,17 @@ const initRoutes = (app) => {
   );
   router.post(
     "/subject/create-subject",
-    verifyTeacher,
+    verifyAdmin,
     subjectController.createNewSubject
   );
   router.put(
     "/subject/update-subject-by-id",
-    verifyTeacher,
+    verifyAdmin,
     subjectController.updateSubjectById
   );
   router.delete(
     "/subject/delete-subject-by-id",
-    verifyTeacher,
+    verifyAdmin,
     subjectController.deleteSubjectById
   );
 

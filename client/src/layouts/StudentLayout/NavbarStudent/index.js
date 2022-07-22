@@ -1,7 +1,6 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { ListGroup, Dropdown, Media, Button } from 'react-bootstrap';
+import React, { useContext, useEffect } from 'react';
+import { ListGroup, Dropdown } from 'react-bootstrap';
 import { Link, useHistory } from 'react-router-dom';
-import PerfectScrollbar from 'react-perfect-scrollbar';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { ConfigContext } from '../../../contexts/ConfigContext';
@@ -23,7 +22,7 @@ const NavbarStudent = () => {
     if (!user) {
       history.push('/signin');
     }
-  }, [user]);
+  }, [user, history]);
 
   return (
     <React.Fragment>
