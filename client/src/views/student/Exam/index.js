@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallBack } from 'react';
 import { Row, Col, Card, Button, Form, Collapse, Spinner } from 'react-bootstrap';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { useHistory } from 'react-router-dom';
@@ -28,9 +28,9 @@ const Exam = () => {
     e.returnValue = 'Are you sure you want to close?';
   };
 
-  const handleTabClosing = () => {
+  const handleTabClosing = useCallBack(() => {
     dispatch(getResultByExam({ ...examInfo, studentId: user.userId }));
-  };
+  });
 
   useEffect(() => {
     window.addEventListener('beforeunload', handleBeforeUnLoad);
@@ -39,7 +39,7 @@ const Exam = () => {
       window.removeEventListener('beforeunload', handleBeforeUnLoad);
       window.removeEventListener('unload', handleTabClosing);
     };
-  }, []);
+  }, [handleTabClosing]);
 
   useEffect(() => {
     if (!examDetail) {
@@ -69,17 +69,17 @@ const Exam = () => {
         history.push('/dashboard');
       }
     }
-  }, [examInfo]);
+  }, [examInfo, dispatch, history, examDetail, user]);
 
   useEffect(() => {
-    console.log('examDetail change', examDetail);
+    // console.log('examDetail change', examDetail);
     if (examDetail && examDetail?.questionList) {
       setQuestionList(examDetail?.questionList);
       if (!questionShow) {
         changeQuestion(examDetail?.questionList[0]);
       }
     }
-  }, [examDetail]);
+  }, [examDetail,questionShow]);
 
   const changeQuestion = (data) => {
     setQuestionShow({

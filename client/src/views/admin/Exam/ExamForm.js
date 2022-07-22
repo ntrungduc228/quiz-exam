@@ -39,7 +39,7 @@ const ExamForm = ({ title, data, isDetail, isUpdate, isShowModal, setIsShowModal
     setValue('state', data.state || (!isDetail && !isUpdate && true));
 
     clearErrors();
-  }, [data]);
+  }, [data, clearErrors, setValue, isDetail, isUpdate]);
 
   return (
     <>

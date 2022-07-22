@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Row, Col, Modal, Button, Form, Spinner } from 'react-bootstrap';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -20,7 +20,6 @@ const TeacherForm = ({ title, data, isDetail, isUpdate, isShowModal, setIsShowMo
   const [chooseGender, setChooseGender] = useState(data?.gender);
 
   const { isLoading } = useSelector((state) => state.teacher);
-  const dispatch = useDispatch();
 
   const {
     register,
@@ -41,7 +40,7 @@ const TeacherForm = ({ title, data, isDetail, isUpdate, isShowModal, setIsShowMo
     setChooseGender(data?.gender);
 
     clearErrors();
-  }, [data]);
+  }, [data, setValue, clearErrors]);
 
   const onSubmit = (data) => {
     handleSubmitForm({ ...data, gender: chooseGender });

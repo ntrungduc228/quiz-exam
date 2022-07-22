@@ -61,7 +61,7 @@ const Student = () => {
           history.push('/signin');
         }
       });
-  }, []);
+  }, [dispatch, history]);
 
   useEffect(() => {
     setStudentList(students);

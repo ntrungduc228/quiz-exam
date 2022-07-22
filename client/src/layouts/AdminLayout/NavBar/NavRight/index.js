@@ -1,17 +1,17 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { ListGroup, Dropdown, Media, Button } from 'react-bootstrap';
+import { ListGroup, Dropdown } from 'react-bootstrap';
 import { Link, useHistory } from 'react-router-dom';
-import PerfectScrollbar from 'react-perfect-scrollbar';
+// import PerfectScrollbar from 'react-perfect-scrollbar';
 import { useDispatch, useSelector } from 'react-redux';
 
 import ChatList from './ChatList';
 import { ConfigContext } from '../../../../contexts/ConfigContext';
 import { logout } from '../../../../store/slices/auth';
 
-import avatar1 from '../../../../assets/images/user/avatar-1.jpg';
-import avatar2 from '../../../../assets/images/user/avatar-2.jpg';
-import avatar3 from '../../../../assets/images/user/avatar-3.jpg';
-import avatar4 from '../../../../assets/images/user/avatar-4.jpg';
+// import avatar1 from '../../../../assets/images/user/avatar-1.jpg';
+// import avatar2 from '../../../../assets/images/user/avatar-2.jpg';
+// import avatar3 from '../../../../assets/images/user/avatar-3.jpg';
+// import avatar4 from '../../../../assets/images/user/avatar-4.jpg';
 
 const NavRight = () => {
   const dispatch = useDispatch();
@@ -31,7 +31,7 @@ const NavRight = () => {
     if (!user) {
       history.push('/signin');
     }
-  }, [user]);
+  }, [user, history]);
 
   return (
     <React.Fragment>

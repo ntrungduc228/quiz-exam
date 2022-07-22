@@ -40,7 +40,7 @@ const Class = () => {
           history.push('/signin');
         }
       });
-  }, []);
+  }, [dispatch, history]);
 
   useEffect(() => {
     setClassList(classes);

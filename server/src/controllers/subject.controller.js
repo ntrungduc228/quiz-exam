@@ -67,7 +67,7 @@ let deleteSubjectById = async (req, res) => {
     });
   }
   try {
-    let data = await subjectService.deleteSubjectById(subjectId);
+    let data = await subjectService.deleteSubjectById(req.body);
     return res.status(200).json(data);
   } catch (error) {
     console.log(error);

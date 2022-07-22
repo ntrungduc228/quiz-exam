@@ -106,7 +106,7 @@ const classSlice = createSlice({
     [updateClassById.fulfilled]: (state, action) => {
       state.isLoading = false;
       state.classes = state.classes.map((item) => {
-        if (item.classId == action.payload.id) {
+        if (item.classId === action.payload.id) {
           return {
             classId: action.payload.newData?.classId,
             name: action.payload.newData?.name,

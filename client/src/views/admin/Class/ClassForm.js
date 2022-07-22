@@ -39,7 +39,7 @@ const ClassForm = ({ title, data, isShowModal, setIsShowModal, handleSubmitForm,
     setValue('classId', data.classId);
     setValue('name', data.name);
     clearErrors();
-  }, [data]);
+  }, [data, clearErrors, setValue]);
   // console.log('form state', formValue);
 
   return (

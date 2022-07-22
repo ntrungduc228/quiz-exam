@@ -26,7 +26,7 @@ const Subject = () => {
           history.push('/signin');
         }
       });
-  }, []);
+  }, [dispatch, history]);
 
   useEffect(() => {
     setSubjectList(subjects);

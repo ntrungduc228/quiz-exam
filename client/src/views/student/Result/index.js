@@ -24,7 +24,7 @@ const Result = () => {
       dispatch(setLoading(true));
       dispatch(getResultByExam({ studentId: user.userId, subjectId: examInfo.subjectId, times: examInfo.times }));
     }
-  }, [examInfo]);
+  }, [examInfo, history, dispatch, user]);
 
   useEffect(() => {
     setResult({ ...examResult });

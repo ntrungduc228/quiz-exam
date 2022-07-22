@@ -41,15 +41,15 @@ const Dashboard = () => {
           history.push('/signin');
         }
       });
-  }, []);
-  console.log('examByStudent', examByStudent);
-  console.log('examList', examList);
+  }, [dispatch, history, user]);
+  // console.log('examByStudent', examByStudent);
+  // console.log('examList', examList);
 
   useEffect(() => {
     if (examInfo?.classId && examInfo?.subjectId && examInfo?.times && !examResult) {
       history.push('/do-exam');
     }
-  }, [examInfo]);
+  }, [examInfo, history, examResult]);
 
   useEffect(() => {
     setExamList(exams);

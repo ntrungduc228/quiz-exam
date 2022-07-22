@@ -35,13 +35,13 @@ const FormVerify = () => {
 
   useEffect(() => {
     clearErrors();
-  }, []);
+  }, [clearErrors]);
 
   useEffect(() => {
     if (user?.state !== STATE.needConfirm) {
       history.push('/');
     }
-  }, [user]);
+  }, [user, history]);
 
   const onSubmit = (data) => {
     dispatch(setLoading(true));

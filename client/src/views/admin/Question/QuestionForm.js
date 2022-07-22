@@ -41,7 +41,7 @@ const QuestionForm = ({ title, data, isDetail, isUpdate, isShowModal, setIsShowM
 
     setChooseAnswer(data.correctAnswer);
     clearErrors();
-  }, [data]);
+  }, [data, clearErrors, setValue]);
 
   return (
     <>

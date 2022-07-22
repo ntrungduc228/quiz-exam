@@ -32,8 +32,7 @@ const QuestionForm = ({ title, data, isDetail, isUpdate, isShowModal, setIsShowM
     handleSubmit,
     formState: { errors },
     setValue,
-    clearErrors,
-    getValues
+    clearErrors
   } = useForm({ mode: 'onChange', resolver: yupResolver(schema) });
 
   const { subjects } = useSelector((state) => state.subject);
@@ -52,7 +51,7 @@ const QuestionForm = ({ title, data, isDetail, isUpdate, isShowModal, setIsShowM
           history.push('/signin');
         }
       });
-  }, []);
+  }, [history, dispatch]);
 
   useEffect(() => {
     setSubjectList(subjects);
@@ -71,11 +70,11 @@ const QuestionForm = ({ title, data, isDetail, isUpdate, isShowModal, setIsShowM
 
     setChooseAnswer(data.correctAnswer);
     clearErrors();
-  }, [data]);
+  }, [data, setValue, clearErrors]);
 
   useEffect(() => {
     setValue('correctAnswer', chooseAnswer);
-  }, [chooseAnswer]);
+  }, [chooseAnswer, setValue]);
 
   const onSubmit = (data) => {
     let questionSubjectData = subjectList.find((item) => item.subjectId === data.subjectId);

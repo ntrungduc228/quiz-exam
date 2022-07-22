@@ -82,7 +82,7 @@ const Question = () => {
           history.push('/signin');
         }
       });
-  }, []);
+  }, [dispatch, history]);
 
   useEffect(() => {
     setQuestionList(questions);

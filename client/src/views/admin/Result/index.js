@@ -55,7 +55,7 @@ const Result = () => {
           history.push('/signin');
         }
       });
-  }, []);
+  }, [dispatch, history]);
 
   useEffect(() => {
     setScoreList(scores);
