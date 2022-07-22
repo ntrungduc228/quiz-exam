@@ -1,8 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Row, Col, Card, Modal, Button, Form, Spinner } from 'react-bootstrap';
-import BootstrapTable from 'react-bootstrap-table-next';
-import paginationFactory from 'react-bootstrap-table2-paginator';
-import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
+import { Button } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { getAllClasses, createNewClass, setLoading, updateClassById, deleteClassById } from '../../../store/slices/class';
 import { clearMessage } from '../../../store/slices/message';
@@ -15,8 +12,6 @@ import { logout } from '../../../store/slices/auth';
 import Confirm from '../../../components/Confirm';
 import toast from 'react-hot-toast';
 
-const { SearchBar } = Search;
-
 const Class = () => {
   const initialValues = useRef({ classId: '', name: '' }).current;
   const [formValue, setFormValue] = useState(initialValues);
@@ -26,7 +21,6 @@ const Class = () => {
   const [typeAction, setTypeAction] = useState(ACTION_TYPE.CREATE);
   const [errorMessage, setErrorMessage] = useState('');
 
-  const { message } = useSelector((state) => state.message);
   const { classes, isLoading } = useSelector((state) => state.class);
   const dispatch = useDispatch();
   const history = useHistory();
@@ -211,52 +205,6 @@ const Class = () => {
       ></TableList>
     </>
   );
-
-  // return (
-  //   <React.Fragment>
-  //     <Row>
-  //       <Col>
-  //         <Card>
-  //           <Card.Header>
-  //             <Card.Title as="h5">Basic Table</Card.Title>
-  //             <span className="d-block m-t-5">
-  //               use bootstrap <code>Table</code> component
-  //             </span>
-  //           </Card.Header>
-  //           <Card.Body>
-  //             <ToolkitProvider bootstrap4 keyField="classId" data={classList} columns={columns} search>
-  //               {(props) => (
-  //                 <div>
-  //                   <div className="col-12 d-flex justify-content-between flex-wrap">
-  //                     <div className="col-sm-12 col-md-6">
-  //                       <Button onClick={() => setIsShowModal(true)}>Large modal</Button>
-  //                     </div>
-  //                     <div className="col-sm-12 col-md-6 d-flex justify-content-end">
-  //                       <SearchBar {...props.searchProps} placeholder="Search Something!!!" style={{ width: '320px' }} />
-  //                     </div>
-  //                   </div>
-  //                   <hr />
-  //                   <BootstrapTable striped pagination={paginationFactory()} noDataIndication="Table is Empty" {...props.baseProps} />
-  //                 </div>
-  //               )}
-  //             </ToolkitProvider>
-  //             <Modal
-  //               size="lg"
-  //               show={isShowModalCreate}
-  //               onHide={() => setIsShowModal(false)}
-  //               aria-labelledby="example-modal-sizes-title-lg"
-  //             >
-  //               <Modal.Header closeButton>
-  //                 <Modal.Title id="example-modal-sizes-title-lg">Large Modal</Modal.Title>
-  //               </Modal.Header>
-  //               <Modal.Body>...</Modal.Body>
-  //             </Modal>
-  //           </Card.Body>
-  //         </Card>
-  //       </Col>{' '}
-  //     </Row>{' '}
-  //   </React.Fragment>
-  // );
 };
 
 export default Class;

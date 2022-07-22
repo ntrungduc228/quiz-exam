@@ -13,7 +13,7 @@ let updateSubjectById = (data) => {
 };
 
 let deleteSubjectById = (data) => {
-  return axios.delete('/subject/delete-subject-by-id', data);
+  return axios.delete('/subject/delete-subject-by-id', { data: data });
 };
 
 const subjectService = { getAllSubjects, createNewSubject, updateSubjectById, deleteSubjectById };

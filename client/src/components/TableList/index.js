@@ -3,6 +3,7 @@ import { Row, Col, Card, Button } from 'react-bootstrap';
 import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
+import filterFactory from 'react-bootstrap-table2-filter';
 
 const { SearchBar } = Search;
 
@@ -44,6 +45,8 @@ const TableList = ({ title, dataList, columns, keyField, isShowButtonCreate, isS
                       pagination={paginationFactory()}
                       noDataIndication="Không tìm thấy dữ liệu..."
                       {...props.baseProps}
+                      filter={filterFactory()}
+                      // filterPosition="top"
                     />
                   </div>
                 )}

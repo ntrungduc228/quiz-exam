@@ -5,23 +5,25 @@ import { useSelector, useDispatch } from 'react-redux';
 import errorJwt from '../../../utils/errorJwt';
 import { logout } from '../../../store/slices/auth';
 import TableList from '../../../components/TableList';
-import { getListResultByStudentId } from '../../../store/slices/score';
+import { getListResult } from '../../../store/slices/score';
 import { selectFilter } from 'react-bootstrap-table2-filter';
 import { getAllSubjects } from '../../../store/slices/subject';
+import { getAllClasses } from '../../../store/slices/class';
 
-const ListResult = () => {
+const Result = () => {
   const [scoreList, setScoreList] = useState([]);
   const [subjectList, setSubjectList] = useState([]);
+  const [classList, setClassList] = useState([]);
 
-  const { user } = useSelector((state) => state.auth);
   const { scores } = useSelector((state) => state.score);
   const { subjects } = useSelector((state) => state.subject);
+  const { classes } = useSelector((state) => state.class);
 
   const history = useHistory();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getListResultByStudentId({ studentId: user.userId }))
+    dispatch(getListResult())
       .unwrap()
       .then(() => {})
       .catch(async (err) => {
@@ -42,11 +44,27 @@ const ListResult = () => {
           history.push('/signin');
         }
       });
+
+    dispatch(getAllClasses())
+      .unwrap()
+      .then(() => {})
+      .catch(async (err) => {
+        console.log('yeye', err);
+        if (errorJwt(err)) {
+          await dispatch(logout());
+          history.push('/signin');
+        }
+      });
   }, []);
 
   useEffect(() => {
     setScoreList(scores);
   }, [scores]);
+
+  useEffect(() => {
+    let arr = classes.map((item) => ({ label: item.classId, value: item.classId }));
+    setClassList([...arr]);
+  }, [classes]);
 
   useEffect(() => {
     let arr = subjects.map((item) => ({ label: item.name, value: item.name }));
@@ -72,6 +90,26 @@ const ListResult = () => {
       text: 'Điểm',
       sort: true
     },
+
+    {
+      dataField: 'studentId',
+      text: 'Mã sinh viên',
+      sort: true
+    },
+    {
+      dataField: 'fullName',
+      text: 'Họ tên',
+      sort: true
+    },
+    {
+      dataField: 'scoreStudentData.studentClassData.classId',
+      text: 'Lớp',
+      sort: true,
+      filter: selectFilter({
+        options: classList
+      })
+    },
+
     {
       dataField: 'date',
       text: 'Ngày thi',
@@ -99,4 +137,4 @@ const ListResult = () => {
   );
 };
 
-export default ListResult;
+export default Result;

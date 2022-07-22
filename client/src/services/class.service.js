@@ -17,7 +17,7 @@ let updateClassById = (data) => {
 };
 
 let deleteClassById = (data) => {
-  return axios.delete('/class/delete-class-by-id', data);
+  return axios.delete('/class/delete-class-by-id', { data: data });
 };
 
 const classService = { getAllClasses, createNewClass, getClassById, updateClassById, deleteClassById };

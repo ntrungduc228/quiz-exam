@@ -1,18 +1,13 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Row, Col, Button } from 'react-bootstrap';
+import React, { useState, useEffect } from 'react';
+import { Row, Col } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import errorJwt from '../../../utils/errorJwt';
 import { logout } from '../../../store/slices/auth';
 import TableList from '../../../components/TableList';
 import { getAllSubjects } from '../../../store/slices/subject';
-import { ACTION_TYPE } from '../../../config/constant';
 
 const Subject = () => {
-  const initialValues = useRef({
-    subjectId: '',
-    name: ''
-  }).current;
   const [subjectList, setSubjectList] = useState([]);
   const [isShowModal, setIsShowModal] = useState(false);
 

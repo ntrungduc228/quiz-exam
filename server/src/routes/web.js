@@ -7,6 +7,7 @@ const subjectController = require("../controllers/subject.controller");
 const questionController = require("../controllers/question.controller");
 const examController = require("../controllers/exam.controller");
 const resultController = require("../controllers/result.controller");
+const homeController = require("../controllers/home.controller");
 
 const authMiddleware = require("../middlewares/auth");
 
@@ -37,6 +38,14 @@ const initRoutes = (app) => {
   router.get("/", (req, res) => {
     return res.json({ message: "Home page" });
   });
+
+  router.get(
+    "/dashboard/teacher",
+    verifyTeacher,
+    homeController.getDashBoardTeacher
+  );
+
+  router.get("/dashboard/admin", verifyAdmin, homeController.getDashBoardAdmin);
 
   router.post("/login", authController.login);
   router.post("/account/forget-password", authController.forgetPassword);
@@ -118,7 +127,7 @@ const initRoutes = (app) => {
 
   router.get(
     "/subject/get-all-subjects",
-    verifyTeacherOrAdmin,
+    authMiddleware.isAuthenticated,
     subjectController.getAllSubjects
   );
   router.post(
@@ -196,6 +205,12 @@ const initRoutes = (app) => {
     "/result/get-all-result-by-student",
     verifyStudent,
     resultController.getListResultByStudentId
+  );
+
+  router.get(
+    "/result/get-all-results",
+    verifyTeacherOrAdmin,
+    resultController.getListResult
   );
 
   return app.use("/api", router);

@@ -85,6 +85,7 @@ let changeStateExam = async (req, res) => {
 };
 
 let deleteExam = async (req, res) => {
+  console.log("req body", req.body);
   const { classId, subjectId, times } = req.body;
   if (!classId || !subjectId || !times) {
     return res.status(400).json({

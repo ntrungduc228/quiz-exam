@@ -13,6 +13,18 @@ export const getListResultByStudentId = createAsyncThunk('score/getListResultByS
   }
 });
 
+export const getListResult = createAsyncThunk('score/getListResult', async (data, thunkAPI) => {
+  try {
+    let response = await scoreService.getListResult();
+    if (!response.data?.success) {
+      return thunkAPI.rejectWithValue(response.data);
+    }
+    return response?.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+});
+
 const initialState = {
   scores: [],
   isLoading: false
@@ -34,6 +46,19 @@ const scoreSlice = createSlice({
       state.isLoading = false;
     },
     [getListResultByStudentId.rejected]: (state, action) => {
+      state.isLoading = false;
+    },
+    [getListResult.fulfilled]: (state, action) => {
+      state.scores = action.payload.data.map((item) => {
+        return {
+          ...item,
+          keyField: item.subjectId.concat(item.studentId + item.times),
+          fullName: `${item.scoreStudentData.lastName} ${item.scoreStudentData.firstName}`
+        };
+      });
+      state.isLoading = false;
+    },
+    [getListResult.rejected]: (state, action) => {
       state.isLoading = false;
     }
   }

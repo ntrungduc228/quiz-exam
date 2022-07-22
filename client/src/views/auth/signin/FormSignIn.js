@@ -4,16 +4,13 @@ import { Row, Col, Button, Alert, Spinner } from 'react-bootstrap';
 import { Redirect } from 'react-router-dom';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
-import useScriptRef from '../../../hooks/useScriptRef';
-import { selectAuth, showOnLoading, setLoading, login } from '../../../store/slices/auth';
+import { selectAuth, setLoading, login } from '../../../store/slices/auth';
 import { clearMessage } from '../../../store/slices/message';
 
-// import { ACCOUNT_INITIALIZE } from './../../../store/actions';
 import { BASE_URL } from '../../../config/constant';
 
 const FormSignIn = ({ className, ...rest }) => {
   const dispatch = useDispatch();
-  const scriptedRef = useScriptRef();
   const { isLoggedIn, isLoading } = useSelector(selectAuth);
   const { message } = useSelector((state) => state.message);
 

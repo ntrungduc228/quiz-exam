@@ -101,6 +101,23 @@ let createNewExam = (data) => {
         state: STATE_EXAM.open,
       });
 
+      examInstance = await db.Exam.findOne({
+        nest: true,
+        raw: false,
+        where: {
+          classId: data.classId,
+          subjectId: data.subjectId,
+          times: data.times,
+        },
+        attributes: { exclude: ["createdAt", "updatedAt"] },
+        include: [
+          {
+            model: db.Subject,
+            as: "examSubjectData",
+          },
+        ],
+      });
+
       return resolve({
         success: true,
         message: transSuccessVi.createNew("Bài thi"),

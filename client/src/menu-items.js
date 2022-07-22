@@ -23,42 +23,42 @@ export const teacherMenuItems = {
       title: 'Lớp học',
       type: 'item',
       url: '/teacher/class',
-      icon: 'feather icon-box'
+      icon: 'feather icon-folder'
     },
     {
       id: 'student',
       title: 'Sinh viên',
       type: 'item',
       url: '/teacher/student',
-      icon: 'feather icon-box'
+      icon: 'feather icon-folder'
     },
     {
       id: 'subject',
       title: 'Môn học',
       type: 'item',
       url: '/teacher/subject',
-      icon: 'feather icon-box'
+      icon: 'feather icon-folder'
     },
     {
       id: 'question',
       title: 'Câu hỏi',
       type: 'item',
       url: '/teacher/question',
-      icon: 'feather icon-box'
+      icon: 'feather icon-folder'
     },
     {
       id: 'exam',
       title: 'Đề thi',
       type: 'item',
       url: '/teacher/exam',
-      icon: 'feather icon-box'
+      icon: 'feather icon-folder'
     },
     {
       id: 'result',
       title: 'Kết quả',
       type: 'item',
-      url: '/teacher/result',
-      icon: 'feather icon-box'
+      url: '/teacher/score',
+      icon: 'feather icon-folder'
     }
   ]
 };
@@ -76,49 +76,49 @@ export const adminMenuItems = {
       title: 'Lớp học',
       type: 'item',
       url: '/admin/class',
-      icon: 'feather icon-box'
+      icon: 'feather icon-folder'
     },
     {
       id: 'teacher',
       title: 'Giảng viên',
       type: 'item',
       url: '/admin/teacher',
-      icon: 'feather icon-box'
+      icon: 'feather icon-folder'
     },
     {
       id: 'student',
       title: 'Sinh viên',
       type: 'item',
       url: '/admin/student',
-      icon: 'feather icon-box'
+      icon: 'feather icon-folder'
     },
     {
       id: 'subject',
       title: 'Môn học',
       type: 'item',
       url: '/admin/subject',
-      icon: 'feather icon-box'
+      icon: 'feather icon-folder'
     },
     {
       id: 'question',
       title: 'Câu hỏi',
       type: 'item',
       url: '/admin/question',
-      icon: 'feather icon-box'
+      icon: 'feather icon-folder'
     },
     {
       id: 'exam',
       title: 'Đề thi',
       type: 'item',
       url: '/admin/exam',
-      icon: 'feather icon-box'
+      icon: 'feather icon-folder'
     },
     {
       id: 'result',
       title: 'Kết quả',
       type: 'item',
       url: '/admin/result',
-      icon: 'feather icon-box'
+      icon: 'feather icon-folder'
     }
   ]
 };
