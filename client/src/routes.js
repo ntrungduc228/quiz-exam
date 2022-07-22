@@ -226,7 +226,7 @@ export const adminRoutes = {
       path: DASHBOARD_ROUTE.admin?.path,
       roles: [ROLES.admin],
       exact: true,
-      component: lazy(() => import('./views/dashboard/DashDefault'))
+      component: lazy(() => import('./views/admin/Dashboard'))
     },
     {
       guard: AuthGuard,
@@ -255,6 +255,27 @@ export const adminRoutes = {
       roles: [ROLES.admin],
       exact: true,
       component: lazy(() => import('./views/admin/Subject'))
+    },
+    {
+      guard: AuthGuard,
+      path: '/admin/question',
+      roles: [ROLES.admin],
+      exact: true,
+      component: lazy(() => import('./views/admin/Question'))
+    },
+    {
+      guard: AuthGuard,
+      path: '/admin/exam',
+      roles: [ROLES.admin],
+      exact: true,
+      component: lazy(() => import('./views/admin/Exam'))
+    },
+    {
+      guard: AuthGuard,
+      path: '/admin/score',
+      roles: [ROLES.admin],
+      exact: true,
+      component: lazy(() => import('./views/admin/Result'))
     },
     {
       exact: true,
