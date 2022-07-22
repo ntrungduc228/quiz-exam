@@ -10,6 +10,15 @@ import { getAllQuestions, setLoading, createNewQuestion, updateQuestionById, del
 import QuestionForm from './QuestionForm';
 import toast from 'react-hot-toast';
 import Confirm from '../../../components/Confirm';
+import { getAllSubjects } from '../../../store/slices/subject';
+import { selectFilter } from 'react-bootstrap-table2-filter';
+import { getAllTeachers } from '../../../store/slices/teacher';
+
+const levelFilter = [
+  { value: LEVEL.easy.id, label: 'Dễ' },
+  { value: LEVEL.medium.id, label: 'Trung bình' },
+  { value: LEVEL.hard.id, label: 'Khó' }
+];
 
 const Question = () => {
   const initialValues = useRef({
@@ -29,8 +38,13 @@ const Question = () => {
   const [typeAction, setTypeAction] = useState(ACTION_TYPE.CREATE);
   const [errorMessage, setErrorMessage] = useState('');
   const [questionList, setQuestionList] = useState([]);
+  const [subjectList, setSubjectList] = useState([]);
+  const [teacherList, setTeacherList] = useState([]);
 
+  const { subjects } = useSelector((state) => state.subject);
   const { questions, isLoading } = useSelector((state) => state.question);
+  const { teachers } = useSelector((state) => state.teacher);
+
   const { user } = useSelector((state) => state.auth);
   const history = useHistory();
   const dispatch = useDispatch();
@@ -46,11 +60,44 @@ const Question = () => {
           history.push('/signin');
         }
       });
+
+    dispatch(getAllSubjects())
+      .unwrap()
+      .then(() => {})
+      .catch(async (err) => {
+        console.log(err);
+        if (errorJwt(err)) {
+          await dispatch(logout());
+          history.push('/signin');
+        }
+      });
+
+    dispatch(getAllTeachers())
+      .unwrap()
+      .then(() => {})
+      .catch(async (err) => {
+        console.log(err);
+        if (errorJwt(err)) {
+          await dispatch(logout());
+          history.push('/signin');
+        }
+      });
   }, []);
 
   useEffect(() => {
     setQuestionList(questions);
   }, [questions]);
+
+  useEffect(() => {
+    let arr = teachers.map((item) => ({ label: item.teacherId, value: item.teacherId }));
+    setTeacherList([...arr]);
+  }, [teachers]);
+
+  useEffect(() => {
+    // setSubjectList(subjects);
+    let arr = subjects.map((item) => ({ label: item.name, value: item.name }));
+    setSubjectList([...arr]);
+  }, [subjects]);
 
   const handleCreateNew = () => {
     setFormValue(initialValues);
@@ -157,7 +204,11 @@ const Question = () => {
     {
       dataField: 'questionSubjectData.name',
       text: 'Môn học',
-      sort: true
+      sort: true,
+      filter: selectFilter({
+        options: subjectList,
+        placeholder: 'Chọn môn học'
+      })
     },
     {
       dataField: 'level',
@@ -183,12 +234,20 @@ const Question = () => {
           }
         }
         return nameLevel;
-      }
+      },
+      filter: selectFilter({
+        options: levelFilter,
+        placeholder: 'Chọn trình độ'
+      })
     },
     {
       dataField: 'teacherId',
       text: 'Mã GV',
-      sort: true
+      sort: true,
+      filter: selectFilter({
+        options: teacherList,
+        placeholder: 'Chọn giảng viên'
+      })
     },
     {
       dataField: '',

@@ -146,13 +146,13 @@ let deleteQuestionById = (id) => {
       if (!result) {
         return resolve({
           success: false,
-          message: transErrorsVi.deleteInstance("lớp học"),
+          message: transErrorsVi.deleteInstance("câu hỏi"),
         });
       }
 
       return resolve({
         success: true,
-        message: transSuccessVi.deleteInstance("lớp học"),
+        message: transSuccessVi.deleteInstance("câu hỏi"),
         data: +id,
       });
     } catch (error) {

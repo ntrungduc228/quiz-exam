@@ -15,12 +15,12 @@ const schema = yup
   .object({
     classId: yup.string().required('Vui lòng chọn lớp học'),
     subjectId: yup.string().required('Vui lòng chọn môn học'),
-    times: yup.number('Vui lòng nhập số nguyên').required('Vui lòng nhập lần thi').positive().integer(),
-    timeExam: yup.number('Vui lòng nhập số nguyên').required('Vui lòng nhập thời gian cho bài thi (phút)').positive().integer(),
+    times: yup.number().required('Vui lòng nhập lần thi').positive().typeError('Vui lòng nhập số nguyên').integer(),
+    timeExam: yup.number().required('Vui lòng nhập thời gian cho bài thi (phút)').typeError('Vui lòng nhập số nguyên').positive().integer(),
     dateExam: yup.string().required('Vui lòng chọn ngày thi'),
-    numOfEasy: yup.number('Vui lòng nhập số nguyên').required('Vui lòng nhập số câu dễ').positive().integer(),
-    numOfMedium: yup.number('Vui lòng nhập số nguyên').required('Vui lòng nhập số câu trung bình').positive().integer(),
-    numOfHard: yup.number('Vui lòng nhập số nguyên').required('Vui lòng nhập số câu khó').positive().integer(),
+    numOfEasy: yup.number().typeError('Vui lòng nhập số nguyên').required('Vui lòng nhập số câu dễ').positive().integer(),
+    numOfMedium: yup.number().typeError('Vui lòng nhập số nguyên').required('Vui lòng nhập số câu trung bình').positive().integer(),
+    numOfHard: yup.number().typeError('Vui lòng nhập số nguyên').required('Vui lòng nhập số câu khó').positive().integer(),
     state: yup.boolean().required('Vui lòng chọn trạng thái')
   })
   .required();
@@ -34,7 +34,7 @@ const ExamForm = ({ title, data, isDetail, isUpdate, isShowModal, setIsShowModal
     handleSubmit,
     formState: { errors },
     setValue,
-    clearErrors,
+    clearErrors
   } = useForm({ mode: 'onChange', resolver: yupResolver(schema) });
 
   const { subjects } = useSelector((state) => state.subject);
@@ -84,12 +84,14 @@ const ExamForm = ({ title, data, isDetail, isUpdate, isShowModal, setIsShowModal
     setValue('numOfEasy', data.numOfEasy);
     setValue('numOfMedium', data.numOfMedium);
     setValue('numOfHard', data.numOfHard);
-    setValue('state', data.state);
+    setValue('state', data.state || (!isDetail && !isUpdate && true));
 
     clearErrors();
   }, [data]);
 
-  const onSubmit = (data) => {};
+  const onSubmit = (data) => {
+    handleSubmitForm(data);
+  };
 
   return (
     <>
@@ -110,7 +112,7 @@ const ExamForm = ({ title, data, isDetail, isUpdate, isShowModal, setIsShowModal
               <Col md={6}>
                 <Form.Group>
                   <Form.Label>Lớp</Form.Label>
-                  <Form.Control as="select" name="classId" {...register('classId')} disabled={isDetail}>
+                  <Form.Control as="select" name="classId" {...register('classId')} disabled={isDetail || isUpdate}>
                     {classList.map((item) => (
                       <option key={item.classId} value={item.classId}>
                         {item.classId}
@@ -124,7 +126,7 @@ const ExamForm = ({ title, data, isDetail, isUpdate, isShowModal, setIsShowModal
                 <Form.Group>
                   <Form.Label>Môn học</Form.Label>
                   <Form.Group>
-                    <Form.Control as="select" name="subjectId" {...register('subjectId')} disabled={isDetail}>
+                    <Form.Control as="select" name="subjectId" {...register('subjectId')} disabled={isDetail || isUpdate}>
                       {subjectList.map((item) => (
                         <option key={item.subjectId} value={item.subjectId}>
                           {item.name}
@@ -140,14 +142,20 @@ const ExamForm = ({ title, data, isDetail, isUpdate, isShowModal, setIsShowModal
               <Col md={6}>
                 <Form.Group>
                   <Form.Label>Lần thi</Form.Label>
-                  <Form.Control name="times" type="text" placeholder="Lần thi" {...register('times')} disabled={isDetail} />
+                  <Form.Control name="times" type="text" placeholder="Lần thi" {...register('times')} disabled={isDetail || isUpdate} />
                   {errors?.times && <p className="text-danger form-text">{errors?.times.message}</p>}
                 </Form.Group>
               </Col>
               <Col md={6}>
                 <Form.Group>
                   <Form.Label>Thời gian thi (phút)</Form.Label>
-                  <Form.Control name="timeExam" type="text" placeholder="Thời gian thi" {...register('timeExam')} disabled={isDetail} />
+                  <Form.Control
+                    name="timeExam"
+                    type="text"
+                    placeholder="Thời gian thi"
+                    {...register('timeExam')}
+                    disabled={isDetail || isUpdate}
+                  />
                   {errors?.timeExam && <p className="text-danger form-text">{errors?.timeExam.message}</p>}
                 </Form.Group>
               </Col>
@@ -157,14 +165,20 @@ const ExamForm = ({ title, data, isDetail, isUpdate, isShowModal, setIsShowModal
                 <Form.Group>
                   <Form.Label>Ngày thi</Form.Label>
 
-                  <Form.Control name="dateExam" type="text" placeholder="Ngày thi" {...register('dateExam')} disabled={isDetail} />
+                  <Form.Control
+                    name="dateExam"
+                    type="date"
+                    placeholder="Ngày thi"
+                    {...register('dateExam')}
+                    disabled={isDetail || isUpdate}
+                  />
                   {errors?.dateExam && <p className="text-danger form-text">{errors?.dateExam.message}</p>}
                 </Form.Group>
               </Col>
               <Col md={6}>
                 <Form.Group>
                   <Form.Label>Số câu dễ</Form.Label>
-                  <Form.Control name="numOfEasy" type="text" placeholder="Tên" {...register('numOfEasy')} disabled={isDetail} />
+                  <Form.Control name="numOfEasy" type="text" placeholder="Tên" {...register('numOfEasy')} disabled={isDetail || isUpdate} />
                   {errors?.numOfEasy && <p className="text-danger form-text">{errors?.numOfEasy.message}</p>}
                 </Form.Group>
               </Col>
@@ -179,7 +193,7 @@ const ExamForm = ({ title, data, isDetail, isUpdate, isShowModal, setIsShowModal
                     type="text"
                     placeholder="Số câu trung bình"
                     {...register('numOfMedium')}
-                    disabled={isDetail}
+                    disabled={isDetail || isUpdate}
                   />
                   {errors?.numOfMedium && <p className="text-danger form-text">{errors?.numOfMedium.message}</p>}
                 </Form.Group>
@@ -187,7 +201,13 @@ const ExamForm = ({ title, data, isDetail, isUpdate, isShowModal, setIsShowModal
               <Col md={6}>
                 <Form.Group>
                   <Form.Label>Số câu khó</Form.Label>
-                  <Form.Control name="numOfHard" type="text" placeholder="Số câu khó" {...register('numOfHard')} disabled={isDetail} />
+                  <Form.Control
+                    name="numOfHard"
+                    type="text"
+                    placeholder="Số câu khó"
+                    {...register('numOfHard')}
+                    disabled={isDetail || isUpdate}
+                  />
                   {errors?.numOfHard && <p className="text-danger form-text">{errors?.numOfHard.message}</p>}
                 </Form.Group>
               </Col>
@@ -209,7 +229,7 @@ const ExamForm = ({ title, data, isDetail, isUpdate, isShowModal, setIsShowModal
               </Row>
             )}
             <Row>
-              <Col sm={{ span: 10, offset: 4 }}>
+              <Col sm={{ span: 6, offset: 4 }}>
                 {errorMessage && <p className="text-danger form-text">{errorMessage}</p>}
                 {!isDetail && (
                   <Button onClick={handleSubmit(onSubmit)} disabled={isDetail || isLoading} color="info">

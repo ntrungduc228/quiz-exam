@@ -13,7 +13,7 @@ let changeStateExam = (data) => {
 };
 
 let deleteExam = (data) => {
-  return axios.delete('/exam/delete-exam', data);
+  return axios.delete('/exam/delete-exam', { data: data });
 };
 
 let getAllExamsByClass = (data) => {

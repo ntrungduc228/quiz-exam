@@ -4,6 +4,10 @@ let getListResultByStudentId = (data) => {
   return axios.get(`/result/get-all-result-by-student?studentId=${data.studentId}`);
 };
 
-const scoreService = { getListResultByStudentId };
+let getListResult = () => {
+  return axios.get(`/result/get-all-results`);
+};
+
+const scoreService = { getListResultByStudentId, getListResult };
 
 export default scoreService;

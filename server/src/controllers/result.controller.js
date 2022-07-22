@@ -24,6 +24,21 @@ let getListResultByStudentId = async (req, res) => {
   }
 };
 
+let getListResult = async (req, res) => {
+  try {
+    let data = await resultService.getListResult();
+    return res.status(200).json(data);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      message: transErrorsVi.server_error,
+      error: error,
+    });
+  }
+};
+
 module.exports = {
   getListResultByStudentId,
+  getListResult,
 };

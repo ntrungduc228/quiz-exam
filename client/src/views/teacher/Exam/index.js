@@ -8,8 +8,19 @@ import TableList from '../../../components/TableList';
 import { ACTION_TYPE, STATE_EXAM } from '../../../config/constant';
 import toast from 'react-hot-toast';
 import Confirm from '../../../components/Confirm';
-import { setLoading, getAllExams } from '../../../store/slices/exam';
+import { setLoading, getAllExams, changeStateExam, deleteExam, createNewExam } from '../../../store/slices/exam';
 import ExamForm from './ExamForm';
+import { selectFilter } from 'react-bootstrap-table2-filter';
+import { getAllClasses } from '../../../store/slices/class';
+import { getAllSubjects } from '../../../store/slices/subject';
+
+const stateFilter = [
+  {
+    value: STATE_EXAM.open,
+    label: 'Mở'
+  },
+  { value: STATE_EXAM.close, label: 'Đóng' }
+];
 
 const Exam = () => {
   const initialValues = useRef({
@@ -29,8 +40,12 @@ const Exam = () => {
   const [typeAction, setTypeAction] = useState(ACTION_TYPE.CREATE);
   const [errorMessage, setErrorMessage] = useState('');
   const [examList, setExamList] = useState([]);
+  const [subjectList, setSubjectList] = useState([]);
+  const [classList, setClassList] = useState([]);
 
+  const { subjects } = useSelector((state) => state.subject);
   const { exams, isLoading } = useSelector((state) => state.exam);
+  const { classes } = useSelector((state) => state.class);
   const { user } = useSelector((state) => state.auth);
   const history = useHistory();
   const dispatch = useDispatch();
@@ -46,11 +61,43 @@ const Exam = () => {
           history.push('/signin');
         }
       });
+
+    dispatch(getAllSubjects())
+      .unwrap()
+      .then(() => {})
+      .catch(async (err) => {
+        console.log(err);
+        if (errorJwt(err)) {
+          await dispatch(logout());
+          history.push('/signin');
+        }
+      });
+
+    dispatch(getAllClasses())
+      .unwrap()
+      .then(() => {})
+      .catch(async (err) => {
+        console.log('yeye', err);
+        if (errorJwt(err)) {
+          await dispatch(logout());
+          history.push('/signin');
+        }
+      });
   }, []);
 
   useEffect(() => {
     setExamList(exams);
   }, [exams]);
+
+  useEffect(() => {
+    let arr = classes.map((item) => ({ label: item.classId, value: item.classId }));
+    setClassList([...arr]);
+  }, [classes]);
+
+  useEffect(() => {
+    let arr = subjects.map((item) => ({ label: item.name, value: item.name }));
+    setSubjectList([...arr]);
+  }, [subjects]);
 
   const handleCreateNew = () => {
     setFormValue(initialValues);
@@ -66,21 +113,100 @@ const Exam = () => {
     setErrorMessage('');
   };
 
-  const handleChangeStateExam = (data) => {};
-  const handleDeleteExam = (data) => {};
+  const handleChangeStateExam = (data) => {
+    setFormValue({ ...data });
+    setIsShowModal(true);
+    setTypeAction(ACTION_TYPE.UPDATE);
+    setErrorMessage('');
+  };
+  const handleDeleteExam = (data) => {
+    setFormValue({ ...data });
+    setIsShowModalConfirm(true);
+  };
 
-  const handleSubmitCreateExam = async (data) => {};
+  const handleSubmitCreateExam = async (data) => {
+    dispatch(setLoading(true));
+    dispatch(createNewExam({ ...data, teacherId: user.userId }))
+      .unwrap()
+      .then((res) => {
+        if (res.success) {
+          toast.success(res.message);
+          setFormValue({ ...initialValues });
+          setIsShowModal(false);
+        }
+      })
+      .catch(async (err) => {
+        console.log('wrap err', err);
+        if (errorJwt(err)) {
+          dispatch(logout());
+          history.push('/signin');
+        }
+        setErrorMessage(err?.message);
+      });
+  };
+
+  const handleSubmitChangeStateExam = async (data) => {
+    dispatch(setLoading(true));
+    dispatch(changeStateExam({ ...data, newData: { state: data.state } }))
+      .unwrap()
+      .then((res) => {
+        if (res.success) {
+          toast.success(res.message);
+          setFormValue({ ...initialValues });
+          setIsShowModal(false);
+        }
+      })
+      .catch(async (err) => {
+        console.log('wrap err', err);
+        if (errorJwt(err)) {
+          await dispatch(logout());
+          await history.push('/signin');
+        }
+        setErrorMessage(err?.message);
+      });
+  };
+
+  const handleSubmitDeleteExam = async () => {
+    console.log('formvaue', formValue);
+    dispatch(setLoading(true));
+    dispatch(deleteExam({ ...formValue }))
+      .unwrap()
+      .then((res) => {
+        if (res.success) {
+          toast.success(res.message);
+          setFormValue({ ...initialValues });
+          setIsShowModalConfirm(false);
+        }
+      })
+      .catch(async (err) => {
+        setIsShowModalConfirm(false);
+        console.log('wrap err', err);
+        if (errorJwt(err)) {
+          await dispatch(logout());
+          await history.push('/signin');
+        }
+        toast.error(err?.message);
+      });
+  };
 
   const columns = [
     {
       dataField: 'classId',
       text: 'Mã lớp',
-      sort: true
+      sort: true,
+      filter: selectFilter({
+        options: classList,
+        placeholder: 'Chọn lớp học'
+      })
     },
     {
       dataField: 'examSubjectData.name',
       text: 'Môn học',
-      sort: true
+      sort: true,
+      filter: selectFilter({
+        options: subjectList,
+        placeholder: 'Chọn môn học'
+      })
     },
     {
       dataField: 'times',
@@ -112,7 +238,11 @@ const Exam = () => {
             <span style={{}}> {nameState}</span>
           </Badge>
         );
-      }
+      },
+      filter: selectFilter({
+        options: stateFilter,
+        placeholder: 'Chọn trạng thái'
+      })
     },
 
     {
@@ -141,6 +271,16 @@ const Exam = () => {
 
   return (
     <>
+      <Confirm
+        isLoading={isLoading}
+        title={`Bạn có chắc chắn muốn xóa đề thi này?`}
+        data={`Đề thi: ${formValue.classId} ${formValue.subjectId} ${formValue.times}`}
+        isShowModalConfirm={isShowModalConfirm}
+        setIsShowModalConfirm={setIsShowModalConfirm}
+        handleSubmitForm={handleSubmitDeleteExam}
+        isText={false}
+      />
+
       <ExamForm
         title={typeAction.message}
         isDetail={typeAction.type === ACTION_TYPE.DETAIL.type ? true : false}
@@ -148,7 +288,7 @@ const Exam = () => {
         data={formValue}
         setIsShowModal={setIsShowModal}
         isShowModal={isShowModal}
-        handleSubmitForm={typeAction.type === ACTION_TYPE.CREATE.type ? handleSubmitCreateExam : () => {}}
+        handleSubmitForm={typeAction.type === ACTION_TYPE.CREATE.type ? handleSubmitCreateExam : handleSubmitChangeStateExam}
         errorMessage={errorMessage}
       />
 

@@ -1,7 +1,7 @@
 export const BASENAME = ''; // don't add '/' at end off BASENAME
 // export const BASE_URL = '/app/dashboard/default';
 export const BASE_URL = '/dashboard';
-export const BASE_TITLE = ' | Datta Able Premium React Hooks + Redux Admin Template';
+export const BASE_TITLE = 'Trắc Nghiệm Online';
 export const API_SERVER = process.env.REACT_APP_API_SERVER || 'http://localhost:5000/api';
 
 export const ACTION_TYPE = {

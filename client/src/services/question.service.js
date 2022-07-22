@@ -13,7 +13,7 @@ let updateQuestionById = (data) => {
 };
 
 let deleteQuestionById = (data) => {
-  return axios.delete('/question/delete-question-by-id', data);
+  return axios.delete('/question/delete-question-by-id', { data: data });
 };
 
 const questionService = { getAllQuestions, createNewQuestion, updateQuestionById, deleteQuestionById };

@@ -141,9 +141,8 @@ const Account = () => {
         console.log('wrap err', err);
         setErrorMessage(err?.message);
       });
-
-    console.log('dataa', data);
   };
+
   const onSubmitChangePassword = (data) => {
     dispatch(setLoading(true));
     dispatch(changePassword({ username: user.username, password: data.password, newData: { password: data.newPassword } }))
@@ -161,8 +160,6 @@ const Account = () => {
         setErrorMessage(err?.message);
       });
   };
-
-  console.log('errors', errors);
 
   return (
     <React.Fragment>

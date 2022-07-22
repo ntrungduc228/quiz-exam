@@ -1,15 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Row, Col, Button, Badge } from 'react-bootstrap';
-import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { ACTION_TYPE, STATE } from '../../../config/constant';
-import errorJwt from '../../../utils/errorJwt';
-import { logout } from '../../../store/slices/auth';
 import TableList from '../../../components/TableList';
-import { getAllStudents, setLoading, createNewStudent, updateStudentById, changeState } from '../../../store/slices/student';
+import errorJwt from '../../../utils/errorJwt';
+import { useHistory } from 'react-router-dom';
+import { logout } from '../../../store/slices/auth';
+import { getAllStudents } from '../../../store/slices/student';
 import StudentForm from './StudentForm';
-import FormState from '../../../components/FormState';
-import toast from 'react-hot-toast';
+import { ACTION_TYPE, STATE } from '../../../config/constant';
 import { selectFilter } from 'react-bootstrap-table2-filter';
 import { getAllClasses } from '../../../store/slices/class';
 
@@ -32,15 +30,12 @@ const Student = () => {
   }).current;
   const [formValue, setFormValue] = useState(initialValues);
   const [studentList, setStudentList] = useState([]);
-  const [isShowModalConfirm, setIsShowModalConfirm] = useState(false);
   const [isShowModal, setIsShowModal] = useState(false);
-  const [typeAction, setTypeAction] = useState(ACTION_TYPE.CREATE);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [typeAction, setTypeAction] = useState(ACTION_TYPE.DETAIL);
   const [classList, setClassList] = useState([]);
 
-  const { students, isLoading } = useSelector((state) => state.student);
+  const { students } = useSelector((state) => state.student);
   const { classes } = useSelector((state) => state.class);
-
   const history = useHistory();
   const dispatch = useDispatch();
 
@@ -81,91 +76,6 @@ const Student = () => {
     setFormValue({ ...data });
     setIsShowModal(true);
     setTypeAction(ACTION_TYPE.DETAIL);
-    setErrorMessage('');
-  };
-
-  const handleCreateNew = () => {
-    setFormValue(initialValues);
-    setIsShowModal(true);
-    setTypeAction(ACTION_TYPE.CREATE);
-    setErrorMessage('');
-  };
-
-  const handleUpdateStudent = (data) => {
-    setFormValue({ ...data });
-    setIsShowModal(true);
-    setTypeAction(ACTION_TYPE.UPDATE);
-    setErrorMessage('');
-  };
-
-  const handleChangeState = (data) => {
-    setFormValue({ ...data, username: data.studentId, state: data?.studentAccountData.state });
-    setIsShowModalConfirm(true);
-  };
-
-  const handleSubmitCreateStudent = async (data) => {
-    await dispatch(setLoading(true));
-    dispatch(createNewStudent(data))
-      .unwrap()
-      .then((res) => {
-        if (res.success) {
-          toast.success(res.message);
-          setFormValue({ ...initialValues });
-          setIsShowModal(false);
-        }
-      })
-      .catch(async (err) => {
-        console.log('wrap err', err);
-        if (errorJwt(err)) {
-          await dispatch(logout());
-          await history.push('/signin');
-        }
-        setErrorMessage(err?.message);
-      });
-  };
-  const handleSubmitUpdateStudent = async (data) => {
-    await dispatch(setLoading(true));
-    dispatch(updateStudentById({ studentId: formValue.studentId, newData: { ...data } }))
-      .unwrap()
-      .then((res) => {
-        if (res.success) {
-          toast.success(res.message);
-          setFormValue({ ...initialValues });
-          setIsShowModal(false);
-        }
-      })
-      .catch(async (err) => {
-        console.log('wrap err', err);
-        if (errorJwt(err)) {
-          await dispatch(logout());
-          await history.push('/signin');
-        }
-        setErrorMessage(err?.message);
-      });
-  };
-
-  const handleSubmitChangeState = async (data) => {
-    await dispatch(setLoading(true));
-
-    dispatch(changeState({ username: data.username, newData: { state: data.state } }))
-      .unwrap()
-      .then((res) => {
-        if (res.success) {
-          toast.success(res.message);
-          setFormValue({ ...initialValues });
-          setIsShowModalConfirm(false);
-        }
-      })
-      .catch(async (err) => {
-        setIsShowModalConfirm(false);
-
-        console.log('wrap err', err);
-        if (errorJwt(err)) {
-          await dispatch(logout());
-          await history.push('/signin');
-        }
-        toast.error(err?.message);
-      });
   };
 
   const columns = [
@@ -245,50 +155,36 @@ const Student = () => {
             <Button variant="info" className="btn-icon" onClick={() => handleShowDetailInfo(row)}>
               <i className="feather icon-info" />
             </Button>
-            <Button variant="warning" className="btn-icon" onClick={() => handleUpdateStudent(row)}>
-              <i className="feather icon-edit" />
-            </Button>
-            <Button variant="danger" className="btn-icon" key={(rowIndex + 1) * students.length} onClick={() => handleChangeState(row)}>
-              <i className="feather icon-check-circle" />
-            </Button>
           </>
         );
       }
     }
   ];
+
   return (
     <>
-      <FormState
-        isLoading={isLoading}
-        title={`Thay đổi trạng thái cho sinh viên ${formValue.studentId}`}
-        data={formValue}
-        isShowModalConfirm={isShowModalConfirm}
-        setIsShowModalConfirm={setIsShowModalConfirm}
-        handleSubmitForm={handleSubmitChangeState}
-      />
-
       <StudentForm
         title={typeAction.message}
-        isDetail={typeAction.type === ACTION_TYPE.DETAIL.type ? true : false}
-        isUpdate={typeAction.type === ACTION_TYPE.UPDATE.type ? true : false}
+        isDetail={true}
+        isUpdate={false}
         data={formValue}
         setIsShowModal={setIsShowModal}
         isShowModal={isShowModal}
-        handleSubmitForm={typeAction.type === ACTION_TYPE.CREATE.type ? handleSubmitCreateStudent : handleSubmitUpdateStudent}
-        errorMessage={errorMessage}
+        handleSubmitForm={() => {}}
+        errorMessage={''}
       />
 
       <Row>
         <Col>
           <TableList
-            isShowButtonCreate={true}
+            isShowButtonCreate={false}
             keyField="studentId"
             title={`Danh sách sinh viên: ${studentList.length}`}
             dataList={studentList}
             columns={columns}
-            isShowModal={isShowModal}
-            setIsShowModal={setIsShowModal}
-            handleCreateNew={handleCreateNew}
+            isShowModal={false}
+            setIsShowModal={() => {}}
+            handleCreateNew={() => {}}
           ></TableList>
         </Col>
       </Row>
