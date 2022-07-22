@@ -38,7 +38,6 @@ const Dashboard = () => {
 
   useEffect(() => {
     setDashboardList(dashboard);
-    console.log('dashboard', dashboard);
   }, [dashboard]);
 
   return (

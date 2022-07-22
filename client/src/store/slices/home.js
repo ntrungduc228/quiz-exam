@@ -47,7 +47,7 @@ const homeSlice = createSlice({
       state.isLoading = false;
     },
     [getDashBoardAdmin.fulfilled]: (state, action) => {
-      state.dashboard = action.payload.data;
+      state.dashboard = Object.keys(action.payload.data).map((key) => action.payload.data[key]);
       state.isLoading = false;
     },
     [getDashBoardAdmin.rejected]: (state, action) => {

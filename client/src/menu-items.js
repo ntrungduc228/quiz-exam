@@ -117,7 +117,7 @@ export const adminMenuItems = {
       id: 'result',
       title: 'Kết quả',
       type: 'item',
-      url: '/admin/result',
+      url: '/admin/score',
       icon: 'feather icon-folder'
     }
   ]
