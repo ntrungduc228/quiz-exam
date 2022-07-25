@@ -214,6 +214,13 @@ export const adminRoutes = {
   items: [
     {
       guard: AuthGuard,
+      path: '/admin/cktest',
+      roles: [ROLES.admin],
+      exact: true,
+      component: lazy(() => import('./views/admin/Cktest'))
+    },
+    {
+      guard: AuthGuard,
       path: '/admin/profile',
       roles: [ROLES.admin],
       exact: true,

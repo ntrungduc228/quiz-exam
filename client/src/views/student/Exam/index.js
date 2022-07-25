@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallBack } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Row, Col, Card, Button, Form, Collapse, Spinner } from 'react-bootstrap';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { useHistory } from 'react-router-dom';
@@ -28,18 +28,18 @@ const Exam = () => {
     e.returnValue = 'Are you sure you want to close?';
   };
 
-  const handleTabClosing = useCallBack(() => {
-    dispatch(getResultByExam({ ...examInfo, studentId: user.userId }));
-  });
-
   useEffect(() => {
+    const handleTabClosing = () => {
+      dispatch(getResultByExam({ ...examInfo, studentId: user.userId }));
+    };
+
     window.addEventListener('beforeunload', handleBeforeUnLoad);
     window.addEventListener('unload', handleTabClosing);
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnLoad);
       window.removeEventListener('unload', handleTabClosing);
     };
-  }, [handleTabClosing]);
+  }, [dispatch, examInfo, user]);
 
   useEffect(() => {
     if (!examDetail) {
@@ -79,7 +79,7 @@ const Exam = () => {
         changeQuestion(examDetail?.questionList[0]);
       }
     }
-  }, [examDetail,questionShow]);
+  }, [examDetail, questionShow]);
 
   const changeQuestion = (data) => {
     setQuestionShow({
