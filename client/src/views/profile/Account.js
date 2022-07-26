@@ -82,6 +82,7 @@ const Account = () => {
     setValue('firstName', user.firstName);
     setValue('gender', user.gender);
     setValue('phone', user.phone);
+    setChooseGender(user.gender);
     if (user?.role === ROLES.student) {
       setValue('isStudent', true);
       setValue('classId', user.classId);
@@ -104,6 +105,7 @@ const Account = () => {
       setValue('firstName', user.firstName);
       setValue('gender', user.gender);
       setValue('phone', user.phone);
+      setChooseGender(user.gender);
       if (user?.role === ROLES.student) {
         setValue('isStudent', true);
         setValue('classId', user.classId);
@@ -134,6 +136,7 @@ const Account = () => {
       .unwrap()
       .then((res) => {
         if (res.success) {
+          setErrorMessage('');
           toast.success(res.message);
         }
       })
@@ -153,10 +156,12 @@ const Account = () => {
           setValue('password', '');
           setValue('newPassword', '');
           setValue('confirmPassword', '');
+          setErrorMessage('');
         }
       })
       .catch(async (err) => {
         console.log('wrap err', err);
+        setValue('password', '');
         setErrorMessage(err?.message);
       });
   };
