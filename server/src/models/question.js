@@ -28,7 +28,11 @@ module.exports = (sequelize, DataTypes) => {
   }
   Question.init(
     {
-      questionId: { type: DataTypes.INTEGER, primaryKey: true },
+      questionId: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+      },
       content: DataTypes.STRING,
       subjectId: DataTypes.STRING,
       answerA: DataTypes.STRING,
