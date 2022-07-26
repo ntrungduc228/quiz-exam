@@ -22,7 +22,8 @@ const FormForgetPassword = () => {
     register,
     handleSubmit,
     formState: { errors },
-    clearErrors
+    clearErrors,
+    setValue
   } = useForm({ mode: 'onChange', resolver: yupResolver(schema) });
 
   useEffect(() => {
@@ -35,6 +36,7 @@ const FormForgetPassword = () => {
       .unwrap()
       .then((res) => {
         if (res.success) {
+          setValue('email', '');
           setErrorMessage(res?.message);
         }
       })
@@ -49,7 +51,7 @@ const FormForgetPassword = () => {
       <Row>
         <Col>
           <Form.Group>
-            <Form.Label>Nhập mật khẩu mới</Form.Label>
+            <Form.Label>Nhập email</Form.Label>
             <Form.Control type="email" name="email" {...register('email')} />
             {errors?.email && <p className="text-danger form-text">{errors?.email.message}</p>}
           </Form.Group>

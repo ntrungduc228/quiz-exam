@@ -243,7 +243,9 @@ const Exam = () => {
                                 {questionList.map((item, index) => {
                                   return (
                                     <Button
-                                      variant={item.questionId === questionShow.questionId ? 'info' : 'light'}
+                                      variant={
+                                        item.questionId === questionShow.questionId ? 'info' : item.studentChoice ? 'success' : 'light'
+                                      }
                                       className="text-capitalize"
                                       key={item.questionId}
                                       style={{ width: '70px' }}
