@@ -43,14 +43,14 @@ const Dashboard = () => {
   return (
     <React.Fragment>
       <Row>
-        {dashboardList.length &&
+        {dashboardList.length > 0 &&
           dashboardList.map((item, index) => (
-            <React.Fragment key={labels[index].link}>
+            <React.Fragment key={labels[index]?.link}>
               <Col md={6} xl={4}>
-                <Link to={labels[index].link}>
+                <Link to={labels[index]?.link}>
                   <Card>
                     <Card.Body>
-                      <h4 className="mb-4">{labels[index].label}</h4>
+                      <h4 className="mb-4">{labels[index]?.label}</h4>
                       <div className="row d-flex align-items-center">
                         <div className="col-9">
                           <h3 className="f-w-300 d-flex align-items-center m-b-0">
