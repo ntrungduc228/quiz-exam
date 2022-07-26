@@ -5,6 +5,29 @@ const { STATE_EXAM, MINIMUM_QUESTION, LEVEL } = require("../utils/constants");
 const { getShuffledArr } = require("../utils/helpers");
 const moment = require("moment");
 
+// const customConfig = {
+//   host: process.env.DB_HOST || "localhost",
+//   dialect: "postgres",
+//   logging: false,
+//   dialectOptions: {
+//     ssl: {
+//       require: true,
+//       rejectUnauthorized: false,
+//     },
+//   },
+//   query: {
+//     raw: true,
+//   },
+//   timezone: "+07:00",
+// };
+
+// let sequelize = new Sequelize(
+//   process.env.DB_NAME,
+//   process.env.DB_USERNAME,
+//   process.env.DB_PASSWORD,
+//   customConfig
+// );
+
 let getAllExams = () => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -282,18 +305,20 @@ let doingExam = (data) => {
           order: [["number", "ASC"]],
         });
 
-        let questionList = answerList.map((item) => {
-          return {
-            ...item.examDetailQuestionData.dataValues,
-            studentChoice: item.answer,
-          };
-        });
+        if (answerList.length > 0) {
+          let questionList = answerList.map((item) => {
+            return {
+              ...item.examDetailQuestionData.dataValues,
+              studentChoice: item.answer,
+            };
+          });
 
-        examExists.timeRemain = +examExists.expiresAt.getTime();
-        let res = {};
-        res.info = examExists;
-        res.questionList = questionList;
-        return resolve({ data: res, success: true });
+          examExists.timeRemain = +examExists.expiresAt.getTime();
+          let res = {};
+          res.info = examExists;
+          res.questionList = questionList;
+          return resolve({ data: res, success: true });
+        }
       }
 
       let examInstance = await db.Exam.findOne({
@@ -325,7 +350,7 @@ let doingExam = (data) => {
       // easy questions
       let questionList = await db.Question.findAll({
         where: { subjectId: data.subjectId, level: LEVEL.easy },
-        order: Sequelize.literal("rand()"),
+        order: [[Sequelize.fn("RAND")]],
         limit: examInstance.numOfEasy,
         attributes: { exclude: ["createdAt", "updatedAt", "correctAnswer"] },
       });
@@ -333,7 +358,7 @@ let doingExam = (data) => {
       // medium questions
       questionList = await db.Question.findAll({
         where: { subjectId: data.subjectId, level: LEVEL.medium },
-        order: Sequelize.literal("rand()"),
+        order: [[Sequelize.fn("RAND")]],
         limit: examInstance.numOfMedium,
         attributes: { exclude: ["createdAt", "updatedAt", "correctAnswer"] },
       });
@@ -341,7 +366,7 @@ let doingExam = (data) => {
       // hard questions
       questionList = await db.Question.findAll({
         where: { subjectId: data.subjectId, level: LEVEL.hard },
-        order: Sequelize.literal("rand()"),
+        order: [[Sequelize.fn("RAND")]],
         limit: examInstance.numOfHard,
         attributes: { exclude: ["createdAt", "updatedAt", "correctAnswer"] },
       });

@@ -45,7 +45,7 @@ const Dashboard = () => {
   return (
     <React.Fragment>
       <Row>
-        {dashboardList.length &&
+        {dashboardList.length >0 &&
           dashboardList.map((item, index) => (
             <React.Fragment key={labels[index]?.link}>
               <Col md={6} xl={4}>
